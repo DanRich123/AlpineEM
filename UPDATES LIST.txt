@@ -1,0 +1,29 @@
+SUMMARY OF CHANGES:
+post processor failure - untested bug showed up. No issues with past results due to failure though, I think. Also updated spice A_e comment to say needs renormalizing Z_spice.
+statics solver set full update - I wasn't normalized to 1 A like I thought and there were typos throughout. 
+master.py comments updated and netlist examples added.
+zero or less for id number - hadn't been an issue yet but could be in the future, the out of memory access was ignored previously, so it was resolved so there will be no issues moving forward.
+removed dielectric from inside ports - didn't do anything productive and it messed up the incident wave since it couldn't account for it as is. Easiest to just remove.
+Current normalization in basic port types was wrong - needing scaling for all 3 directions, not just the 1 direction I had it. True for spice and normal.
+The gridded feed normalization was also wrong - The method I had was fine but I had a typo. I decided to fully switch to mode decomposition though for slightly better accuracy.
+IGP pulled clear case incident for far fields, but that's a problem. I added the option to use a secondary clear case to for incident wave of ff only.
+added an optional bulk geom script that also conforms materials - functions the same as the old plus conforming - old version still there too though
+added an initialization for material temp ids from optional geometry. Also removed a comment in the optional read in. Both items in .f90.
+
+----------------------------------------------------------------------------------------------------------------------------
+MORE DETAILED NOTES IF DESIRED:
+
+Post processor failure:
+	-this was only an error if not a unit cell - all PML used.
+	-nothing was 'wrong' but the incident wave unit cell definition was triggered when it should not exist.
+	-it tried to define the incident wave placeholder using the unit cell variables.
+	-it wouldn't have been used anyway, but the RHS didn't exist so it throws an error. 
+	-the line was moved down inside an if statement so it only gets used when it is appropriate and is clearly defined.
+	-this didn't affect past results. It was an untested bug.
+
+Need greater than zero ID numbers:
+	-not an issue so far, it was an untested bug. past results not affected.
+	-there was occasional out of memory access being done, but this didn't cause an error in the results.
+	-to fix, I declared the temp id array for optional geometry to start at zero so it can handle the background zeros that are intended.
+	-I made a note in master.py to use ID numbers > zero to avoid memory access error in general for material properties array in Fortran.
+
