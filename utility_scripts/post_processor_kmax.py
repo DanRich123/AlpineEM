@@ -17,7 +17,7 @@ simulation_type='plane wave' #'antenna' or 'plane wave' type of simulation
 #input 3 file names - not all will necessarily be used
 data_filename='data-k.dat'
 clear_filename='clear-k.dat'
-metal_filename='metal.dat'
+metal_filename='metal-k.dat'
 #padding factor (integer) for increasing output # of points - time domain interpolation via padding at the end of the time sequence
 #it can cause ripples in output data if padding>0 and it's EM fields are not converged in the time domain
 padding=0
@@ -289,9 +289,14 @@ if simulation_type=='plane wave':
 
     #now scattered far fields
     #first we determine the incident field specifically from the clear case phase centering 
-    #this is a lot of work but allows us to avoid manually corrections.
-    k3=np.sqrt((k)**2-k1**2-k2**2)
+    #this is a lot of work but allows us to avoid manual phase corrections.
+    #can always revert back to inc_data_f if we need the right magnitude for sure but don't care about phase centering
+    import numpy.lib.scimath as scimath
+    k3=scimath.sqrt(k**2 - k1**2 - k2**2)
     k12=np.sqrt(k1**2+k2**2)
+    for i in range(len(k)):
+        if k[i]==0:
+            k[i]=1E-6
     if (sim_type_y+sim_type_z==2):
         if mode_type==0: #then TE so E fields are added to H fields where all H trans fields are always positive when k is positive, H is always negative when k is negative
             if (k1==0 and k2==0):
