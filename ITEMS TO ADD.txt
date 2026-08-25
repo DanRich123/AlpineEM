@@ -1,9 +1,9 @@
-Known issue:
-kmax far field needs Bloch phase correction to the fields - gain is likely unaffected, but scattering in the far field will be.
+Known issues:
+None currently
 
 Items to incorporate at some point:
 wave ports to paraview - kmax and normal are the same height - low,high
-output fields - more slices or volumes and sheet data options
+output fields - make a sheet/surface option
 permeability - bulk materials
 add far field phase center selection location for plane wave incidence.
 make it possible to have lumped ports at first cube.
@@ -21,4 +21,4 @@ setup a CW wave excitation
 Add a Helmholtz equation py script (and mag equiv.) - for non-TEM mode generation in gridded feeds (dispersive or non-dispersive)
 Alter gridded feeds to handle dispersive field coefficients
 Improve CPML and waveform choice in kmax version
-python - mainly TensorFlow - version for students
+python - mainly TensorFlow or pytorch - version for students
