@@ -50,7 +50,7 @@ f=open('{}'.format(inputs_name), 'w')
 
 f.write('65,30,30\n') #xsize,ysize,zsize of number of cells
 f.write('0.5E-3,0.5E-3,0.5E-3\n') #cell size in meters - recommended to use the same size for each one.
-f.write('4000\n') #time steps
+f.write('500\n') #time steps
 f.write('1\n') #time step reduction factor - CFL*0.98/factor
 f.write('5E9\n') #frequency parameter of output data - see above notes
 f.write('2\n') #pulse type - normal: 1 Gauss, 2 Diff Gauss; kmax: any value, currently unused
@@ -98,10 +98,12 @@ f.write('90,180\n') #ang2 (theta,phi)
 #for i in range(len(angle_array)):
     #f.write('{},0\n'.format(angle_array[i]))
 
-f.write('no\n') #'yes' or 'no' to export fields for videos or otherwise
+#field export section - a single 2D slice and/or the full fields - always exports all E and H components - this will slow down the program to save RAM if full fields
+f.write('no\n') #'yes' or 'no' to export fields in 2D slice for videos or otherwise - E,H components are cell centered and at the same time step
 #if yes, then add lines of code below
 #f.write('y\n') #plane to make the cut
 #f.write('16\n') #location/height of the plane to make the cut - cube centered cut
+f.write('no\n') #'yes' or 'no' to export all field data for videos or otherwise - E,H components are cell centered BUT H IS 1/2 TIME STEP BACK IN TIME TO SAVE RAM
 
 f.write('data.dat\n') #name the output file, this will also influence the name of the geometry output file name. 
 
@@ -321,8 +323,8 @@ f.close()
 #f.write(".param A=0.3048e-3*0.3048e-3\n")
 #f.write(".param dl=0.3048e-3\n")
 #f.write(".param Cshunt=er*e0*A/dl\n")
-#f.write("C_fdtd1 out_port1 0 {Cshunt}\n")
-#f.write("C_fdtd2 out_port2 0 {Cshunt}\n")
+#f.write("C_fdtd1 out_port1 0 {Cshunt}\n") #C_fdtd1 and C_fdtd2 values are overwritten by FDTD solver - they are grid capacitances
+#f.write("C_fdtd2 out_port2 0 {Cshunt}\n") #C_fdtd1 and C_fdtd2 values are overwritten by FDTD solver - they are grid capacitances
 #f.write("*Two separate bias voltages\n")
 #f.write('Vbias1 2_port1 0 SIN({} 0 7E9)\n'.format(bias_1)) # (SPICE_Net_Name CIR_LOC1 CIR_LOC2 SIN(BIAS AMP FREQ TIME_DELAY)
 #f.write('Vbias2 2_port2 0 SIN({} 0 7E9)\n'.format(bias_2)) # (SPICE_Net_Name CIR_LOC1 CIR_LOC2 SIN(BIAS AMP FREQ TIME_DELAY)

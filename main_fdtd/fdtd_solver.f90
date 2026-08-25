@@ -5,9 +5,6 @@ Program fdtd
     !There are two custom compiler flags - one for spice and one for kmax
     !use_kmax_version
     !use_spice_version
-    !This allow for 1 .f90 file for combining my what was previously 4 versions together into 1 program
-    !There are likely a number of parameters or arrays that will go unused between versions but declared and/or allocated
-    !I will do my best to use directives to reduce memory and improve speed for unused items as I notice them
 
     !added for spice
 #ifdef use_spice_version
@@ -89,6 +86,7 @@ Program fdtd
     integer :: clock_time_end
     integer :: clock_rate
     real :: step_vc_out !added for antenna source clear cases
+    character(len=5) :: export_all_field_data
 
     !added for kmax
 #ifdef use_kmax_version
@@ -332,6 +330,12 @@ Program fdtd
     real, allocatable :: Hy_video(:,:,:)
     real, allocatable :: Ez_video(:,:,:)
     real, allocatable :: Hz_video(:,:,:)
+    real, allocatable :: Ex_all_field_data(:,:,:)
+    real, allocatable :: Hx_all_field_data(:,:,:)
+    real, allocatable :: Ey_all_field_data(:,:,:)
+    real, allocatable :: Hy_all_field_data(:,:,:)
+    real, allocatable :: Ez_all_field_data(:,:,:)
+    real, allocatable :: Hz_all_field_data(:,:,:)
 #endif
 #ifdef use_kmax_version
     complex, allocatable :: Ex_video(:,:,:)
@@ -340,6 +344,12 @@ Program fdtd
     complex, allocatable :: Hy_video(:,:,:)
     complex, allocatable :: Ez_video(:,:,:)
     complex, allocatable :: Hz_video(:,:,:)
+    complex, allocatable :: Ex_all_field_data(:,:,:)
+    complex, allocatable :: Hx_all_field_data(:,:,:)
+    complex, allocatable :: Ey_all_field_data(:,:,:)
+    complex, allocatable :: Hy_all_field_data(:,:,:)
+    complex, allocatable :: Ez_all_field_data(:,:,:)
+    complex, allocatable :: Hz_all_field_data(:,:,:)
 #endif
 
     !output field arrays for post processing - unit cell specific - for sparameters
@@ -886,6 +896,8 @@ Program fdtd
             end select
             read(1,*) slice_location
         end if
+        read(1,*) export_all_field_data
+
         read(1,*) filename
 
         read(1,*) num_total_materials
@@ -3934,6 +3946,22 @@ Program fdtd
         allocate(Hz_video(1,1,1))
     end if
 
+    if (TRIM(export_all_field_data)=='yes') then
+        allocate(Ex_all_field_data(x_size-1-pbc_x,y_size-1-pbc_y,z_size-1-pbc_z))
+        allocate(Ey_all_field_data(x_size-1-pbc_x,y_size-1-pbc_y,z_size-1-pbc_z))
+        allocate(Ez_all_field_data(x_size-1-pbc_x,y_size-1-pbc_y,z_size-1-pbc_z))
+        allocate(Hx_all_field_data(x_size-1-pbc_x,y_size-1-pbc_y,z_size-1-pbc_z))
+        allocate(Hy_all_field_data(x_size-1-pbc_x,y_size-1-pbc_y,z_size-1-pbc_z))
+        allocate(Hz_all_field_data(x_size-1-pbc_x,y_size-1-pbc_y,z_size-1-pbc_z))
+    else
+        allocate(Ex_all_field_data(1,1,1))
+        allocate(Ey_all_field_data(1,1,1))
+        allocate(Ez_all_field_data(1,1,1))
+        allocate(Hx_all_field_data(1,1,1))
+        allocate(Hy_all_field_data(1,1,1))
+        allocate(Hz_all_field_data(1,1,1))
+    end if
+
     !incident field we save to use in post processing
     allocate(incident(time_steps))
     !output field arrays for post processing later on - these are for pbc s parameters
@@ -4202,6 +4230,13 @@ Program fdtd
     Ez_video(:,:,:)=0.0+0.0*imag
     Hz_video(:,:,:)=0.0+0.0*imag
 
+    Ex_all_field_data=0.0+0.0*imag
+    Ey_all_field_data=0.0+0.0*imag
+    Ez_all_field_data=0.0+0.0*imag
+    Hx_all_field_data=0.0+0.0*imag
+    Hy_all_field_data=0.0+0.0*imag
+    Hz_all_field_data=0.0+0.0*imag
+
     incident(:)=0.0+0.0*imag
 #ifndef use_kmax_version
     E_reflected(:)=0.0
@@ -4287,6 +4322,16 @@ Program fdtd
     Hx_ff_pc(:)=0.0+0.0*imag
     Hy_ff_pc(:)=0.0+0.0*imag
     Hz_ff_pc(:)=0.0+0.0*imag
+
+    !prep full field array for export if needed
+    if (TRIM(export_all_field_data)=='yes') then
+        open(17, file=filename(1:LEN_TRIM(filename)-4)//"_"//"full_Ex.bin", form="unformatted",action="write",status="replace")
+        open(18, file=filename(1:LEN_TRIM(filename)-4)//"_"//"full_Ey.bin", form="unformatted",action="write",status="replace")
+        open(19, file=filename(1:LEN_TRIM(filename)-4)//"_"//"full_Ez.bin", form="unformatted",action="write",status="replace")
+        open(20, file=filename(1:LEN_TRIM(filename)-4)//"_"//"full_Hx.bin", form="unformatted",action="write",status="replace")
+        open(21, file=filename(1:LEN_TRIM(filename)-4)//"_"//"full_Hy.bin", form="unformatted",action="write",status="replace")
+        open(22, file=filename(1:LEN_TRIM(filename)-4)//"_"//"full_Hz.bin", form="unformatted",action="write",status="replace")
+    end if
     
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!! END ALL SETUP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -4313,6 +4358,7 @@ Program fdtd
     !flags for acc or openmp are only used and recongized if we use the right compilation flags
     !$acc data copy(Hx, Hy, Hz, Ex, Ey, Ez) &
     !$acc      copy(Ex_video, Hx_video, Ey_video, Hy_video, Ez_video, Hz_video) &
+    !$acc      copy(Ex_all_field_data,Ey_all_field_data,Ez_all_field_data,Hx_all_field_data,Hy_all_field_data,Hz_all_field_data) &
 #ifndef use_kmax_version
     !$acc      copy(E_reflected, E_transmitted, incident) &
 #endif
@@ -6759,7 +6805,7 @@ Program fdtd
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        !video/field arrays for exporting
+        !video/field arrays for exporting - 2D slices
         !current method is cell centered at the same time - so videos are same as material cells now
         !this leads to issues at first and last time step for H fields but this is okay - both should be zero to small.
         if (video_on==1) then
@@ -6781,7 +6827,7 @@ Program fdtd
                 !$omp do collapse(2) schedule(static)
                 do k = 1, vid_size2
                     do j = 1, vid_size1
-                        !H fields are at the base time step + 1/2 so use cell centered value * 0.5
+                        !H fields are at the base time step - 1/2 so use cell centered value * 0.5
                         Hx_video(j,k,counter) = (Hx(i,j,k)+Hx(i+1,j,k))/4.0
                         Hy_video(j,k,counter) = (Hy(i,j,k)+Hy(i,j+1,k))/4.0
                         Hz_video(j,k,counter) = (Hz(i,j,k)+Hz(i,j,k+1))/4.0
@@ -6794,7 +6840,7 @@ Program fdtd
                     !$omp do collapse(2) schedule(static)
                     do k = 1, vid_size2
                         do j = 1, vid_size1
-                            !H fields are at the base time step + 1/2 so use cell centered value * 0.5
+                            !H fields are at the base time step - 1/2 so use cell centered value * 0.5
                             Hx_video(j,k,counter+1) = (Hx(i,j,k)+Hx(i+1,j,k))/4.0
                             Hy_video(j,k,counter+1) = (Hy(i,j,k)+Hy(i,j+1,k))/4.0
                             Hz_video(j,k,counter+1) = (Hz(i,j,k)+Hz(i,j,k+1))/4.0
@@ -6821,7 +6867,7 @@ Program fdtd
                 !$omp do collapse(2) schedule(static)
                 do k = 1, vid_size2
                     do i = 1, vid_size1
-                        !H fields are at the base time step + 1/2 so use cell centered value * 0.5
+                        !H fields are at the base time step - 1/2 so use cell centered value * 0.5
                         Hx_video(i,k,counter) = (Hx(i,j,k)+Hx(i+1,j,k))/4.0
                         Hy_video(i,k,counter) = (Hy(i,j,k)+Hy(i,j+1,k))/4.0
                         Hz_video(i,k,counter) = (Hz(i,j,k)+Hz(i,j,k+1))/4.0
@@ -6884,6 +6930,48 @@ Program fdtd
                     !$omp end do
                 end if
             end if
+        end if
+
+        !Full field output - cub centered - as noted to user in master.py the E,H field are not time synchrnoized to save RAM, USER will need to do this manually
+        if (TRIM(export_all_field_data)=='yes') then
+            !$acc parallel loop collapse(2) present(Ex_all_field_data, Ey_all_field_data, Ez_all_field_data, Ex, Ey, Ez)
+            !$omp do collapse(2) schedule(static)
+            do k = 1, z_size-1-pbc_z
+                do j = 1, y_size-1-pbc_y
+                    do i = 1, x_size-1-pbc_x
+                        !E fields are the base time step
+                        Ex_all_field_data(i,j,k) = (Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0
+                        Ey_all_field_data(i,j,k) = (Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0
+                        Ez_all_field_data(i,j,k) = (Ez(i,j,k)+Ez(i+1,j,k)+Ez(i,j+1,k)+Ez(i+1,j+1,k))/4.0
+                    end do
+                end do
+            end do
+            !$acc end parallel loop
+            !$omp end do
+            !$acc parallel loop collapse(2) present(Hx_all_field_data, Hy_all_field_data, Hz_all_field_data, Hx, Hy, Hz)
+            !$omp do collapse(2) schedule(static)
+            do k = 1, z_size-1-pbc_z
+                do j = 1, y_size-1-pbc_y
+                    do i = 1, x_size-1-pbc_x
+                        !H fields are at the base time step - 1/2
+                        Hx_all_field_data(i,j,k) = (Hx(i,j,k)+Hx(i+1,j,k))/2.0
+                        Hy_all_field_data(i,j,k) = (Hy(i,j,k)+Hy(i,j+1,k))/2.0
+                        Hz_all_field_data(i,j,k) = (Hz(i,j,k)+Hz(i,j,k+1))/2.0
+                    end do
+                end do
+            end do
+            !$acc end parallel loop
+            !$omp end do
+            !$omp single
+            !$acc serial
+            write(17) Ex_all_field_data(:,:,:)
+            write(18) Ey_all_field_data(:,:,:)
+            write(19) Ez_all_field_data(:,:,:)
+            write(20) Hx_all_field_data(:,:,:)
+            write(21) Hy_all_field_data(:,:,:)
+            write(22) Hz_all_field_data(:,:,:)
+            !$acc end serial
+            !$omp end single
         end if
 
         !!!S parameters if a full pbc version if used!!!
@@ -7033,7 +7121,15 @@ Program fdtd
         
         !Now far field angles if requested - on the fly time domain version for far field calculations
         !You get broadband frequency info at each angle selected
-        !this is not preferred for many angles and single frequencies - there is a better method for that that is forthcoming
+        !this is not preferred for many angles and a single frequency - there is a better method for that that is forthcoming
+        !first all J and M arrays on the relevant walls are calculated, then the on the fly far field mapping takes place - all at each time step
+
+        !kmax and not kmax will be split here for ease in following the code primarily
+        !kmax needs different methods for omp or acc due to speed of complex data handling in atomics
+        !also removal of bloch phase in only needed in kmax version
+        !also kmax doesn't need the mirroring for IGP conditions
+
+#ifdef use_kmax_version
         if (num_far_field_angles>0) then
 
             !first calculate all current sources as needed
@@ -7041,11 +7137,323 @@ Program fdtd
             
             !X faces
             if (pbc_x==0) then
+
                 !$acc parallel loop collapse(2) present(My_xlow, My_xlow_oldt, Mz_xlow, Mz_xlow_oldt, &
                 !$acc Jy_xlow, Jy_xlow_oldt, Jz_xlow, Jz_xlow_oldt, My_xhigh, My_xhigh_oldt, Mz_xhigh, &
                 !$acc Mz_xhigh_oldt, Jy_xhigh, Jy_xhigh_oldt, Jz_xhigh, Jz_xhigh_oldt, Ez, Ey, Hz, Hy) &
                 !$acc private(i)
                 !$omp do collapse(2) schedule(static)
+
+                do k = ff_zlow, ff_zhigh
+                    do j = ff_ylow, ff_yhigh
+
+                        i = ff_xlow
+                        !M=-n hat cross E where n hat faces outward
+                        My_xlow_oldt(j,k) = My_xlow(j,k)
+                        My_xlow(j,k) = -1.0*(Ez(i,j,k)+Ez(i,j+1,k)+Ez(i+1,j,k)+Ez(i+1,j+1,k))/4.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Mz_xlow_oldt(j,k) = Mz_xlow(j,k) 
+                        Mz_xlow(j,k) = (Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        !J=n hat cross H where n hat faces outward
+                        Jy_xlow_oldt(j,k) = Jy_xlow(j,k)
+                        Jy_xlow(j,k) = (Hz(i,j,k)+Hz(i,j,k+1))/2.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Jz_xlow_oldt(j,k) = Jz_xlow(j,k)
+                        Jz_xlow(j,k) = -1.0*(Hy(i,j,k)+Hy(i,j+1,k))/2.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+
+                        i = ff_xhigh
+                        !M=-n hat cross E where n hat faces outward
+                        My_xhigh_oldt(j,k) = My_xhigh(j,k)
+                        My_xhigh(j,k) = (Ez(i,j,k)+Ez(i,j+1,k)+Ez(i+1,j,k)+Ez(i+1,j+1,k))/4.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Mz_xhigh_oldt(j,k) = Mz_xhigh(j,k)
+                        Mz_xhigh(j,k) = -1.0*(Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        !J=n hat cross H where n hat faces outward
+                        Jy_xhigh_oldt(j,k) = Jy_xhigh(j,k)
+                        Jy_xhigh(j,k) = -1.0*(Hz(i,j,k)+Hz(i,j,k+1))/2.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Jz_xhigh_oldt(j,k) = Jz_xhigh(j,k)
+                        Jz_xhigh(j,k) = (Hy(i,j,k)+Hy(i,j+1,k))/2.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+
+                    end do
+                end do
+                !$acc end parallel loop
+                !$omp end do
+            end if
+
+            !Y faces
+            if (pbc_y==0) then
+
+                !$acc parallel loop collapse(2) present(Mx_ylow, Mx_ylow_oldt, Mz_ylow, Mz_ylow_oldt, &
+                !$acc Jx_ylow, Jx_ylow_oldt, Jz_ylow, Jz_ylow_oldt, Mx_yhigh, Mx_yhigh_oldt, Mz_yhigh, &
+                !$acc Mz_yhigh_oldt, Jx_yhigh, Jx_yhigh_oldt, Jz_yhigh, Jz_yhigh_oldt, Ez, Ex, Hz, Hx) &
+                !$acc private(j)
+                !$omp do collapse(2) schedule(static) 
+
+                do k = ff_zlow, ff_zhigh
+                    do i = ff_xlow, ff_xhigh
+
+                        j = ff_ylow
+                        !M=-n hat cross E where n hat faces outward
+                        Mx_ylow_oldt(i,k) = Mx_ylow(i,k)
+                        Mx_ylow(i,k) = (Ez(i,j,k)+Ez(i+1,j,k)+Ez(i,j+1,k)+Ez(i+1,j+1,k))/4.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Mz_ylow_oldt(i,k) = Mz_ylow(i,k)
+                        Mz_ylow(i,k) = -1.0*(Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        !J=n hat cross H where n hat faces outward
+                        Jx_ylow_oldt(i,k) = Jx_ylow(i,k)
+                        Jx_ylow(i,k) = -1.0*(Hz(i,j,k)+Hz(i,j,k+1))/2.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Jz_ylow_oldt(i,k) = Jz_ylow(i,k)
+                        Jz_ylow(i,k) = (Hx(i,j,k)+Hx(i+1,j,k))/2.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+
+                        j = ff_yhigh
+                        !M=-n hat cross E where n hat faces outward
+                        Mx_yhigh_oldt(i,k) = Mx_yhigh(i,k)
+                        Mx_yhigh(i,k) = -1.0*(Ez(i,j,k)+Ez(i+1,j,k)+Ez(i,j+1,k)+Ez(i+1,j+1,k))/4.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Mz_yhigh_oldt(i,k) = Mz_yhigh(i,k)
+                        Mz_yhigh(i,k) = (Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        !J=n hat cross H where n hat faces outward
+                        Jx_yhigh_oldt(i,k) = Jx_yhigh(i,k)
+                        Jx_yhigh(i,k) = (Hz(i,j,k)+Hz(i,j,k+1))/2.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Jz_yhigh_oldt(i,k) = Jz_yhigh(i,k)
+                        Jz_yhigh(i,k) = -1.0*(Hx(i,j,k)+Hx(i+1,j,k))/2.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+
+                    end do
+                end do
+                !$acc end parallel loop
+                !$omp end do
+            end if
+
+            !Z faces
+            if (pbc_z==0) then
+
+                !$acc parallel loop collapse(2) present(Mx_zlow, Mx_zlow_oldt, My_zlow, My_zlow_oldt, Jx_zlow, &
+                !$acc Jx_zlow_oldt, Jy_zlow, Jy_zlow_oldt, Mx_zhigh, Mx_zhigh_oldt, My_zhigh, My_zhigh_oldt, &
+                !$acc Jx_zhigh, Jx_zhigh_oldt, Jy_zhigh, Jy_zhigh_oldt, Ey, Ex, Hy, Hx) private(k)
+                !$omp do collapse(2) schedule(static)
+
+                do j = ff_ylow, ff_yhigh
+                    do i = ff_xlow, ff_xhigh
+
+                        k = ff_zlow
+                        !M=-n hat cross E where n hat faces outward
+                        Mx_zlow_oldt(i,j) = Mx_zlow(i,j)
+                        Mx_zlow(i,j) = -1.0*(Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        My_zlow_oldt(i,j) = My_zlow(i,j)
+                        My_zlow(i,j) = (Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        !J=n hat cross H where n hat faces outward
+                        Jx_zlow_oldt(i,j) = Jx_zlow(i,j)
+                        Jx_zlow(i,j) = (Hy(i,j,k)+Hy(i,j+1,k))/2.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Jy_zlow_oldt(i,j) = Jy_zlow(i,j)
+                        Jy_zlow(i,j) = -1.0*(Hx(i,j,k)+Hx(i+1,j,k))/2.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+
+                        k = ff_zhigh
+                        !M=-n hat cross E where n hat faces outward
+                        Mx_zhigh_oldt(i,j) = Mx_zhigh(i,j)
+                        Mx_zhigh(i,j) = (Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        My_zhigh_oldt(i,j) = My_zhigh(i,j)
+                        My_zhigh(i,j) = -1.0*(Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        !J=n hat cross H where n hat faces outward
+                        Jx_zhigh_oldt(i,j) = Jx_zhigh(i,j)
+                        Jx_zhigh(i,j) = -1.0*(Hy(i,j,k)+Hy(i,j+1,k))/2.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Jy_zhigh_oldt(i,j) = Jy_zhigh(i,j)
+                        Jy_zhigh(i,j) = (Hx(i,j,k)+Hx(i+1,j,k))/2.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+
+                    end do
+                end do
+                !$acc end parallel loop
+                !$omp end do
+            end if
+
+            !now prep each angle of extraction
+
+            !$omp single
+            !$acc update self(My_xlow, My_xlow_oldt, Mz_xlow, Mz_xlow_oldt, &
+                    !$acc            Jy_xlow, Jy_xlow_oldt, Jz_xlow, Jz_xlow_oldt, &
+                    !$acc            My_xhigh, My_xhigh_oldt, Mz_xhigh, Mz_xhigh_oldt, &
+                    !$acc            Jy_xhigh, Jy_xhigh_oldt, Jz_xhigh, Jz_xhigh_oldt, &
+                    !$acc            Mx_ylow, Mx_ylow_oldt, Mz_ylow, Mz_ylow_oldt, &
+                    !$acc            Jx_ylow, Jx_ylow_oldt, Jz_ylow, Jz_ylow_oldt, &
+                    !$acc            Mx_yhigh, Mx_yhigh_oldt, Mz_yhigh, Mz_yhigh_oldt, &
+                    !$acc            Jx_yhigh, Jx_yhigh_oldt, Jz_yhigh, Jz_yhigh_oldt, &
+                    !$acc            Mx_zlow, Mx_zlow_oldt, My_zlow, My_zlow_oldt, Jx_zlow, &
+                    !$acc            Jx_zlow_oldt, Jy_zlow, Jy_zlow_oldt, &
+                    !$acc            Mx_zhigh, Mx_zhigh_oldt, My_zhigh, My_zhigh_oldt, Jx_zhigh, &
+                    !$acc            Jx_zhigh_oldt, Jy_zhigh, Jy_zhigh_oldt, &
+                    !$acc            Ux, Uy, Uz, Wx, Wy, Wz, far_field_angles)
+
+            !X faces contribution
+            if (pbc_x==0) then
+
+                do kk=1,num_far_field_angles
+                    do k=ff_zlow,ff_zhigh
+                        do j=ff_ylow,ff_yhigh
+
+                            ang1=far_field_angles(kk,1)
+                            ang2=far_field_angles(kk,2)
+
+                            !now U and W w/ r=1 - cancels with other r anyway so value doesn't actually matter
+                            !n+1 is counter in this notation - important for comparing to taflove
+
+                            i=ff_xlow
+                            time_f_var=(r_for_time_relay-((i-ic)*del_x*sin(ang1)*cos(ang2)+(j-jc)*del_y*sin(ang1)*sin(ang2)&
+                            +(k-kc)*del_z*cos(ang1)))/(c*del_t)
+                            ii=int(counter+0.5+time_f_var-1.0)
+                            jj_real=(counter+0.5+time_f_var-1.0)-ii
+                            Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xlow(j,k)-My_xlow_oldt(j,k))
+                            Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xlow(j,k)-My_xlow_oldt(j,k))
+                            Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xlow(j,k)-Mz_xlow_oldt(j,k))
+                            Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xlow(j,k)-Mz_xlow_oldt(j,k))
+
+                            ii=int(counter+time_f_var-1.0)
+                            jj_real=(counter+time_f_var-1.0)-ii
+                            Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xlow(j,k)-Jy_xlow_oldt(j,k))
+                            Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xlow(j,k)-Jy_xlow_oldt(j,k))
+                            Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xlow(j,k)-Jz_xlow_oldt(j,k))
+                            Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xlow(j,k)-Jz_xlow_oldt(j,k))
+
+                            i=ff_xhigh
+                            time_f_var=(r_for_time_relay-((i-ic)*del_x*sin(ang1)*cos(ang2)+(j-jc)*del_y*sin(ang1)*sin(ang2)&
+                            +(k-kc)*del_z*cos(ang1)))/(c*del_t)
+                            ii=int(counter+0.5+time_f_var-1.0)
+                            jj_real=(counter+0.5+time_f_var-1.0)-ii
+                            Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xhigh(j,k)-My_xhigh_oldt(j,k))
+                            Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xhigh(j,k)-My_xhigh_oldt(j,k))
+                            Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xhigh(j,k)-Mz_xhigh_oldt(j,k))
+                            Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xhigh(j,k)-Mz_xhigh_oldt(j,k))
+
+                            ii=int(counter+time_f_var-1.0)
+                            jj_real=(counter+time_f_var-1.0)-ii
+                            Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xhigh(j,k)-Jy_xhigh_oldt(j,k))
+                            Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xhigh(j,k)-Jy_xhigh_oldt(j,k))
+                            Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xhigh(j,k)-Jz_xhigh_oldt(j,k))
+                            Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xhigh(j,k)-Jz_xhigh_oldt(j,k))
+
+                        end do
+                    end do
+                end do
+            end if
+
+            !Y faces contribution
+            if (pbc_y==0) then
+
+                do kk=1,num_far_field_angles
+                    do k=ff_zlow,ff_zhigh
+                        do i=ff_xlow,ff_xhigh
+
+                            ang1=far_field_angles(kk,1)
+                            ang2=far_field_angles(kk,2)
+
+                            !now U and W w/ r=1 - cancels with other r anyway so value doesn't actually matter
+                            !n+1 is counter in this notation - important for comparing to taflove
+
+                            j=ff_ylow
+                            time_f_var=(r_for_time_relay-((i-ic)*del_x*sin(ang1)*cos(ang2)+(j-jc)*del_y*sin(ang1)*sin(ang2)&
+                            +(k-kc)*del_z*cos(ang1)))/(c*del_t)
+                            ii=int(counter+0.5+time_f_var-1.0)
+                            jj_real=(counter+0.5+time_f_var-1.0)-ii
+                            Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_ylow(i,k)-Mx_ylow_oldt(i,k))
+                            Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_ylow(i,k)-Mx_ylow_oldt(i,k))
+                            Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_ylow(i,k)-Mz_ylow_oldt(i,k))
+                            Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_ylow(i,k)-Mz_ylow_oldt(i,k))
+
+                            ii=int(counter+time_f_var-1.0)
+                            jj_real=(counter+time_f_var-1.0)-ii
+                            Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_ylow(i,k)-Jx_ylow_oldt(i,k))
+                            Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_ylow(i,k)-Jx_ylow_oldt(i,k))
+                            Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_ylow(i,k)-Jz_ylow_oldt(i,k))
+                            Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_ylow(i,k)-Jz_ylow_oldt(i,k))
+
+                            j=ff_yhigh
+                            time_f_var=(r_for_time_relay-((i-ic)*del_x*sin(ang1)*cos(ang2)+(j-jc)*del_y*sin(ang1)*sin(ang2)&
+                            +(k-kc)*del_z*cos(ang1)))/(c*del_t)
+                            ii=int(counter+0.5+time_f_var-1.0)
+                            jj_real=(counter+0.5+time_f_var-1.0)-ii
+                            Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_yhigh(i,k)-Mx_yhigh_oldt(i,k))
+                            Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_yhigh(i,k)-Mx_yhigh_oldt(i,k))
+                            Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_yhigh(i,k)-Mz_yhigh_oldt(i,k))
+                            Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_yhigh(i,k)-Mz_yhigh_oldt(i,k))
+
+                            ii=int(counter+time_f_var-1.0)
+                            jj_real=(counter+time_f_var-1.0)-ii
+                            Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_yhigh(i,k)-Jx_yhigh_oldt(i,k))
+                            Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_yhigh(i,k)-Jx_yhigh_oldt(i,k))
+                            Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_yhigh(i,k)-Jz_yhigh_oldt(i,k))
+                            Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_yhigh(i,k)-Jz_yhigh_oldt(i,k))
+
+                        end do
+                    end do
+                end do
+            end if
+
+            !Z faces contribution
+            if (pbc_z==0) then
+
+                do kk=1,num_far_field_angles
+                    do j=ff_ylow,ff_yhigh
+                        do i=ff_xlow,ff_xhigh
+                        
+                            ang1=far_field_angles(kk,1)
+                            ang2=far_field_angles(kk,2)
+
+                            !now U and W w/ r=1 - cancels with other r anyway so value doesn't actually matter
+                            !n+1 is counter in this notation - important for comparing to taflove
+
+                            k=ff_zlow
+                            time_f_var=(r_for_time_relay-((i-ic)*del_x*sin(ang1)*cos(ang2)+(j-jc)*del_y*sin(ang1)*sin(ang2)&
+                            +(k-kc)*del_z*cos(ang1)))/(c*del_t)
+                            ii=int(counter+0.5+time_f_var-1.0)
+                            jj_real=(counter+0.5+time_f_var-1.0)-ii
+                            Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zlow(i,j)-My_zlow_oldt(i,j))
+                            Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zlow(i,j)-My_zlow_oldt(i,j))
+                            Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zlow(i,j)-Mx_zlow_oldt(i,j))
+                            Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zlow(i,j)-Mx_zlow_oldt(i,j))
+
+                            ii=int(counter+time_f_var-1.0)
+                            jj_real=(counter+time_f_var-1.0)-ii
+                            Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zlow(i,j)-Jy_zlow_oldt(i,j))
+                            Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zlow(i,j)-Jy_zlow_oldt(i,j))
+                            Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zlow(i,j)-Jx_zlow_oldt(i,j))
+                            Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zlow(i,j)-Jx_zlow_oldt(i,j))
+
+                            k=ff_zhigh
+                            time_f_var=(r_for_time_relay-((i-ic)*del_x*sin(ang1)*cos(ang2)+(j-jc)*del_y*sin(ang1)*sin(ang2)&
+                            +(k-kc)*del_z*cos(ang1)))/(c*del_t)
+                            ii=int(counter+0.5+time_f_var-1.0)
+                            jj_real=(counter+0.5+time_f_var-1.0)-ii
+                            Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zhigh(i,j)-My_zhigh_oldt(i,j))
+                            Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zhigh(i,j)-My_zhigh_oldt(i,j))
+                            Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zhigh(i,j)-Mx_zhigh_oldt(i,j))
+                            Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zhigh(i,j)-Mx_zhigh_oldt(i,j))
+
+                            ii=int(counter+time_f_var-1.0)
+                            jj_real=(counter+time_f_var-1.0)-ii
+                            Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zhigh(i,j)-Jy_zhigh_oldt(i,j))
+                            Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zhigh(i,j)-Jy_zhigh_oldt(i,j))
+                            Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zhigh(i,j)-Jx_zhigh_oldt(i,j))
+                            Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zhigh(i,j)-Jx_zhigh_oldt(i,j))
+
+                        end do
+                    end do
+                end do
+            end if
+
+            !$omp end single
+            !$acc update device(Ux,Uy,Uz,Wx,Wy,Wz)
+
+        end if
+#endif
+
+#ifndef use_kmax_version
+        if (num_far_field_angles>0) then
+
+            !first calculate all current sources as needed
+            !they are the same for each angle of extraction at each time step
+            
+            !X faces
+            if (pbc_x==0) then
+
+                !$acc parallel loop collapse(2) present(My_xlow, My_xlow_oldt, Mz_xlow, Mz_xlow_oldt, &
+                !$acc Jy_xlow, Jy_xlow_oldt, Jz_xlow, Jz_xlow_oldt, My_xhigh, My_xhigh_oldt, Mz_xhigh, &
+                !$acc Mz_xhigh_oldt, Jy_xhigh, Jy_xhigh_oldt, Jz_xhigh, Jz_xhigh_oldt, Ez, Ey, Hz, Hy) &
+                !$acc private(i)
+                !$omp do collapse(2) schedule(static)
+
                 do k = ff_zlow, ff_zhigh
                     do j = ff_ylow, ff_yhigh
 
@@ -7081,11 +7489,13 @@ Program fdtd
 
             !Y faces
             if (pbc_y==0) then
+
                 !$acc parallel loop collapse(2) present(Mx_ylow, Mx_ylow_oldt, Mz_ylow, Mz_ylow_oldt, &
                 !$acc Jx_ylow, Jx_ylow_oldt, Jz_ylow, Jz_ylow_oldt, Mx_yhigh, Mx_yhigh_oldt, Mz_yhigh, &
                 !$acc Mz_yhigh_oldt, Jx_yhigh, Jx_yhigh_oldt, Jz_yhigh, Jz_yhigh_oldt, Ez, Ex, Hz, Hx) &
                 !$acc private(j)
                 !$omp do collapse(2) schedule(static) 
+
                 do k = ff_zlow, ff_zhigh
                     do i = ff_xlow, ff_xhigh
 
@@ -7121,10 +7531,12 @@ Program fdtd
 
             !Z faces
             if (pbc_z==0) then
+
                 !$acc parallel loop collapse(2) present(Mx_zlow, Mx_zlow_oldt, My_zlow, My_zlow_oldt, Jx_zlow, &
                 !$acc Jx_zlow_oldt, Jy_zlow, Jy_zlow_oldt, Mx_zhigh, Mx_zhigh_oldt, My_zhigh, My_zhigh_oldt, &
                 !$acc Jx_zhigh, Jx_zhigh_oldt, Jy_zhigh, Jy_zhigh_oldt, Ey, Ex, Hy, Hx) private(k)
                 !$omp do collapse(2) schedule(static)
+
                 do j = ff_ylow, ff_yhigh
                     do i = ff_xlow, ff_xhigh
 
@@ -7160,26 +7572,9 @@ Program fdtd
 
             !now prep each angle of extraction
 
-#ifdef use_kmax_version
-            !$omp single
-            !$acc update self(My_xlow, My_xlow_oldt, Mz_xlow, Mz_xlow_oldt, &
-                    !$acc            Jy_xlow, Jy_xlow_oldt, Jz_xlow, Jz_xlow_oldt, &
-                    !$acc            My_xhigh, My_xhigh_oldt, Mz_xhigh, Mz_xhigh_oldt, &
-                    !$acc            Jy_xhigh, Jy_xhigh_oldt, Jz_xhigh, Jz_xhigh_oldt, &
-                    !$acc            Mx_ylow, Mx_ylow_oldt, Mz_ylow, Mz_ylow_oldt, &
-                    !$acc            Jx_ylow, Jx_ylow_oldt, Jz_ylow, Jz_ylow_oldt, &
-                    !$acc            Mx_yhigh, Mx_yhigh_oldt, Mz_yhigh, Mz_yhigh_oldt, &
-                    !$acc            Jx_yhigh, Jx_yhigh_oldt, Jz_yhigh, Jz_yhigh_oldt, &
-                    !$acc            Mx_zlow, Mx_zlow_oldt, My_zlow, My_zlow_oldt, Jx_zlow, &
-                    !$acc            Jx_zlow_oldt, Jy_zlow, Jy_zlow_oldt, &
-                    !$acc            Mx_zhigh, Mx_zhigh_oldt, My_zhigh, My_zhigh_oldt, Jx_zhigh, &
-                    !$acc            Jx_zhigh_oldt, Jy_zhigh, Jy_zhigh_oldt, &
-                    !$acc            Ux, Uy, Uz, Wx, Wy, Wz, far_field_angles)
-#endif
-
             !X faces contribution
             if (pbc_x==0) then
-#ifndef use_kmax_version
+
                 !$acc parallel loop collapse(3) present(My_xlow, My_xlow_oldt, Mz_xlow, Mz_xlow_oldt, &
                 !$acc                                    Jy_xlow, Jy_xlow_oldt, Jz_xlow, Jz_xlow_oldt, &
                 !$acc                                    My_xhigh, My_xhigh_oldt, Mz_xhigh, Mz_xhigh_oldt, &
@@ -7187,7 +7582,7 @@ Program fdtd
                 !$acc                                    Uy, Uz, Wy, Wz, far_field_angles) &
                 !$acc private(ang1, ang2, time_f_var, ii, jj_real, i)
                 !$omp do collapse(3) schedule(static)
-#endif
+
                 do kk=1,num_far_field_angles
                     do k=ff_zlow,ff_zhigh
                         do j=ff_ylow,ff_yhigh
@@ -7203,48 +7598,32 @@ Program fdtd
                             +(k-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xlow(j,k)-My_xlow_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                            
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xlow(j,k)-My_xlow_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xlow(j,k)-Mz_xlow_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xlow(j,k)-Mz_xlow_oldt(j,k))
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xlow(j,k)-Jy_xlow_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xlow(j,k)-Jy_xlow_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xlow(j,k)-Jz_xlow_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xlow(j,k)-Jz_xlow_oldt(j,k))
 
                             i=ff_xhigh
@@ -7252,62 +7631,44 @@ Program fdtd
                             +(k-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xhigh(j,k)-My_xhigh_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xhigh(j,k)-My_xhigh_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xhigh(j,k)-Mz_xhigh_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif                        
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xhigh(j,k)-Mz_xhigh_oldt(j,k))
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xhigh(j,k)-Jy_xhigh_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xhigh(j,k)-Jy_xhigh_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xhigh(j,k)-Jz_xhigh_oldt(j,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xhigh(j,k)-Jz_xhigh_oldt(j,k))
 
                         end do
                     end do
                 end do
-#ifndef use_kmax_version
                 !$acc end parallel loop
                 !$omp end do
-#endif
             end if
 
             !Y faces contribution
             if (pbc_y==0) then
-#ifndef use_kmax_version
+
                 !$acc parallel loop collapse(3) present(Mx_ylow, Mx_ylow_oldt, Mz_ylow, Mz_ylow_oldt, &
                 !$acc                                    Jx_ylow, Jx_ylow_oldt, Jz_ylow, Jz_ylow_oldt, &
                 !$acc                                    Mx_yhigh, Mx_yhigh_oldt, Mz_yhigh, Mz_yhigh_oldt, &
@@ -7315,7 +7676,7 @@ Program fdtd
                 !$acc                                    Ux, Uz, Wx, Wz, far_field_angles) &
                 !$acc private(ang1, ang2, time_f_var, ii, jj_real, j)
                 !$omp do collapse(3) schedule(static)
-#endif
+
                 do kk=1,num_far_field_angles
                     do k=ff_zlow,ff_zhigh
                         do i=ff_xlow,ff_xhigh
@@ -7331,48 +7692,32 @@ Program fdtd
                             +(k-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_ylow(i,k)-Mx_ylow_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_ylow(i,k)-Mx_ylow_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_ylow(i,k)-Mz_ylow_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_ylow(i,k)-Mz_ylow_oldt(i,k))
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_ylow(i,k)-Jx_ylow_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_ylow(i,k)-Jx_ylow_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_ylow(i,k)-Jz_ylow_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_ylow(i,k)-Jz_ylow_oldt(i,k))
 
                             j=ff_yhigh
@@ -7380,62 +7725,44 @@ Program fdtd
                             +(k-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_yhigh(i,k)-Mx_yhigh_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_yhigh(i,k)-Mx_yhigh_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_yhigh(i,k)-Mz_yhigh_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_yhigh(i,k)-Mz_yhigh_oldt(i,k))
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_yhigh(i,k)-Jx_yhigh_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_yhigh(i,k)-Jx_yhigh_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_yhigh(i,k)-Jz_yhigh_oldt(i,k))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_yhigh(i,k)-Jz_yhigh_oldt(i,k))
 
                         end do
                     end do
                 end do
-#ifndef use_kmax_version
                 !$acc end parallel loop
                 !$omp end do
-#endif
             end if
 
             !Z faces contribution
             if (pbc_z==0) then
-#ifndef use_kmax_version
+
                 !$acc parallel loop collapse(3) present(Mx_zlow, Mx_zlow_oldt, My_zlow, My_zlow_oldt, &
                 !$acc                                    Jx_zlow, Jx_zlow_oldt, Jy_zlow, Jy_zlow_oldt, &
                 !$acc                                    Mx_zhigh, Mx_zhigh_oldt, My_zhigh, My_zhigh_oldt, &
@@ -7443,7 +7770,7 @@ Program fdtd
                 !$acc                                    Ux, Uy, Wx, Wy, far_field_angles) &
                 !$acc private(ang1, ang2, time_f_var, ii, jj_real, k)
                 !$omp do collapse(3) schedule(static)
-#endif
+
                 do kk=1,num_far_field_angles
                     do j=ff_ylow,ff_yhigh
                         do i=ff_xlow,ff_xhigh
@@ -7459,48 +7786,32 @@ Program fdtd
                             +(k-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zlow(i,j)-My_zlow_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zlow(i,j)-My_zlow_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zlow(i,j)-Mx_zlow_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zlow(i,j)-Mx_zlow_oldt(i,j))
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zlow(i,j)-Jy_zlow_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zlow(i,j)-Jy_zlow_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zlow(i,j)-Jx_zlow_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zlow(i,j)-Jx_zlow_oldt(i,j))
 
                             k=ff_zhigh
@@ -7508,80 +7819,52 @@ Program fdtd
                             +(k-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zhigh(i,j)-My_zhigh_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zhigh(i,j)-My_zhigh_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zhigh(i,j)-Mx_zhigh_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zhigh(i,j)-Mx_zhigh_oldt(i,j))
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zhigh(i,j)-Jy_zhigh_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zhigh(i,j)-Jy_zhigh_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zhigh(i,j)-Jx_zhigh_oldt(i,j))
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zhigh(i,j)-Jx_zhigh_oldt(i,j))
 
                         end do
                     end do
                 end do
-#ifndef use_kmax_version
                 !$acc end parallel loop
                 !$omp end do
-#endif
             end if
-
-#ifdef use_kmax_version
-            !$omp end single
-            !$acc update device(Ux,Uy,Uz,Wx,Wy,Wz)
-#endif
 
         end if
 
         !is mirror is true and there are far field angles 
         !wall variables will take care of first 5 walls if mirrored, so these are the mirrored walls only
         !probably not needed but I have a third filter in case someone added an IGP for a 4 wall pbc condition
+
         if (pbc_x+pbc_y+pbc_z<2 .and. num_far_field_angles>0 .and. is_mirror==1) then
-
-            !now prep each angle of extraction
-
-#ifdef use_kmax_version
-            !$omp single
-#endif
 
             !X faces contribution (mirrored)
             if (pbc_x==0) then
-#ifndef use_kmax_version
+
                 !$acc parallel loop collapse(3) present(My_xlow, My_xlow_oldt, Mz_xlow, Mz_xlow_oldt, &
                 !$acc                                    Jy_xlow, Jy_xlow_oldt, Jz_xlow, Jz_xlow_oldt, &
                 !$acc                                    My_xhigh, My_xhigh_oldt, Mz_xhigh, Mz_xhigh_oldt, &
@@ -7589,7 +7872,7 @@ Program fdtd
                 !$acc                                    Uy, Uz, Wy, Wz, far_field_angles) &
                 !$acc private(ang1, ang2, time_f_var, ii, jj_real, i, i_mirror, j_mirror, k_mirror)
                 !$omp do collapse(3) schedule(static)
-#endif
+
                 do kk=1,num_far_field_angles
                     do k=ff_zlow,ff_zhigh
                         do j=ff_ylow,ff_yhigh
@@ -7609,48 +7892,32 @@ Program fdtd
                             +(k_mirror-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xlow(j,k)-My_xlow_oldt(j,k))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xlow(j,k)-My_xlow_oldt(j,k))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xlow(j,k)-Mz_xlow_oldt(j,k))*Mz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xlow(j,k)-Mz_xlow_oldt(j,k))*Mz_mirror
 
                             ii=int(counter+time_f_var-1.0) 
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xlow(j,k)-Jy_xlow_oldt(j,k))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xlow(j,k)-Jy_xlow_oldt(j,k))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xlow(j,k)-Jz_xlow_oldt(j,k))*Jz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xlow(j,k)-Jz_xlow_oldt(j,k))*Jz_mirror
 
                             i=ff_xhigh
@@ -7660,62 +7927,44 @@ Program fdtd
                             +(k_mirror-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xhigh(j,k)-My_xhigh_oldt(j,k))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(My_xhigh(j,k)-My_xhigh_oldt(j,k))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xhigh(j,k)-Mz_xhigh_oldt(j,k))*Mz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Mz_xhigh(j,k)-Mz_xhigh_oldt(j,k))*Mz_mirror
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xhigh(j,k)-Jy_xhigh_oldt(j,k))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jy_xhigh(j,k)-Jy_xhigh_oldt(j,k))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xhigh(j,k)-Jz_xhigh_oldt(j,k))*Jz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_y*del_z/(4.0*pi*del_t*c))*(Jz_xhigh(j,k)-Jz_xhigh_oldt(j,k))*Jz_mirror
 
                         end do
                     end do
                 end do
-#ifndef use_kmax_version
                 !$acc end parallel loop
                 !$omp end do
-#endif
             end if
 
             !Y faces contribution (mirrored)
             if (pbc_y==0) then
-#ifndef use_kmax_version
+
                 !$acc parallel loop collapse(3) present(Mx_ylow, Mx_ylow_oldt, Mz_ylow, Mz_ylow_oldt, &
                 !$acc                                    Jx_ylow, Jx_ylow_oldt, Jz_ylow, Jz_ylow_oldt, &
                 !$acc                                    Mx_yhigh, Mx_yhigh_oldt, Mz_yhigh, Mz_yhigh_oldt, &
@@ -7723,7 +7972,7 @@ Program fdtd
                 !$acc                                    Ux, Uz, Wx, Wz, far_field_angles) &
                 !$acc private(ang1, ang2, time_f_var, ii, jj_real, j, i_mirror, j_mirror, k_mirror)
                 !$omp do collapse(3) schedule(static)
-#endif
+
                 do kk=1,num_far_field_angles
                     do k=ff_zlow,ff_zhigh
                         do i=ff_xlow,ff_xhigh
@@ -7743,48 +7992,32 @@ Program fdtd
                             +(k_mirror-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_ylow(i,k)-Mx_ylow_oldt(i,k))*Mx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_ylow(i,k)-Mx_ylow_oldt(i,k))*Mx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_ylow(i,k)-Mz_ylow_oldt(i,k))*Mz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_ylow(i,k)-Mz_ylow_oldt(i,k))*Mz_mirror
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_ylow(i,k)-Jx_ylow_oldt(i,k))*Jx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_ylow(i,k)-Jx_ylow_oldt(i,k))*Jx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_ylow(i,k)-Jz_ylow_oldt(i,k))*Jz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_ylow(i,k)-Jz_ylow_oldt(i,k))*Jz_mirror
 
                             j=ff_yhigh
@@ -7794,62 +8027,44 @@ Program fdtd
                             +(k_mirror-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_yhigh(i,k)-Mx_yhigh_oldt(i,k))*Mx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mx_yhigh(i,k)-Mx_yhigh_oldt(i,k))*Mx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii)=Uz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_yhigh(i,k)-Mz_yhigh_oldt(i,k))*Mz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uz(kk,ii+1)=Uz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Mz_yhigh(i,k)-Mz_yhigh_oldt(i,k))*Mz_mirror
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_yhigh(i,k)-Jx_yhigh_oldt(i,k))*Jx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jx_yhigh(i,k)-Jx_yhigh_oldt(i,k))*Jx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii)=Wz(kk,ii)+(1.0-jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_yhigh(i,k)-Jz_yhigh_oldt(i,k))*Jz_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wz(kk,ii+1)=Wz(kk,ii+1)+(jj_real)*(del_x*del_z/(4.0*pi*del_t*c))*(Jz_yhigh(i,k)-Jz_yhigh_oldt(i,k))*Jz_mirror
 
                         end do
                     end do
                 end do
-#ifndef use_kmax_version
                 !$acc end parallel loop
                 !$omp end do
-#endif
             end if
 
             !Z faces contribution (mirrored)
                 if (pbc_z==0) then
-#ifndef use_kmax_version
+
                 !$acc parallel loop collapse(3) present(Mx_zlow, Mx_zlow_oldt, My_zlow, My_zlow_oldt, &
                 !$acc                                    Jx_zlow, Jx_zlow_oldt, Jy_zlow, Jy_zlow_oldt, &
                 !$acc                                    Mx_zhigh, Mx_zhigh_oldt, My_zhigh, My_zhigh_oldt, &
@@ -7857,7 +8072,7 @@ Program fdtd
                 !$acc                                    Ux, Uy, Wx, Wy, far_field_angles) &
                 !$acc private(ang1, ang2, time_f_var, ii, jj_real, k, i_mirror, j_mirror, k_mirror)
                 !$omp do collapse(3) schedule (static)
-#endif
+
                 do kk=1,num_far_field_angles
                     do j=ff_ylow,ff_yhigh
                         do i=ff_xlow,ff_xhigh
@@ -7877,48 +8092,32 @@ Program fdtd
                             +(k_mirror-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zlow(i,j)-My_zlow_oldt(i,j))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zlow(i,j)-My_zlow_oldt(i,j))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zlow(i,j)-Mx_zlow_oldt(i,j))*Mx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zlow(i,j)-Mx_zlow_oldt(i,j))*Mx_mirror
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zlow(i,j)-Jy_zlow_oldt(i,j))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zlow(i,j)-Jy_zlow_oldt(i,j))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zlow(i,j)-Jx_zlow_oldt(i,j))*Jx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zlow(i,j)-Jx_zlow_oldt(i,j))*Jx_mirror
 
                             k=ff_zhigh
@@ -7928,65 +8127,43 @@ Program fdtd
                             +(k_mirror-kc)*del_z*cos(ang1)))/(c*del_t)
                             ii=int(counter+0.5+time_f_var-1.0)
                             jj_real=(counter+0.5+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii)=Uy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zhigh(i,j)-My_zhigh_oldt(i,j))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Uy(kk,ii+1)=Uy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(My_zhigh(i,j)-My_zhigh_oldt(i,j))*My_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii)=Ux(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zhigh(i,j)-Mx_zhigh_oldt(i,j))*Mx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Ux(kk,ii+1)=Ux(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Mx_zhigh(i,j)-Mx_zhigh_oldt(i,j))*Mx_mirror
 
                             ii=int(counter+time_f_var-1.0)
                             jj_real=(counter+time_f_var-1.0)-ii
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii)=Wy(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zhigh(i,j)-Jy_zhigh_oldt(i,j))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wy(kk,ii+1)=Wy(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jy_zhigh(i,j)-Jy_zhigh_oldt(i,j))*Jy_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii)=Wx(kk,ii)+(1.0-jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zhigh(i,j)-Jx_zhigh_oldt(i,j))*Jx_mirror
-#ifndef use_kmax_version
                             !$acc atomic update
                             !$omp atomic update
-#endif 
                             Wx(kk,ii+1)=Wx(kk,ii+1)+(jj_real)*(del_x*del_y/(4.0*pi*del_t*c))*(Jx_zhigh(i,j)-Jx_zhigh_oldt(i,j))*Jx_mirror
 
                         end do
                     end do
                 end do
-#ifndef use_kmax_version
                 !$acc end parallel loop
                 !$omp end do
-#endif
             end if
 
-#ifdef use_kmax_version
-            !$omp end single
-            !$acc update device(Ux,Uy,Uz,Wx,Wy,Wz)
-#endif
         end if
-
+#endif
 
         !Voltage outputs if any relevant
         !$acc parallel loop present(Voltage_out, Voltage)
@@ -8077,6 +8254,16 @@ Program fdtd
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    !close full field data save if needed
+    if (TRIM(export_all_field_data)=='yes') then
+        close(17)
+        close(18)
+        close(19)
+        close(20)
+        close(21)
+        close(22)
+    end if
 
     !S parameters final processing if pbc version and incident wave creation/determination
     !first nornal kmax, then kmax
