@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=fdtd
-#SBATCH --partition=amilan
-#SBATCH --qos=normal
+#SBATCH --job-name=fdtd_parallel
+#SBATCH --partition=acpu
+#SBATCH --qos=cpu-normal
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1

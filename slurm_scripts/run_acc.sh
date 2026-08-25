@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=acc_fdtd
 #SBATCH --partition=aa100
-#SBATCH --qos=normal
+#SBATCH --qos=gpu-normal #or gpu-testing
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1       
