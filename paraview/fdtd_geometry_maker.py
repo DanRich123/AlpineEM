@@ -14,7 +14,7 @@ output_dir = "unit cell design"
 filename = 'main geometry' # main VTM file
 #label if using spice or kmax versions
 spice = False
-kmax = True
+kmax = False
 
 # ----------------------------
 # Setup directory
@@ -91,6 +91,7 @@ with open(inputs_filename, "r") as file:
     if video_on == 1:
         slice_value = file.readline().strip()
         slice_location = int(file.readline())
+    all_data = file.readline().strip()
 
     filename_fdtd = file.readline().strip()
 
