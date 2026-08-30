@@ -9,7 +9,6 @@ There is also a folder with a statics solver that is primarily used for TEM mode
 There is a folder for geometry viewing. Paraview is used for geometry viewing, a macro that can be uploaded to Paraview for easy viewing is also available.
 There are several optimization script examples given as well in the optimization folder - adjoint (gradient) optimization and genetic algorithms.
 There is a full python version (pytorch and tensorflow) that is trial. It is incomplete and not well tested.
-There is a file that lists (most) updates since the last version was published.
 Lastly, there is a list of items I am planning to fix and/or add.
 
 Methods and caveats worthy of noting:
