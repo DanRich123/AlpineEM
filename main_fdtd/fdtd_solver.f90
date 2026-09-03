@@ -796,6 +796,10 @@ Program fdtd
         case ('antenna')
             read(1,*) antenna_amp, antenna_time_delay
             read(1,*) excitation_port_number
+            if (excitation_port_number==0) then
+                antenna_amp=0.0
+                antenna_time_delay=0.0
+            end if
         end select
 
         !print warnings or errors and stop the program in some cases
@@ -848,6 +852,10 @@ Program fdtd
         case ('antenna')
             read(1,*) antenna_amp, antenna_time_delay
             read(1,*) excitation_port_number
+            if (excitation_port_number==0) then
+                antenna_amp=0.0
+                antenna_time_delay=0.0
+            end if
         end select
 
         if (pbc_y+pbc_z==2) then
@@ -875,6 +883,9 @@ Program fdtd
             allocate(far_field_angles(num_far_field_angles,2))
         else 
             allocate(far_field_angles(1,1))
+        end if
+        if (num_far_field_angles>0) then
+            read(1,*) ic,jc,kc
         end if
         do i=1,num_far_field_angles
             read(1,*) far_field_angles(i,1),far_field_angles(i,2)
@@ -1352,11 +1363,6 @@ Program fdtd
     theta_mirror=pi/180.0*(theta_mirror)
     phi_mirror=pi/180.0*(phi_mirror)
 
-    !far field data uses coordinate system centered in the middle of the simulation space we care about (and the user knows about)
-    ic=int((x_size-1-pbc_x)/2.0)
-    jc=int((y_size-1-pbc_y)/2.0)
-    kc=int((z_size-1-pbc_z)/2.0)
-
     !low and high vars are used in a number of places - they define the TF/SF boundary layers
     !the low/high are defaulted to zero so set them if they are needed
     xlow=1
@@ -1387,42 +1393,42 @@ Program fdtd
             xlow=mirror_height
             xlow_wall=0
             x_mirror_offset = 2.0 * (xlow)
-            ic=xlow
+            !ic=xlow
             nxPML_1=0
             use_x_mirror=1.0
         case(2)
             xhigh=mirror_height
             xhigh_wall=0
             x_mirror_offset = 2.0 * (xhigh)
-            ic=xhigh
+            !ic=xhigh
             nxPML_2=0
             use_x_mirror=1.0
         case(3)
             ylow=mirror_height
             ylow_wall=0
             y_mirror_offset = 2.0 * (ylow)
-            jc=ylow
+            !jc=ylow
             nyPML_1=0
             use_y_mirror=1.0
         case(4)
             yhigh=mirror_height
             yhigh_wall=0
             y_mirror_offset = 2.0 * (yhigh)
-            jc=yhigh
+            !jc=yhigh
             nyPML_2=0
             use_y_mirror=1.0
         case(5)
             zlow=mirror_height
             zlow_wall=0
             z_mirror_offset = 2.0 * (zlow)
-            kc=zlow
+            !kc=zlow
             nzPML_1=0
             use_z_mirror=1.0
         case(6)
             zhigh=mirror_height
             zhigh_wall=0
             z_mirror_offset = 2.0 * (zhigh)
-            kc=zhigh
+            !kc=zhigh
             nzPML_2=0
             use_z_mirror=1.0
         end select
@@ -6962,15 +6968,18 @@ Program fdtd
             end do
             !$acc end parallel loop
             !$omp end do
+
+            ! Pull data from GPU VRAM back to CPU RAM
+            !$acc update host(Ex_all_field_data, Ey_all_field_data, Ez_all_field_data, &
+            !$acc             Hx_all_field_data, Hy_all_field_data, Hz_all_field_data)
+
             !$omp single
-            !$acc serial
             write(17) Ex_all_field_data(:,:,:)
             write(18) Ey_all_field_data(:,:,:)
             write(19) Ez_all_field_data(:,:,:)
             write(20) Hx_all_field_data(:,:,:)
             write(21) Hy_all_field_data(:,:,:)
             write(22) Hz_all_field_data(:,:,:)
-            !$acc end serial
             !$omp end single
         end if
 
@@ -7150,26 +7159,26 @@ Program fdtd
                         i = ff_xlow
                         !M=-n hat cross E where n hat faces outward
                         My_xlow_oldt(j,k) = My_xlow(j,k)
-                        My_xlow(j,k) = -1.0*(Ez(i,j,k)+Ez(i,j+1,k)+Ez(i+1,j,k)+Ez(i+1,j+1,k))/4.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        My_xlow(j,k) = -1.0*(Ez(i,j,k)+Ez(i,j+1,k)+Ez(i+1,j,k)+Ez(i+1,j+1,k))/4.0*xlow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
                         Mz_xlow_oldt(j,k) = Mz_xlow(j,k) 
-                        Mz_xlow(j,k) = (Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Mz_xlow(j,k) = (Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*xlow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
                         !J=n hat cross H where n hat faces outward
                         Jy_xlow_oldt(j,k) = Jy_xlow(j,k)
-                        Jy_xlow(j,k) = (Hz(i,j,k)+Hz(i,j,k+1))/2.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Jy_xlow(j,k) = (Hz(i,j,k)+Hz(i,j,k+1))/2.0*xlow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
                         Jz_xlow_oldt(j,k) = Jz_xlow(j,k)
-                        Jz_xlow(j,k) = -1.0*(Hy(i,j,k)+Hy(i,j+1,k))/2.0*xlow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Jz_xlow(j,k) = -1.0*(Hy(i,j,k)+Hy(i,j+1,k))/2.0*xlow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
 
                         i = ff_xhigh
                         !M=-n hat cross E where n hat faces outward
                         My_xhigh_oldt(j,k) = My_xhigh(j,k)
-                        My_xhigh(j,k) = (Ez(i,j,k)+Ez(i,j+1,k)+Ez(i+1,j,k)+Ez(i+1,j+1,k))/4.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        My_xhigh(j,k) = (Ez(i,j,k)+Ez(i,j+1,k)+Ez(i+1,j,k)+Ez(i+1,j+1,k))/4.0*xhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
                         Mz_xhigh_oldt(j,k) = Mz_xhigh(j,k)
-                        Mz_xhigh(j,k) = -1.0*(Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Mz_xhigh(j,k) = -1.0*(Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*xhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
                         !J=n hat cross H where n hat faces outward
                         Jy_xhigh_oldt(j,k) = Jy_xhigh(j,k)
-                        Jy_xhigh(j,k) = -1.0*(Hz(i,j,k)+Hz(i,j,k+1))/2.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Jy_xhigh(j,k) = -1.0*(Hz(i,j,k)+Hz(i,j,k+1))/2.0*xhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
                         Jz_xhigh_oldt(j,k) = Jz_xhigh(j,k)
-                        Jz_xhigh(j,k) = (Hy(i,j,k)+Hy(i,j+1,k))/2.0*xhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
+                        Jz_xhigh(j,k) = (Hy(i,j,k)+Hy(i,j+1,k))/2.0*xhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_y*(j-jc)*del_y))
 
                     end do
                 end do
@@ -7192,26 +7201,26 @@ Program fdtd
                         j = ff_ylow
                         !M=-n hat cross E where n hat faces outward
                         Mx_ylow_oldt(i,k) = Mx_ylow(i,k)
-                        Mx_ylow(i,k) = (Ez(i,j,k)+Ez(i+1,j,k)+Ez(i,j+1,k)+Ez(i+1,j+1,k))/4.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Mx_ylow(i,k) = (Ez(i,j,k)+Ez(i+1,j,k)+Ez(i,j+1,k)+Ez(i+1,j+1,k))/4.0*ylow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
                         Mz_ylow_oldt(i,k) = Mz_ylow(i,k)
-                        Mz_ylow(i,k) = -1.0*(Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Mz_ylow(i,k) = -1.0*(Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*ylow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
                         !J=n hat cross H where n hat faces outward
                         Jx_ylow_oldt(i,k) = Jx_ylow(i,k)
-                        Jx_ylow(i,k) = -1.0*(Hz(i,j,k)+Hz(i,j,k+1))/2.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Jx_ylow(i,k) = -1.0*(Hz(i,j,k)+Hz(i,j,k+1))/2.0*ylow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
                         Jz_ylow_oldt(i,k) = Jz_ylow(i,k)
-                        Jz_ylow(i,k) = (Hx(i,j,k)+Hx(i+1,j,k))/2.0*ylow_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Jz_ylow(i,k) = (Hx(i,j,k)+Hx(i+1,j,k))/2.0*ylow_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
 
                         j = ff_yhigh
                         !M=-n hat cross E where n hat faces outward
                         Mx_yhigh_oldt(i,k) = Mx_yhigh(i,k)
-                        Mx_yhigh(i,k) = -1.0*(Ez(i,j,k)+Ez(i+1,j,k)+Ez(i,j+1,k)+Ez(i+1,j+1,k))/4.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Mx_yhigh(i,k) = -1.0*(Ez(i,j,k)+Ez(i+1,j,k)+Ez(i,j+1,k)+Ez(i+1,j+1,k))/4.0*yhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
                         Mz_yhigh_oldt(i,k) = Mz_yhigh(i,k)
-                        Mz_yhigh(i,k) = (Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Mz_yhigh(i,k) = (Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*yhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
                         !J=n hat cross H where n hat faces outward
                         Jx_yhigh_oldt(i,k) = Jx_yhigh(i,k)
-                        Jx_yhigh(i,k) = (Hz(i,j,k)+Hz(i,j,k+1))/2.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Jx_yhigh(i,k) = (Hz(i,j,k)+Hz(i,j,k+1))/2.0*yhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
                         Jz_yhigh_oldt(i,k) = Jz_yhigh(i,k)
-                        Jz_yhigh(i,k) = -1.0*(Hx(i,j,k)+Hx(i+1,j,k))/2.0*yhigh_wall*CEXP(imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
+                        Jz_yhigh(i,k) = -1.0*(Hx(i,j,k)+Hx(i+1,j,k))/2.0*yhigh_wall*CEXP(-imag*(k_count_z*(k-kc)*del_z+k_count_x*(i-ic)*del_x))
 
                     end do
                 end do
@@ -7233,26 +7242,26 @@ Program fdtd
                         k = ff_zlow
                         !M=-n hat cross E where n hat faces outward
                         Mx_zlow_oldt(i,j) = Mx_zlow(i,j)
-                        Mx_zlow(i,j) = -1.0*(Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Mx_zlow(i,j) = -1.0*(Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*zlow_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
                         My_zlow_oldt(i,j) = My_zlow(i,j)
-                        My_zlow(i,j) = (Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        My_zlow(i,j) = (Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*zlow_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
                         !J=n hat cross H where n hat faces outward
                         Jx_zlow_oldt(i,j) = Jx_zlow(i,j)
-                        Jx_zlow(i,j) = (Hy(i,j,k)+Hy(i,j+1,k))/2.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Jx_zlow(i,j) = (Hy(i,j,k)+Hy(i,j+1,k))/2.0*zlow_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
                         Jy_zlow_oldt(i,j) = Jy_zlow(i,j)
-                        Jy_zlow(i,j) = -1.0*(Hx(i,j,k)+Hx(i+1,j,k))/2.0*zlow_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Jy_zlow(i,j) = -1.0*(Hx(i,j,k)+Hx(i+1,j,k))/2.0*zlow_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
 
                         k = ff_zhigh
                         !M=-n hat cross E where n hat faces outward
                         Mx_zhigh_oldt(i,j) = Mx_zhigh(i,j)
-                        Mx_zhigh(i,j) = (Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Mx_zhigh(i,j) = (Ey(i,j,k)+Ey(i+1,j,k)+Ey(i,j,k+1)+Ey(i+1,j,k+1))/4.0*zhigh_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
                         My_zhigh_oldt(i,j) = My_zhigh(i,j)
-                        My_zhigh(i,j) = -1.0*(Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        My_zhigh(i,j) = -1.0*(Ex(i,j,k)+Ex(i,j+1,k)+Ex(i,j,k+1)+Ex(i,j+1,k+1))/4.0*zhigh_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
                         !J=n hat cross H where n hat faces outward
                         Jx_zhigh_oldt(i,j) = Jx_zhigh(i,j)
-                        Jx_zhigh(i,j) = -1.0*(Hy(i,j,k)+Hy(i,j+1,k))/2.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Jx_zhigh(i,j) = -1.0*(Hy(i,j,k)+Hy(i,j+1,k))/2.0*zhigh_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
                         Jy_zhigh_oldt(i,j) = Jy_zhigh(i,j)
-                        Jy_zhigh(i,j) = (Hx(i,j,k)+Hx(i+1,j,k))/2.0*zhigh_wall*CEXP(imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
+                        Jy_zhigh(i,j) = (Hx(i,j,k)+Hx(i+1,j,k))/2.0*zhigh_wall*CEXP(-imag*(k_count_y*(j-jc)*del_y+k_count_x*(i-ic)*del_x))
 
                     end do
                 end do
@@ -8549,7 +8558,7 @@ Program fdtd
     #ifdef use_spice_version
         do i=1, num_spice_ports
             write(10,*) "recieved voltage at spice port ", i, "w/ Z"
-            write(10,*) 1.0 !spice impedance set to 1, will need normaliziation in outputs later on
+            write(10,*) 50 !spice impedance set to 50, will need normaliziation in outputs later on
             do j=1, time_steps
                 write(10,*) Spice_Voltage_out(i,j)
             end do
@@ -8684,7 +8693,7 @@ Program fdtd
             !1,2 real,imag currents for same fdtd E-port that was duplicated by the user on purpose
             !These are all real quantities here though but correspond to real and imaginary parts of the current and thus voltage actual
             write(10,*) "recieved voltage at spice port ", i, "w/ Z"
-            write(10,*) 1.0 !spice impedance set to 1, will need normaliziation in outputs later on
+            write(10,*) 50 !spice impedance set to 50, will need normaliziation in outputs later on
             do j=1, time_steps
                 write(10,*) Spice_Voltage_out(2*i-1,j), Spice_Voltage_out(2*i,j)
             end do

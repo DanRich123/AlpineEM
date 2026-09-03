@@ -67,8 +67,9 @@ f.write('plane wave\n') #excitation - 'plane wave' or 'antenna'
 f.write('1,0\n') #amplitude and time delay (V/m and seconds)
 f.write('90,0,270\n') #incident angles and polarization in degrees (theta,phi,pol)
 #if 'antenna':
+#if spice port excitation is desired then use '0' for the internal port number below, this will override any amplitude and phase set here and default all port settings to spice control
 #f.write('0.001,0\n') #amplitude and time delay (V and seconds)
-#f.write('4\n') #internal port number to excite (ports numbered by submission order below - 1,2,3,...,n)
+#f.write('4\n') #internal port number to excite (ports numbered by submission order below - 1,2,3,...,n) - use '0' if spice port excitation is used in the netlist
 
 #if using kmax fdtd solver:
 #f.write('plane wave\n') #excitation - 'plane wave' or 'antenna'
@@ -77,8 +78,9 @@ f.write('90,0,270\n') #incident angles and polarization in degrees (theta,phi,po
 #f.write('TM\n') #orientation of TE or TM
 #f.write('+\n') #propogation direction
 #if 'antenna':
+#if spice port excitation is desired then use '0' for the internal port number below, this will override any amplitude and phase set here and default all port settings to spice control
 #f.write('0.001,0\n') #amplitude and time shift (V and seconds)
-#f.write('1\n') #internal port number to excite (ports numbered by submission order below - 1,2,3,...,n)
+#f.write('1\n') #internal port number to excite (ports numbered by submission order below - 1,2,3,...,n) - use '0' if spice port excitation is used in the netlist
 #for either, excitation specify k:
 #f.write('0,0\n') #k1 and k2 in rad/m (ky,kz),(kx,kz), or (kx,ky) - used in both excitation schemes for boundary phase shift
 ##speciate note###
@@ -87,10 +89,10 @@ f.write('90,0,270\n') #incident angles and polarization in degrees (theta,phi,po
 #variable1 = float(sys.argv[1]) #set to retrieve the k values submitted via command line for ease in looping
 #variable2 = float(sys.argv[2])
 
-f.write('2\n') #num far field angles we want returned data for - both pols returned
-#far field phase center is cubic center at the center of the grid - round down if sizes are odd. I.e. 65/2 yields 32.
-#if IGP is used, phase center will be centered at the ground plane cube
-#if >0 then add this line each time
+f.write('2\n') #num far field angles we want returned data for - both pols returned, far field phase center is cubic centered
+#if >0 enter the far field phase center here
+f.write('32,15,15\n') #xcube,ycube,zcube
+#if >0 then add this next line for each angle
 f.write('90,0\n') #ang1 (theta,phi)
 f.write('90,180\n') #ang2 (theta,phi)
 #many angles with ease:
