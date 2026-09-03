@@ -1,24 +1,16 @@
-Known issues:
-None currently
-
-Items to incorporate at some point:
-wave ports to paraview - kmax and normal are the same height - low,high
-output fields - make a sheet/surface option
-permeability - bulk materials
-add far field phase center selection location for plane wave incidence.
-make it possible to have lumped ports at first cube.
-optional x,y,z sheets arrays - like optional bulk material array
-single frequency angle pattern far field method in addition to current method
-add more plasma terms - and double check what I have now while in process - previous testing looks good though
-add relative C input to sheets w/ note for what that means in py script - double check sheet conditions for filtering vacuum sheets when implementing.
-wp - double precision option as parameter turn on using iso fortran env - real64 and real32 - requires all numbers get #_wp - requires real (wp) :: - good for complex and real
-spice port excitations - fdtd-spice can run it now but fdtd and post processor together need updates to handle the output of data and processing for the port info.
-MPI utilization
-add magnetic sheets in same way as electric sheets
-thin wires - sub cell update
-setup a raised cosine functional for narrow banded excitations
-setup a CW wave excitation
-Add a Helmholtz equation py script (and mag equiv.) - for non-TEM mode generation in gridded feeds (dispersive or non-dispersive)
-Alter gridded feeds to handle dispersive field coefficients
-Improve CPML and waveform choice in kmax version
-python - mainly TensorFlow or pytorch - version for students
+ITEMS TO INCORPORATE AT SOME POINT:
+Paraview and python viewer renderings of the wave port locations for unit cell designs
+option to output E,H fields at surfaces
+permeability beyond free space value for bulk materials
+make it possible to have a lumped ports at the first cube
+add optional x,y,z sheets binary read-ins - like optional bulk material array
+add additional far field method - pick a frequency and produce all angles for that frequency.
+add more plasma terms to the multipole Drude model
+add option to turn on double precision numerically in Fortran
+add MPI utilization for spreading memory over multiple nodes (multiple computers)
+add thin wires as an option
+add more source types (E.g. CW wave, raised cosine envelope, etc.)
+add a 2D Helmholtz solver for frequency dependent (dispersive or non-dispersive) mode generation for gridded feeds
+modify gridded feeds so that they can handle dispersive field coefficients if desired
+Improve CPML and incident plane wave configurations for kmax (oblique angle PBCs)
+Improve the functionality of the python version (made for student education, not performance) of the solver and validated it.
