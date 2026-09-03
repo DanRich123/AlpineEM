@@ -19,7 +19,7 @@ This example performs FDTD to calculate the monostatic RCS of a near PEC (metal)
 	--there will be a single Paraview file and a folder with associated files. Only open the single file, it will reference the folder of files.
 	--run the macro from within Paraview by loading it via the Macros tab.
 
-Use my settings:
+Using my computer and settings I got:
 open ACC GPU version took 30 seconds per simulation.
 open MP multi-thread CPU version took 4 minutes per simulation.
 single threaded default version took 8 minutes per simulation.
