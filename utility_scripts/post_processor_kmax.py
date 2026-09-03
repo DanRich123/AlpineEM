@@ -32,6 +32,13 @@ Antenna_gain_output_file_name='Realized_antenna_gain_k.csv'
 #30 becomes more qualitative at wider freq and larger angles
 #40 is very qualitative at wider freq and larger angles
 dB_rule=20
+#NOTE, spice port impedance is not known a priori, the post processor defaults to 50 ohms and makes a note in the csv output files that it needs to be modified directly by the user if needed.
+#NOTE, if using spice port excitation, this needs to be uploaded here so that this script knows to use that incident wave instead of the .dat file's zero'd out wave.
+spice_excitation=False
+#if spice_excitation is True specify these two items, otherwise not needed and unused.
+spice_port_number=1 # tell the script which of the spice ports it is (1,2,3,...n) for the submission order of the spice ports into the master.py - recall the pair submission is removed here (i.e port 3&4 in fdtd is port 2 here)
+if spice_excitation==True:
+    spice_incident_wave=np.load('incident.npy') # load in the incident wave, at the right fdtd time steps (1-xxx), as a numpy array
 ####################################################################
 ####################################################################
 
@@ -66,6 +73,8 @@ mode_type=np.loadtxt(data_filename,usecols=10,skiprows=19,max_rows=1)
 if simulation_type=='antenna':
     port_number_str = np.loadtxt(data_filename,usecols=5, skiprows=20,max_rows=1)
     port_number_int = int(port_number_str)
+    if spice_excitation==True:
+        port_number_int = num_ports + spice_port_number
 maxrows=num_time_steps
 ######################################################################
 
@@ -76,6 +85,9 @@ inc_data=inc_data.reshape(-1)
 inc_data_imag=np.loadtxt(data_filename, skiprows=21, usecols=1, max_rows=maxrows)
 inc_data_imag=inc_data_imag.reshape(-1)
 inc_data=inc_data+1j*inc_data_imag
+
+if spice_excitation==True:
+    inc_data=spice_incident_wave
 
 #plt.figure()
 #plt.plot(np.real(inc_data))
@@ -421,28 +433,53 @@ if (num_ports+num_spice_ports+wave_port_num)>0:
         header_parts.append(f"Wave Trans TM (dB)")
         header_parts.append(f"Wave Trans TM (rad)")
     if simulation_type=='antenna':
-        header_parts.append(f"S_TEwaveport1:lumpedport{port_number_int} (dB)")
-        header_parts.append(f"S_TEwaveport1:lumpedport{port_number_int} (rad)")
-        header_parts.append(f"S_TMwaveport1:lumpedport{port_number_int} (dB)")
-        header_parts.append(f"S_TMwaveport1:lumpedport{port_number_int} (rad)")
-        header_parts.append(f"S_TEwaveport2:lumpedport{port_number_int} (dB)")
-        header_parts.append(f"S_TEwaveport2:lumpedport{port_number_int} (rad)")
-        header_parts.append(f"S_TMwaveport2:lumpedport{port_number_int} (dB)")
-        header_parts.append(f"S_TMwaveport2:lumpedport{port_number_int} (rad)")
+        if spice_excitation==False:
+            header_parts.append(f"S_TEwaveport1:lumpedport{port_number_int} (dB)")
+            header_parts.append(f"S_TEwaveport1:lumpedport{port_number_int} (rad)")
+            header_parts.append(f"S_TMwaveport1:lumpedport{port_number_int} (dB)")
+            header_parts.append(f"S_TMwaveport1:lumpedport{port_number_int} (rad)")
+            header_parts.append(f"S_TEwaveport2:lumpedport{port_number_int} (dB)")
+            header_parts.append(f"S_TEwaveport2:lumpedport{port_number_int} (rad)")
+            header_parts.append(f"S_TMwaveport2:lumpedport{port_number_int} (dB)")
+            header_parts.append(f"S_TMwaveport2:lumpedport{port_number_int} (rad)")
+        if spice_excitation==True:
+            header_parts.append(f"S_TEwaveport1:S_spiceport{spice_port_number} (dB) - needs renormalizing Z_spice")
+            header_parts.append(f"S_TEwaveport1:S_spiceport{spice_port_number} (rad) - needs renormalizing Z_spice")
+            header_parts.append(f"S_TMwaveport1:S_spiceport{spice_port_number} (dB) - needs renormalizing Z_spice")
+            header_parts.append(f"S_TMwaveport1:S_spiceport{spice_port_number} (rad) - needs renormalizing Z_spice")
+            header_parts.append(f"S_TEwaveport2:S_spiceport{spice_port_number} (dB) - needs renormalizing Z_spice")
+            header_parts.append(f"S_TEwaveport2:S_spiceport{spice_port_number} (rad) - needs renormalizing Z_spice")
+            header_parts.append(f"S_TMwaveport2:S_spiceport{spice_port_number} (dB) - needs renormalizing Z_spice")
+            header_parts.append(f"S_TMwaveport2:S_spiceport{spice_port_number} (rad) - needs renormalizing Z_spice")
     for i in range(num_ports):
         if simulation_type=='plane wave':
-            s_parameter_name=f"S_lumpedport{i+1}:waveport1"
+            s_parameter_name=f"S_lumpedport{i+1}:inc_waveport"
+            header_parts.append(f"{s_parameter_name} (dB)")
+            header_parts.append(f"{s_parameter_name} (rad)")
         if simulation_type=='antenna':
-            s_parameter_name = f"S{i+1}{port_number_int}"
-        header_parts.append(f"{s_parameter_name} (dB)")
-        header_parts.append(f"{s_parameter_name} (rad)")
+            if spice_excitation==False:
+                s_parameter_name = f"S{i+1}:{port_number_int}"
+                header_parts.append(f"{s_parameter_name} (dB)")
+                header_parts.append(f"{s_parameter_name} (rad)")
+            if spice_excitation==True:
+                s_parameter_name = f"S_lumpedport{i+1}:spiceport{spice_port_number}"
+                header_parts.append(f"{s_parameter_name} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"{s_parameter_name} (rad) - needs renormalizing Z_spice")
     for i in range(num_spice_ports):
         if simulation_type=='plane wave':
-            s_parameter_name=f"S_spiceport{i+1}':waveport1 - needs renormalizing Z_spice"
+            s_parameter_name=f"S_spiceport{i+1}:inc_waveport"
+            header_parts.append(f"{s_parameter_name} (dB) - needs renormalizing Z_spice")
+            header_parts.append(f"{s_parameter_name} (rad) - needs renormalizing Z_spice")
         if simulation_type=='antenna':
-            s_parameter_name = f"S_spiceport{i+1}':lumpedport{port_number_int} - needs renormalizing Z_spice"
-        header_parts.append(f"{s_parameter_name} (dB)")
-        header_parts.append(f"{s_parameter_name} (rad)")
+            if spice_excitation==False:
+                s_parameter_name = f"S_spiceport{i+1}:lumpedport{port_number_int}"
+                header_parts.append(f"{s_parameter_name} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"{s_parameter_name} (rad) - needs renormalizing Z_spice")
+            if spice_excitation==True:
+                s_parameter_name = f"S_spiceport{i+1}:spiceport{spice_port_number}"
+                header_parts.append(f"{s_parameter_name} (dB) - needs renormalizing Z_spice (unless #n:#n)")
+                header_parts.append(f"{s_parameter_name} (rad) - needs renormalizing Z_spice (unless #n:#n)")
+
     
     header_text = ", ".join(header_parts)
     # Save the arrays with a header, without comment character
@@ -478,10 +515,16 @@ if num_angles>0:
             normal_phase=np.exp(1j*2*np.pi*freq[l:h+1]*(time_corrections[timeplace])-1j*np.pi/2)
             out_put_data.append(np.angle(scatter_array[i][l:h+1]*normal_phase/inc_data_f[l:h+1]))
         for i in range(int(num_angles)):
-            header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
-            header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc - eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
-            header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
-            header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc - eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
+            if spice_excitation==False:
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc - eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc- eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
+            if spice_excitation==True:
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc - eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location) - needs renormalizing Z_spice") 
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc- eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location) - needs renormalizing Z_spice") 
         header_text = ", ".join(header_parts)
         out_put_data=np.transpose(out_put_data)
         # Save the arrays with a header, without comment character

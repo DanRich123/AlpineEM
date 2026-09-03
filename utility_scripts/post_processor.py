@@ -11,7 +11,7 @@ start_time=tp.time()
 
 ####################################################################
 ####SETUP INFORMATION HERE##########################################
-####ONLY THESE LINES NEED CHANGING TO RUN#########################
+####ONLY THESE LINES NEED CHANGING TO RUN###########################
 #os.chdir('C:/Users/foldername')
 simulation_type='plane wave' #'antenna' or 'plane wave' type of simulation
 #input 4 file names - not all will necessarily be used depending on several factors
@@ -25,11 +25,18 @@ padding=10
 #decide if metal should be used (only for unit cells, otherwise ignored) - effects phase centering - useful for measurement comparison and higher fidelity accuracy of amplitudes
 use_metal=False
 #IGP full clear needed for far field cal if IGP used (only for plane waves, otherwise ignored) - used for incident wave amplitude and phase centering for far fields
-use_IGP_clear=False
+use_IGP_full_clear=False
 #output file names - not all will ncessarily be used
 S_parameter_output_file_name='S_parameters.csv'
 Scattering_output_file_name='Scattering_Far_Field.csv'
 Antenna_gain_output_file_name='Realized_antenna_gain.csv'
+#NOTE, spice port impedance is not known a priori, the post processor defaults to 50 ohms and makes a note in the csv output files that it needs to be modified directly by the user if needed.
+#NOTE, if using spice port excitation, this needs to be uploaded here so that this script knows to use that incident wave instead of the .dat file's zero'd out wave.
+spice_excitation=False
+#if spice_excitation is True specify these two items, otherwise not needed and unused.
+spice_port_number=1 # tell the script which of the spice ports it is (1,2,3,...n) for the submission order of the spice ports into the master.py
+if spice_excitation==True:
+    spice_incident_wave=np.load('incident.npy') # load in the incident wave, at the right fdtd time steps (1-xxx), as a numpy array
 ####################################################################
 ####################################################################
 
@@ -71,11 +78,16 @@ if simulation_type=='antenna':
     wave_port_num=0
     port_number_str = np.loadtxt(data_filename,usecols=5, skiprows=17,max_rows=1)
     port_number_int = int(port_number_str)
+    if spice_excitation==True:
+        port_number_int = num_ports + spice_port_number
 #######################################################################
 
 ######First import all data into arrays and setup any needed arrays####
 inc_data=np.loadtxt(data_filename, skiprows=18,max_rows=maxrows)
 inc_data=inc_data.reshape(-1)
+
+if spice_excitation==True:
+    inc_data=spice_incident_wave
 
 wave_port_time_array=np.zeros((3,wave_port_num,num_time_steps))
 far_field_time_array=np.zeros((2,int(num_angles*2),num_time_steps))
@@ -123,10 +135,10 @@ for i in range(int(num_angles)):
 #now for the incident field for phase centering - only applies to plane waves and we only need it from the clear case
 if (num_angles>0):
     if simulation_type=='plane wave':
-        if (use_IGP_clear==False):
+        if (use_IGP_full_clear==False):
             inc_ff_pc=np.loadtxt(clear_filename,skiprows=skip_start_clear+1,max_rows=num_time_steps)
             inc_ff_pc=inc_ff_pc.reshape(-1)
-        if (use_IGP_clear==True):
+        if (use_IGP_full_clear==True):
             inc_ff_pc=np.loadtxt(IGP_full_clear_filename,skiprows=skip_start_clear+1,max_rows=num_time_steps)
             inc_ff_pc=inc_ff_pc.reshape(-1)
 
@@ -282,31 +294,50 @@ if (num_ports+num_spice_ports+wave_port_num)>0:
             header_parts.append(f"Wave Trans (dB)")
             header_parts.append(f"Wave Trans (rad)")
         if simulation_type=='antenna':
-            header_parts.append(f"S_waveport1:lumpedport{port_number_int} (dB)")
-            header_parts.append(f"S_waveport1:lumpedport{port_number_int} (rad)")
-            header_parts.append(f"S_waveport2:lumpedport{port_number_int} (dB)")
-            header_parts.append(f"S_waveport2:lumpedport{port_number_int} (rad)")
+            if spice_excitation==False:
+                header_parts.append(f"S_waveport1:lumpedport{port_number_int} (dB)")
+                header_parts.append(f"S_waveport1:lumpedport{port_number_int} (rad)")
+                header_parts.append(f"S_waveport2:lumpedport{port_number_int} (dB)")
+                header_parts.append(f"S_waveport2:lumpedport{port_number_int} (rad)")
+            if spice_excitation==True:
+                header_parts.append(f"S_waveport1:S_spiceport{spice_port_number} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"S_waveport1:S_spiceport{spice_port_number} (rad) - needs renormalizing Z_spice")
+                header_parts.append(f"S_waveport2:S_spiceport{spice_port_number} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"S_waveport2:S_spiceport{spice_port_number} (rad) - needs renormalizing Z_spice")
     for i in range(num_ports):
         if simulation_type=='plane wave':
             if (wave_port_num!=0):
-                s_parameter_name=f"S_lumpedport{i+1}:waveport1"
+                s_parameter_name=f"S_lumpedport{i+1}:inc_waveport"
             else:
                 s_parameter_name=f"A_e for port {i+1} - Vport/Einc phase center info: Vport fdtd grid (centered) port location & Einc location"
+            header_parts.append(f"{s_parameter_name} (dB)")
+            header_parts.append(f"{s_parameter_name} (rad)")
         if simulation_type=='antenna':
-            s_parameter_name = f"S{i+1}{port_number_int}"
-        header_parts.append(f"{s_parameter_name} (dB)")
-        header_parts.append(f"{s_parameter_name} (rad)")
+            if spice_excitation==False:
+                s_parameter_name = f"S{i+1}:{port_number_int}"
+                header_parts.append(f"{s_parameter_name} (dB)")
+                header_parts.append(f"{s_parameter_name} (rad)")
+            if spice_excitation==True:
+                s_parameter_name = f"S_lumpedport{i+1}:spiceport{spice_port_number}" 
+                header_parts.append(f"{s_parameter_name} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"{s_parameter_name} (rad) - needs renormalizing Z_spice")
     for i in range(num_spice_ports):
         if simulation_type=='plane wave':
             if (wave_port_num!=0):
-                s_parameter_name=f"S_spiceport{i+1}:waveport1"
+                s_parameter_name=f"S_spiceport{i+1}:inc_waveport"
             else:
-                s_parameter_name=f"A_e for spice port {i+1} - needs renormalizaing Z_spice - Vport/Einc phase center info: Vport fdtd grid (centered) port location & Einc location"
+                s_parameter_name=f"A_e for spice port {i+1} - Vport/Einc phase center info: Vport fdtd grid (centered) port location & Einc location"
+            header_parts.append(f"{s_parameter_name} (dB) - needs renormalizaing Z_spice")
+            header_parts.append(f"{s_parameter_name} (rad) - needs renormalizaing Z_spice")
         if simulation_type=='antenna':
-            s_parameter_name = f"S_spiceport{i+1}:lumpedport{port_number_int} - needs renormalizing Z_spice"
-        header_parts.append(f"{s_parameter_name} (dB)")
-        header_parts.append(f"{s_parameter_name} (rad)")
-    
+            if spice_excitation==False:
+                s_parameter_name = f"S_spiceport{i+1}:lumpedport{port_number_int}"
+                header_parts.append(f"{s_parameter_name} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"{s_parameter_name} (rad) - needs renormalizing Z_spice")
+            if spice_excitation==True:
+                s_parameter_name = f"S_spiceport{i+1}:spiceport{spice_port_number}"
+                header_parts.append(f"{s_parameter_name} (dB) - needs renormalizing Z_spice (unless #n:#n)")
+                header_parts.append(f"{s_parameter_name} (rad) - needs renormalizing Z_spice (unless #n:#n)")
     header_text = ", ".join(header_parts)
     # Save the arrays with a header, without comment character
     out_put_data=np.transpose(out_put_data)
@@ -341,10 +372,16 @@ if num_angles>0:
             normal_phase=np.exp(1j*2*np.pi*freq[l:h+1]*(time_corrections[timeplace])-1j*np.pi/2)
             out_put_data.append(np.angle(scatter_array[i][l:h+1]*normal_phase/inc_data_f[l:h+1]))
         for i in range(int(num_angles)):
-            header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
-            header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc - eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
-            header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
-            header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc- eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
+            if spice_excitation==False:
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc - eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB)")
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc- eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location)") 
+            if spice_excitation==True:
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"Theta Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc - eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location) - needs renormalizing Z_spice") 
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (dB) - needs renormalizing Z_spice")
+                header_parts.append(f"Phi Pol: Theta={far_field_angles[i][0]} & Phi={far_field_angles[i][1]} (rad of rEfar/Vinc- eEfar phase centered at ff origin & Vinc phase centered on fdtd grid port location) - needs renormalizing Z_spice") 
         header_text = ", ".join(header_parts)
         out_put_data=np.transpose(out_put_data)
         # Save the arrays with a header, without comment character
