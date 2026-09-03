@@ -79,6 +79,8 @@ with open(inputs_filename, "r") as file:
 
     # Read and convert far-field angles
     num_far_field_angles = int(file.readline())
+    if (num_far_field_angles>0):
+        ff_loc= map(int, file.readline().split(','))
     for _ in range(num_far_field_angles):
         angle_theta, angle_phi = map(float, file.readline().split(','))
 
