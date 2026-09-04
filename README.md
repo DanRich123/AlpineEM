@@ -16,8 +16,8 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 - **Two excitation types** — Gaussian and normalized differentiated Gaussian, usable as lumped-port or TF/SF plane-wave sources
 - **Far-field and S-parameter extraction** — adaptive, on-the-fly time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
 - **Sub-cell thin-sheet modeling** — Smith–Mahoney method, including zero-impedance approximations for PEC sheets
-- **Dispersive media support** — auxiliary differential equation (ADE) approach; currently only Drude (plasma) media
 - **Anisotropic, non-magnetic media** — diagonal (anisotropic) permittivity and electrical conductivity; permeability is currently fixed at the vacuum value (isotropic only)
+- **Dispersive, non-magnetic media support** — auxiliary differential equation (ADE) approach; currently only Drude (plasma) media
 - **Statics solver** — generates non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
 - **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows
 - **Paraview integration** — geometry visualization, including a ready-to-import macro
