@@ -117,7 +117,7 @@ If you use AlpineEM in academic work, please cite it, e.g.:
 
 Portions of this software are derived from open-source work by others:
 
-- FDTD/CPML implementation derived from code by Jamesina J. Simpson (University of New Mexico)
+- FDTD/CPML implementation derived from code by Jamesina J. Simpson (University of New Mexico) [CPML implementation](https://github.com/cvarin/FDTD/blob/master/Taflove/fdtd3D_CPML.f90)
 - ngspice Fortran interface derived from code by Alberto Gascon ([OpenSEMBA/ngspice_fortran_interface](https://github.com/OpenSEMBA/ngspice_fortran_interface))
 
 Full attribution is in [`LICENSE.txt`](./LICENSE.txt).
