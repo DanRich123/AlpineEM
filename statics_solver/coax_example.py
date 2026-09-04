@@ -46,7 +46,7 @@ for i in range(sim.Nx):
 # Filling the entire "gap" area with a specific relative permittivity
 # We can just fill the whole area; the boundary nodes will override 
 # the fields inside the conductors anyway.
-sim.set_material([0, nx], [0, ny], value=3.0) # e.g., Random dielectric value I assigned it
+sim.set_material([0, nx], [0, ny], value=3.0) # e.g., Dielectric value I assigned it
 
 # --- Solve ---
 V = sim.solve()
