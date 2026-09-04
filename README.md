@@ -1,6 +1,6 @@
 # AlpineEM
 
-**An FDTD–SPICE electromagnetic simulation suite**, coupling a full-wave 3D Finite-Difference Time-Domain (FDTD) solver with SPICE circuit co-simulation via ngspice. Built for electromagnetics problems that need both field-level accuracy and circuit-level fidelity.
+**An FDTD–SPICE electromagnetic simulation suite**, coupling a full-wave 3D Finite-Difference Time-Domain (FDTD) solver with SPICE circuit co-simulation via ngspice. Built for a wide variety of electromagnetics problems.
 
 Developed by Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder and as an independent.
 
