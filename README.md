@@ -1,13 +1,8 @@
 # AlpineEM
 
-**An FDTD–SPICE electromagnetic simulation suite**, coupling a full-wave 3D Finite-Difference Time-Domain (FDTD) solver with SPICE circuit co-simulation via ngspice. Built for antenna, periodic-structure, and lumped-port circuit problems that need both field-level accuracy and circuit-level fidelity.
+**An FDTD–SPICE electromagnetic simulation suite**, coupling a full-wave 3D Finite-Difference Time-Domain (FDTD) solver with SPICE circuit co-simulation via ngspice. Built for electromagnetics problems that need both field-level accuracy and circuit-level fidelity.
 
-![License](https://img.shields.io/github/license/DanRich123/AlpineEM)
-![Language](https://img.shields.io/github/languages/top/DanRich123/AlpineEM)
-![Last commit](https://img.shields.io/github/last-commit/DanRich123/AlpineEM)
-![Status](https://img.shields.io/badge/status-active%20development-yellow)
-
-Developed by Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder.
+Developed by Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder and as an independent.
 
 > **Status:** Active development. APIs, file formats, and folder structure may still change — see [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the current roadmap.
 
@@ -18,9 +13,9 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 - **3D FDTD solver** on a standard Yee grid, written in Fortran (`.f90`), with OpenMP / OpenACC build variants for multithreaded CPU or GPU execution
 - **SPICE co-simulation** — couple FDTD lumped ports directly to an ngspice circuit netlist
 - **Convolutional PML** boundaries (ADE formulation)
-- **Periodic boundary support** via a dedicated `kmax` solver variant for oblique-incidence plane waves
+- **Periodic boundary support** via a dedicated `kmax` solver variant for oblique-incidence plane waves via the constant k vector method
 - **Two excitation types** — Gaussian and normalized differentiated Gaussian — usable as lumped-port or TF/SF plane-wave sources
-- **Adaptive on-the-fly** time-domain far-field and S-parameter extraction (broadband, at selected angles)
+- **Adaptive on-the-fly** time-domain far-field (at select angles) and S-parameter extraction for broadband information
 - **Sub-cell thin-sheet modeling** (Smith–Mahoney method), including high-conductivity approximations for PEC sheets
 - **Dispersive media support** via an auxiliary differential equation (ADE) approach — currently Drude (plasma) media
 - **Statics solver** for generating non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
@@ -58,9 +53,9 @@ The FDTD core is built in four flavors, combined from two axes:
 
 ## Requirements
 
-- Fortran compiler with OpenMP / OpenACC support (e.g. `gfortran`, `nvfortran`)
+- Fortran compiler with OpenMP / OpenACC support (e.g. 'ifx', `gfortran`, `nvfortran`)
 - [ngspice](https://ngspice.sourceforge.io/) (only required for SPICE-coupled builds)
-- Python 3 (for the execution wrapper script and post-processing utilities)
+- Python 3 recommended (for the execution wrapper script and post-processing utilities)
 - [Paraview](https://www.paraview.org/) (optional, for geometry visualization)
 - Slurm (optional, only needed for cluster job submission)
 
