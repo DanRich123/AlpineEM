@@ -52,3 +52,8 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | Single-threaded (default)     | ~8 minutes          |
 
 > **Note:** These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software.
+>
+
+## Validation
+
+![Model Accuracy](/Validation_Plot.png)
