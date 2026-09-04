@@ -56,4 +56,5 @@ Approximate per-simulation runtimes measured on the author's hardware:
 
 ## Validation
 
-![Model Accuracy](examples/metal_sphere_scattering/Validation_Plot.png)
+The `PEC_sphere_monostatic_RCS_validation.py` file can be used to compare the FDTD result with the analytic result:
+![Model Accuracy](/Validation.png)
