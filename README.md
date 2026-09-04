@@ -85,7 +85,7 @@ There are also two bash scripts for building ngspice if the user has not already
 3. Copy `master.py` from [`main_fdtd/`](./main_fdtd) and any utlility files needed from [`utility_scripts/`](./utility_scripts), such as `post_processor.py`.
 4. Set up your geometry and source parameters in `master.py` (see [`examples/`](./examples) for reference input files).
 5. If using gridded lumped ports, run the [`statics_solver/`](./statics_solver) first to generate the TEM-mode E/H field pattern.
-6. Run the solver via the Python execution script `master.py` that we copied from [`main_fdtd/`](./main_fdtd) (locally, or submit via [`slurm_scripts/`](./slurm_scripts) on a cluster).
+6. Run the solver via the Python execution script `master.py` that was copied from [`main_fdtd/`](./main_fdtd) (locally, or submit via [`slurm_scripts/`](./slurm_scripts) on a cluster).
 7. You may need to run a 'clear' case depending on what you are simulating (e.g. clear case is the identical simulation, typically with no geometry present).
 8. Post-process results with the tools in [`utility_scripts/`](./utility_scripts), and view geometry in Paraview using the macro in [`paraview/`](./paraview).
 
