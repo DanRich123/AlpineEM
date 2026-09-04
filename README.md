@@ -10,22 +10,19 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 
 ## Features
 
-- **3D FDTD solver** on a standard cubic Yee grid, written in Fortran (`.f90`), with OpenMP / OpenACC build variants for multithreaded CPU or GPU execution
-- **SPICE co-simulation** — couple FDTD lumped ports directly to an ngspice circuit netlist
-- **Convolutional PML** boundary option (ADE formulation)
-- **Periodic boundary support** via a standard periodic boundary option and a dedicated `kmax` solver variant for oblique-incidence plane waves (constant k-vector method)
-- **Infinite ground plane** boundary option
-- **Two excitation types** — Gaussian and normalized differentiated Gaussian — usable as lumped-port or TF/SF plane-wave sources
-- **Adaptive on-the-fly** time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
-- **Sub-cell thin-sheet modeling** (Smith–Mahoney method), including zero-impedance approximations for PEC sheets
-- **Dispersive media support** via an auxiliary differential equation (ADE) approach — currently only Drude (plasma) media
-- **Anisotropic media** — diagonal elements for both permittivity and electrical conductivity
-- **Vacuum permeability** — only vacuum permeability is currently supported
-- **Statics solver** for generating non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
+- **3D FDTD solver** — full-wave solver on a standard cubic Yee grid, written in Fortran (`.f90`), with OpenMP / OpenACC build variants for multithreaded CPU or GPU execution
+- **SPICE co-simulation** — couples FDTD lumped ports directly to an ngspice circuit netlist
+- **Boundary conditions** — convolutional PML (ADE formulation); standard periodic boundaries, with a dedicated `kmax` solver variant for oblique-incidence plane waves (constant k-vector method); and an infinite ground plane option
+- **Two excitation types** — Gaussian and normalized differentiated Gaussian, usable as lumped-port or TF/SF plane-wave sources
+- **Far-field and S-parameter extraction** — adaptive, on-the-fly time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
+- **Sub-cell thin-sheet modeling** — Smith–Mahoney method, including zero-impedance approximations for PEC sheets
+- **Dispersive media support** — auxiliary differential equation (ADE) approach; currently only Drude (plasma) media
+- **Anisotropic, non-magnetic media** — diagonal (anisotropic) permittivity and electrical conductivity; permeability is currently fixed at the vacuum value (isotropic only)
+- **Statics solver** — generates non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
 - **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows
-- **Paraview integration** for geometry visualization, including a ready-to-import macro
-- **Slurm submission scripts** for HPC/cluster runs (especially useful for OpenMP/OpenACC builds)
-- An experimental, incomplete **pure-Python (PyTorch/TensorFlow) trial version** of the solver
+- **Paraview integration** — geometry visualization, including a ready-to-import macro
+- **Slurm submission scripts** — for HPC/cluster runs, especially useful for OpenMP/OpenACC builds
+- **Pure-Python trial version** — experimental, incomplete PyTorch/TensorFlow implementation of the solver, for educational purposes
 
 ## Repository structure
 
