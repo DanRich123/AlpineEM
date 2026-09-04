@@ -38,6 +38,7 @@ export OMP_PROC_BIND=close
 export OMP_PLACES=cores
 
 # Run simulation
-python fdtd.py
-python fdtd_clear.py
+python master.py
+# python master_clear.py
+# python master_metal.py
 python post_processor.py
