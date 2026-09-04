@@ -56,4 +56,4 @@ Approximate per-simulation runtimes measured on the author's hardware:
 
 ## Validation
 
-![Model Accuracy](/Validation_Plot.png)
+![Model Accuracy](examples/metal_sphere_scattering/Validation_Plot.png)
