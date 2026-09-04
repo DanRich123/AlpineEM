@@ -10,16 +10,17 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 
 ## Features
 
-- **3D FDTD solver** on a standard Yee grid, written in Fortran (`.f90`), with OpenMP / OpenACC build variants for multithreaded CPU or GPU execution
-- **SPICE co-simulation** — couple FDTD lumped ports directly to an ngspice circuit netlist
+- **3D FDTD solver** on a standard cubic Yee grid, written in Fortran (`.f90`), with OpenMP / OpenACC build variants for multithreaded CPU or GPU execution
+- **SPICE co-simulation** couple FDTD lumped ports directly to an ngspice circuit netlist
 - **Convolutional PML** boundary option (ADE formulation)
-- **Periodic boundary support** — standard periodic boundary option and a dedicated `kmax` solver variant for oblique-incidence plane waves via the constant k vector method
+- **Periodic boundary support** via standard periodic boundary option and a dedicated `kmax` solver variant for oblique-incidence plane waves (constant k vector method)
+- **Infinite ground plane** boudnary option
 - **Two excitation types** — Gaussian and normalized differentiated Gaussian — usable as lumped-port or TF/SF plane-wave sources
 - **Adaptive on-the-fly** time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
-- **Sub-cell thin-sheet modeling** (Smith–Mahoney method), including high-conductivity approximations for PEC sheets
+- **Sub-cell thin-sheet modeling** (Smith–Mahoney method), including zero impedance approximations for PEC sheets
 - **Dispersive media support** via an auxiliary differential equation (ADE) approach — currently only Drude (plasma) media
 - **Anisotropic media** — diagonal elements for both permittivity and electrical conductivity
-- **Vacuum permeability** — only vacuum permeability currently supported (for saving RAM purposefully)
+- **Vacuum permeability** — only vacuum permeability currently supported
 - **Statics solver** for generating non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
 - **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows
 - **Paraview integration** for geometry visualization, including a ready-to-import macro
@@ -55,9 +56,9 @@ The FDTD core is built in four flavors, combined from two axes:
 
 ## Requirements
 
-- Fortran compiler with OpenMP / OpenACC support (e.g. 'ifx', `gfortran`, `nvfortran`)
+- Fortran compiler with OpenMP / OpenACC support (e.g. `ifx/ifort`, `gfortran`, `nvfortran`)
 - [ngspice](https://ngspice.sourceforge.io/) (only required for SPICE-coupled builds)
-- Python 3 recommended (for the execution wrapper script and post-processing utilities)
+- Python 3 (recommended) (for the execution wrapper script and post-processing utilities)
 - [Paraview](https://www.paraview.org/) (optional, for geometry visualization)
 - Slurm (optional, only needed for cluster job submission)
 
@@ -68,11 +69,11 @@ Compile scripts for each solver variant live in [`compile_scripts/`](./compile_s
 ```bash
 # Example — replace with your target variant's script
 cd compile_scripts
-./compile_fdtd.sh        # standard build
-./compile_fdtd_spice.sh  # SPICE-coupled build (requires ngspice)
+./compile.sh        # standard build
+./compile_spice.sh  # SPICE-coupled build (requires ngspice)
 ```
 
-> Update this section with the exact script names/flags from `compile_scripts/` — see note above.
+The compilation process is generally straightforward since there are few dependencies (other than ngspice) so it is easy to modify the complication process.
 
 ## Quick start
 
