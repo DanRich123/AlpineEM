@@ -33,6 +33,7 @@ conda activate sandbox
 # export LD_LIBRARY_PATH=$INSTALL_DIR/ngspice-sf-mirror-ngspice-44.2/local/lib:$LD_LIBRARY_PATH
 
 # Run simulation
-python fdtd_igp.py
-python fdtd_igp_clear.py
+python master.py
+# python master_clear.py
+# python master_metal.py
 python post_processor.py
