@@ -79,7 +79,7 @@ There are also two bash scripts for building ngspice, if the user has not alread
 1. Create a new folder and choose a solver variant (standard vs. `kmax`, with or without SPICE) to compile using the appropriate script in [`compile_scripts/`](./compile_scripts).
 2. Copy any needed files for your selected variant from [`main_fdtd/`](./main_fdtd) to this new folder (e.g. `fdtd_solver.f90`, `circuit.F90`, etc.) and compile the solver.
 3. Copy `master.py` from [`main_fdtd/`](./main_fdtd) and any utility files needed from [`utility_scripts/`](./utility_scripts), such as `post_processor.py`.
-4. Set up your geometry and source parameters in `master.py` (see [`examples/`](./examples) for reference input files).
+4. Set up your geometry and source parameters in `master.py` (see [`examples/`](./examples) for reference).
 5. If using gridded lumped ports, copy and run the [`statics_solver/`](./statics_solver) in the new folder first to generate the TEM-mode E/H field pattern.
 6. Run the solver via the Python execution script `master.py` that was copied from [`main_fdtd/`](./main_fdtd) (locally, or submit via [`slurm_scripts/`](./slurm_scripts) on a cluster).
 7. You may need to run a "clear" case depending on what you are simulating (e.g. a clear case is the identical simulation, typically with no geometry present).
