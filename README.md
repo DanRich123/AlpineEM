@@ -91,10 +91,10 @@ cd compile_scripts
 
 ### Known limitations
 
-- Non-TEM mode generation requires a Helmholtz-equation solver, which does not yet exist
-- Non-LTI (narrow-band/CW) source excitation is not currently available
-- The pure-Python trial version is incomplete and not well tested
-- Far-field and adaptive time-domain calculations do not parallelize efficiently; a fully parallel version would be RAM-intensive
+- Non-TEM mode generation for lumped or wave ports requires a 2D Helmholtz-equation solver, which does not yet exist, and modifications to the main code to support dispersive port behavior.
+- Non-LTI (narrow-band/CW) source excitation is not currently available but planned
+- The pure-Python trial version is incomplete and not well tested - this is primarily to teaching purposes
+- Adaptive far field time-domain calculations do not parallelize efficiently via OpenMP and OpenACC due to atomics; a fully parallel version would be RAM-intensive
 
 See [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
 
@@ -107,12 +107,9 @@ If you use AlpineEM in academic work, please cite it, e.g.:
   author  = {Richardson, Daniel},
   title   = {AlpineEM: An FDTD-SPICE Software Suite},
   year    = {2026},
-  url     = {https://github.com/DanRich123/AlpineEM},
-  note    = {Center for National Security Initiatives, University of Colorado Boulder}
+  url     = {https://github.com/DanRich123/AlpineEM}
 }
 ```
-
-> If you archive a release on [Zenodo](https://zenodo.org/) (free, and gives you a DOI), swap the `url` field for a versioned DOI so citations point to the exact release someone used — Zenodo can auto-generate the BibTeX entry for you.
 
 ## Acknowledgments
 
