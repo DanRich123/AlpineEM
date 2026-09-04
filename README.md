@@ -13,11 +13,13 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 - **3D FDTD solver** on a standard Yee grid, written in Fortran (`.f90`), with OpenMP / OpenACC build variants for multithreaded CPU or GPU execution
 - **SPICE co-simulation** — couple FDTD lumped ports directly to an ngspice circuit netlist
 - **Convolutional PML** boundary option (ADE formulation)
-- **Periodic boundary support** standard periodic boundaries and a dedicated `kmax` solver variant for oblique-incidence plane waves via the constant k vector method
+- **Periodic boundary support** — standard periodic boundary option and a dedicated `kmax` solver variant for oblique-incidence plane waves via the constant k vector method
 - **Two excitation types** — Gaussian and normalized differentiated Gaussian — usable as lumped-port or TF/SF plane-wave sources
 - **Adaptive on-the-fly** time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
 - **Sub-cell thin-sheet modeling** (Smith–Mahoney method), including high-conductivity approximations for PEC sheets
-- **Dispersive media support** via an auxiliary differential equation (ADE) approach — currently Drude (plasma) media
+- **Dispersive media support** via an auxiliary differential equation (ADE) approach — currently only Drude (plasma) media
+- **Anisotropic media** — diagonal elements for both permittivity and electrical conductivity
+- **Vacuum permeability** — only vacuum permeability currently supported (for saving RAM purposefully)
 - **Statics solver** for generating non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
 - **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows
 - **Paraview integration** for geometry visualization, including a ready-to-import macro
@@ -82,16 +84,14 @@ cd compile_scripts
 
 ## Additional information and known limitations
 
-- **Field update:** Yee-grid FDTD on a standard rectangular coordinate system with standard CFL condition but it's user reducible
-- **Dispersive media:** ADE approach that currently limited to Drude (plasma) media only
-- **Thin sheets:** Smith–Mahoney sub-cell method. Vacuum sheets are intentionally skipped (used as the existence-filter mechanism); PEC sheets are approximated as high-conductivity with finite thickness rather than zero-impedance
-- **Lumped ports:** Internal (non-SPICE) ports intentionally omit the FDTD cell capacitance; SPICE-linked ports include it. SPICE FDTD locations must use non-dispersive permittivity. Gridded lumped ports accept arbitrary geometry but require known non-dispersive E/H field coefficients — currently generated via the statics solver for TEM modes
+- **CFL reducible time step:** — Yee-grid FDTD on a standard rectangular coordinate system with standard CFL condition but it's user reducible.
+- **Thin sheets filtering:** Vacuum sheets are intentionally skipped (used as the existence-filter mechanism); PEC sheets are approximated as high-conductivity with finite thickness rather than zero-impedance
+- **Lumped ports information:** Internal (non-SPICE) ports intentionally omit the FDTD cell capacitance; SPICE-linked ports include it. SPICE FDTD locations must use non-dispersive permittivity. Gridded lumped ports accept arbitrary geometry but require known non-dispersive E/H field coefficients — currently generated via the statics solver for TEM modes.
 - **Far field / S-parameters:** Adaptive on-the-fly time-domain method for broadband data at selected angles (note: computationally harder to parallelize well due to atomics on both CPU/OpenMP and GPU/OpenACC)
-
-- Non-TEM mode generation for lumped or wave ports requires a 2D Helmholtz-equation solver, which does not yet exist, and modifications to the main code to support dispersive port behavior.
-- Non-LTI (narrow-band/CW) source excitation is not currently available but planned
-- The pure-Python trial version is incomplete and not well tested - this is primarily to teaching purposes
-- Adaptive far field time-domain calculations do not parallelize efficiently via OpenMP and OpenACC due to atomics; a fully parallel version would be RAM-intensive
+- **Non-TEM mode generation** for lumped or wave ports requires a 2D Helmholtz-equation solver, which does not yet exist, and modifications to the main code to support dispersive port behavior.
+- **Non-LTI (narrow-band/CW) source excitation** is not currently available but planned
+- **Pure-Python trial version** is incomplete and not well tested - this is primarily to teaching purposes
+- **Adaptive far field time-domain calculations** do not parallelize efficiently via OpenMP and OpenACC due to atomics; a fully parallel version would be RAM-intensive though. A future release will include a broadband angle at select frequencies options, this is expected to parallelize well with no issues.
 
 See [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
 
