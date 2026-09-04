@@ -2,6 +2,11 @@
 
 **An FDTD–SPICE electromagnetic simulation suite**, coupling a full-wave 3D Finite-Difference Time-Domain (FDTD) solver with SPICE circuit co-simulation via ngspice. Built for antenna, periodic-structure, and lumped-port circuit problems that need both field-level accuracy and circuit-level fidelity.
 
+![License](https://img.shields.io/github/license/DanRich123/AlpineEM)
+![Language](https://img.shields.io/github/languages/top/DanRich123/AlpineEM)
+![Last commit](https://img.shields.io/github/last-commit/DanRich123/AlpineEM)
+![Status](https://img.shields.io/badge/status-active%20development-yellow)
+
 Developed by Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder.
 
 > **Status:** Active development. APIs, file formats, and folder structure may still change — see [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the current roadmap.
@@ -15,12 +20,12 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 - **Convolutional PML** boundaries (ADE formulation)
 - **Periodic boundary support** via a dedicated `kmax` solver variant for oblique-incidence plane waves
 - **Two excitation types** — Gaussian and normalized differentiated Gaussian — usable as lumped-port or TF/SF plane-wave sources
-- **Adaptive on-the-fly** time-domain far-field (at select angles) and S-parameter extraction both yield broadband information
+- **Adaptive on-the-fly** time-domain far-field and S-parameter extraction (broadband, at selected angles)
 - **Sub-cell thin-sheet modeling** (Smith–Mahoney method), including high-conductivity approximations for PEC sheets
 - **Dispersive media support** via an auxiliary differential equation (ADE) approach — currently Drude (plasma) media
 - **Statics solver** for generating non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
 - **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows
-- **Paraview integration** for geometry and E,H field visualization, including a ready-to-import macro
+- **Paraview integration** for geometry visualization, including a ready-to-import macro
 - **Slurm submission scripts** for HPC/cluster runs (especially useful for OpenMP/OpenACC builds)
 - An experimental, incomplete **pure-Python (PyTorch/TensorFlow) trial version** of the solver
 
@@ -97,6 +102,22 @@ cd compile_scripts
 - Far-field and adaptive time-domain calculations do not parallelize efficiently; a fully parallel version would be RAM-intensive
 
 See [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
+
+## Citing this work
+
+If you use AlpineEM in academic work, please cite it, e.g.:
+
+```bibtex
+@software{alpineem,
+  author  = {Richardson, Daniel},
+  title   = {AlpineEM: An FDTD-SPICE Software Suite},
+  year    = {2026},
+  url     = {https://github.com/DanRich123/AlpineEM},
+  note    = {Center for National Security Initiatives, University of Colorado Boulder}
+}
+```
+
+> If you archive a release on [Zenodo](https://zenodo.org/) (free, and gives you a DOI), swap the `url` field for a versioned DOI so citations point to the exact release someone used — Zenodo can auto-generate the BibTeX entry for you.
 
 ## Acknowledgments
 
