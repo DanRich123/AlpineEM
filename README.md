@@ -38,7 +38,7 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 | [`optimization_scripts/`](./optimization_scripts) | Example adjoint (gradient) and genetic-algorithm optimization workflows |
 | [`utility_scripts/`](./utility_scripts) | Post-processing utilities, including field plotting |
 | [`paraview/`](./paraview) | Geometry-viewing macro for Paraview |
-| [`fdtd_python_trial_versions/`](./fdtd_python_trial_versions) | Incomplete, lightly-tested pure-Python (PyTorch/TensorFlow) version of the solver |
+| [`fdtd_python_trial_versions/`](./fdtd_python_trial_versions) | Incomplete, lightly-tested pure-Python (PyTorch/TensorFlow) version of the solver for educational purposes |
 | [`examples/`](./examples) | Example simulation files, updated periodically (may occasionally lag behind the current version) |
 | [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) | Planned fixes and features |
 | [`LICENSE.txt`](./LICENSE.txt) | License and third-party acknowledgments |
@@ -75,6 +75,8 @@ cd compile_scripts
 
 The compilation process is generally straightforward since there are few dependencies (other than ngspice) so it is easy to modify the complication process.
 
+There are also two bash scripts for building ngspice if the user has not already done so.
+
 ## Quick start
 
 1. Choose a solver variant (standard vs. `kmax`, with or without SPICE) and compile it using the appropriate script in `compile_scripts/`.
@@ -88,11 +90,10 @@ The compilation process is generally straightforward since there are few depende
 - **CFL reducible time step:** — Yee-grid FDTD on a standard rectangular coordinate system with standard CFL condition but it's user reducible.
 - **Thin sheets filtering:** Vacuum sheets are intentionally skipped (used as the existence-filter mechanism); PEC sheets are approximated as high-conductivity with finite thickness rather than zero-impedance
 - **Lumped ports information:** Internal (non-SPICE) ports intentionally omit the FDTD cell capacitance; SPICE-linked ports include it. SPICE FDTD locations must use non-dispersive permittivity. Gridded lumped ports accept arbitrary geometry but require known non-dispersive E/H field coefficients — currently generated via the statics solver for TEM modes.
-- **Far field / S-parameters:** Adaptive on-the-fly time-domain method for broadband data at selected angles (note: computationally harder to parallelize well due to atomics on both CPU/OpenMP and GPU/OpenACC)
+- **Adaptive far field time-domain calculations** do not parallelize efficiently via OpenMP and OpenACC due to atomics; a fully parallel version would be RAM-intensive though. A future release will include a broadband angle at select frequencies options; this is expected to parallelize well with no issues.
 - **Non-TEM mode generation** for lumped or wave ports requires a 2D Helmholtz-equation solver, which does not yet exist, and modifications to the main code to support dispersive port behavior.
 - **Non-LTI (narrow-band/CW) source excitation** is not currently available but planned
 - **Pure-Python trial version** is incomplete and not well tested - this is primarily to teaching purposes
-- **Adaptive far field time-domain calculations** do not parallelize efficiently via OpenMP and OpenACC due to atomics; a fully parallel version would be RAM-intensive though. A future release will include a broadband angle at select frequencies options, this is expected to parallelize well with no issues.
 
 See [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
 
