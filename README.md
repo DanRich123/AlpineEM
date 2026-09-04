@@ -69,7 +69,6 @@ Compile scripts for each solver variant live in [`compile_scripts/`](./compile_s
 
 ```bash
 # Example — replace with your target variant's script
-cd compile_scripts
 ./compile.sh        # standard build
 ./compile_spice.sh  # SPICE-coupled build (requires ngspice)
 ```
