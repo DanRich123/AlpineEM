@@ -55,7 +55,7 @@ The FDTD core is built in four flavors, combined from two axes:
 
 - Fortran compiler (e.g. `ifx/ifort`, `gfortran`, `nvfortran`) with OpenMP / OpenACC support (if using one of those options)
 - [ngspice](https://ngspice.sourceforge.io/) (only required for SPICE-coupled builds)
-- C compiler (only required for SPICE-coupled builds, e.g. `icx/icc`, `gcc`, `nvc`) with OpenMP / OpenACC support (if using one of those options)
+- C compiler (only required for SPICE-coupled builds, e.g. `icx/icc`, `gcc`, `nvc`)
 - Python 3 (recommended) for the execution wrapper script and post-processing utilities
 - [Paraview](https://www.paraview.org/) (optional, for geometry visualization)
 - Slurm (optional, only needed for cluster job submission)
