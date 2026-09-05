@@ -1,6 +1,10 @@
 # A Non-Foster Recieving Monopole Antenna (AlpineEM FDTD) (Work in progress....)
 
-This example uses AlpineEM to perform FDTD simulations that calculate the effective aperture area of a non-Foster loaded monopole antenna over an infinite ground plane. A uniform plane wave incident on the antenna is received at the non-Foster loaded port, and the effective aperture area is calculated from the received voltage and the incident plane wave information. It outputs time-domain data for post-processing, along with binary geometry files. Because SPICE is used, the port impedance needs to be corrected after post processing - the post processing uses 50 ohms (constant over frequency) for the impedance instead of the correct impedance value. This value is purely for post processing - the correct port impedance was used in the simulation, but the post processor doesn't natively know this value.
+This example uses AlpineEM to perform FDTD simulations that calculate the effective aperture area of a non-Foster loaded monopole antenna over an infinite ground plane. A uniform plane wave incident on the antenna is received at the non-Foster loaded port (square coaxial port), and the effective aperture area is calculated from the received voltage and the incident plane wave information. 
+
+It outputs time-domain data for post-processing, along with a binary geometry file. Because SPICE is used, the port impedance needs to be corrected after post processing - the post processing uses 50 ohms (constant over frequency) for the impedance instead of the correct impedance value. This value is purely for post processing - the correct port impedance was used in the simulation, but the post processor doesn't natively know this value. The file YY... corrects for this...
+
+Though a square coaxial-like port is used, there is another script in ZZ that supports circular ports as well. The user can define any port shape they want via the static solver, but square and circle coax examples are available...
 
 ## Workflow
 
