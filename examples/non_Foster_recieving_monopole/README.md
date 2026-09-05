@@ -16,7 +16,15 @@ Choose one of three build options depending on the resources available to you:
 - **Multi-threaded CPU** (OpenMP)
 - **GPU** (OpenACC)
 
-### 2. Run the object case — `master.py`
+### 2. Run the static solver to produce the feed pattern... — `....py`
+
+Configures and runs...
+
+- Generates... used for...
+- You must set...
+- Produces several output files used for...
+
+### 4. Run the object case — `master.py`
 
 Configures and runs the simulation.
 
@@ -24,13 +32,13 @@ Configures and runs the simulation.
 - You must set the solver name in `master.py` (the GPU/OpenACC version is selected by default).
 - Produces several output files used for post-processing and geometry viewing.
 
-### 3. Post-process — `post_process.py`
+### 5. Post-process — `post_process.py`
 
 Uses the outputs to generate the effective aperture area data as a `.csv` file.
 
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
 
-### 4. (Optional) View the geometry
+### 6. (Optional) View the geometry
 
 To visualize the simulation geometry:
 
