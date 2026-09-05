@@ -30,7 +30,10 @@ Configures and runs the simulation.
 Uses the simulation outputs to generate the effective aperture area data as a `.csv` file.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
 
-### 5. (Optional) View the geometry
+### 5. Correct the aperture area and plot (optional) via — `plot_up.py`
+Uses the `.csv` file generated in the post processing step and corrects using the actual load over which the voltage is measured.
+
+### 6. (Optional) View the geometry
 To visualize the simulation geometry:
 1. Run `fdtd_geometry_maker.py` to generate ParaView files.
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and don't open its contents individually.
