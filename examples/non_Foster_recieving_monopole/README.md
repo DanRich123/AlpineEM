@@ -56,4 +56,4 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | OpenMP (multi-threaded CPU)   | ~2.1 minutes          |
 | Single-threaded (default)     | ~2.9 minutes          |
 
-> **Note:** SPICE is the larger time consumption in this specific example, and it does not run natively on the GPU - leading OpenMP to produce a faster runtime in this specific example. See the metal sphere monostatic scattering example for more drastic differences in runtime where OpenACC dominates. These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software. 
+> **Note:** SPICE is the larger time consumption in this specific example due to a small SPICE time step, and it does not run natively on the GPU - leading OpenMP to produce a faster runtime in this specific example. See the metal sphere monostatic scattering example for more drastic differences in runtime where OpenACC dominates. These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software. 
