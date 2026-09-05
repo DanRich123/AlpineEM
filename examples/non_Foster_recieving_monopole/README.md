@@ -6,6 +6,8 @@ The simulation outputs time-domain data for post-processing, along with a binary
 
 This example uses a square coaxial-like port, but [`statics_solver/`](./statics_solver) also includes `coax_example.py`, which supports circular coaxial ports. The static solver can accommodate any port shape, but square and circular coax examples are provided since they're the most common.
 
+This example is designed to demonstrate how to...
+
 ## Workflow
 
 ### 1. Compile the FDTD solver
