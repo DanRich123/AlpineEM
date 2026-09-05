@@ -2,6 +2,8 @@
 
 This example uses AlpineEM to perform FDTD simulations that calculate the monostatic radar cross section (RCS) of a near-PEC (metal) sphere with a 12.5 mm radius. It outputs time-domain data for post-processing, along with binary geometry files for both the **object** (sphere present) and **clear** (sphere absent) cases.
 
+This example is designed to validate the core mechanisms of the solver including the total field / scattered field formalism (TF/SF), the convolutional perfecly matched layer (CPML) boundaries, the Near-to-Far-Field transformation (NTFF), and the three builder opttions (single-threaded CPU, multi-threaded CPU (OpenMP), and the GPU (OpenACC)).
+
 ## Workflow
 
 ### 1. Compile the FDTD solver
