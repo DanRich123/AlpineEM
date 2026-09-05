@@ -53,9 +53,9 @@ The FDTD core is built in four flavors, combined from two axes:
 
 ## Requirements
 
-- Fortran compiler with OpenMP / OpenACC support (e.g. `ifx/ifort`, `gfortran`, `nvfortran`)
+- Fortran compiler (e.g. `ifx/ifort`, `gfortran`, `nvfortran`) with OpenMP / OpenACC support (if using one of those options)
 - [ngspice](https://ngspice.sourceforge.io/) (only required for SPICE-coupled builds)
-- C compiler with OpenMP / OpenACC support (only required for SPICE-coupled builds, e.g. `icx/icc`, `gcc`, `nvc`)
+- C compiler (only required for SPICE-coupled builds, e.g. `icx/icc`, `gcc`, `nvc`) with OpenMP / OpenACC support (if using one of those options)
 - Python 3 (recommended) for the execution wrapper script and post-processing utilities
 - [Paraview](https://www.paraview.org/) (optional, for geometry visualization)
 - Slurm (optional, only needed for cluster job submission)
@@ -90,7 +90,7 @@ There are also two bash scripts for building ngspice, if the user has not alread
 - **CFL-reducible time step:** Yee-grid FDTD on a standard rectangular coordinate system with the standard CFL condition, but it's user-reducible.
 - **Thin-sheet filtering:** Vacuum sheets are intentionally skipped (used as the existence-filter mechanism); PEC sheets are approximated as high-conductivity with finite thickness rather than zero-impedance.
 - **Lumped port information:** Internal (non-SPICE) ports intentionally omit the FDTD cell capacitance; SPICE-linked ports include it. SPICE FDTD locations must use non-dispersive permittivity. Gridded lumped ports accept arbitrary geometry but require known non-dispersive E/H field coefficients — currently generated via the statics solver for TEM modes.
-- **Adaptive far-field time-domain calculations** do not parallelize efficiently via OpenMP and OpenACC due to atomics; a fully parallel version would be RAM-intensive, though. A future release will include a broadband-angle-at-select-frequencies option; this is expected to parallelize well with no issues.
+- **Adaptive far-field time-domain calculations** do not parallelize efficiently via OpenMP or OpenACC due to atomics; a fully parallel version would be RAM-intensive, though. A future release will include a broadband-angle-at-select-frequencies option; this is expected to parallelize well with no issues.
 - **Non-TEM mode generation** for lumped or wave ports requires a 2D Helmholtz-equation solver, which does not yet exist, along with modifications to the main code to support dispersive port behavior.
 - **Non-LTI (narrow-band/CW) source excitation** is not currently available but planned.
 - **Pure-Python trial version** is incomplete and not well tested — this is primarily for teaching purposes.
