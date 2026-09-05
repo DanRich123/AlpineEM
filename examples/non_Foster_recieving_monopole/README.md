@@ -16,20 +16,20 @@ Choose one of three build options depending on the resources available to you:
 - **Multi-threaded CPU** (OpenMP)
 - **GPU** (OpenACC)
 
-### 2. Run the static solver to produce the feed pattern... — `....py`
+### 2. Run the static solver to produce the TEM E and H field weightings — `square_coax_example.py`
 
-Configures and runs...
+This python script calls `EM2Dsolver.py` to solve the statics problem. The weights also apply to TEM modes if used appropriately.
 
-- Generates... used for...
-- You must set...
-- Produces several output files used for...
+- Generates a binary file for E and H field weightings that will be directly read into and executed via the binary compiled in Step 1.
+- User must set the permittivity and permeability of the 2D geometry, it must match the shape intended in the `master.py` script.
 
 ### 4. Run the object case — `master.py`
 
 Configures and runs the simulation.
 
 - Generates a text file of inputs, then executes the binary compiled in Step 1.
-- You must set the solver name in `master.py` (the GPU/OpenACC version is selected by default).
+- You must set the solver name in `master.py` (the multi-threaded CPU version (OpenMP) is currently selected by default).
+- When entering gridded feed information, manually enter the name of the binary created in Step 3.
 - Produces several output files used for post-processing and geometry viewing.
 
 ### 5. Post-process — `post_process.py`
@@ -56,4 +56,4 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | OpenMP (multi-threaded CPU)   | ~xx minutes          |
 | Single-threaded (default)     | ~xx minutes          |
 
-> **Note:** These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software. Note why OpenMP outperforms here...
+> **Note:** These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software. SPICE is the larger time consumption in this specific example, and it does not run natively on the GPU - leading OpenMP to produce a faster runtime in this specific example. See the metal sphere monostatic scattering example for more drastic differences in runtime.
