@@ -34,8 +34,10 @@ Uses the simulation outputs to generate the effective aperture area data as a `.
 - Because the load of interest in SPICE was set to 50 ohms, no corrections to the `.csv' file is needed.
 - Example: If the SPICE load had been set to 25 ohms, the aperture area produced by `post_processor.py` would need a factor of 2 correction.
 
+### 5. (Optional) convert aperture area to realized gain — `convert.py`
+Imports the `.csv` file for the aperture area and plots the realized gain.
 
-### 5. (Optional) View the geometry
+### 6. (Optional) View the geometry
 To visualize the simulation geometry:
 1. Run `fdtd_geometry_maker.py` to generate ParaView files.
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and don't open its contents individually.
