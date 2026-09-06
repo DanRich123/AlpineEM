@@ -1,10 +1,12 @@
-# A Non-Foster Receiving Monopole Antenna (AlpineEM FDTD) (Work in progress...)
+# A Non-Foster Receiving Monopole Antenna (AlpineEM FDTD)
 
 This example uses AlpineEM to run FDTD simulations that calculate the effective aperture area of a non-Foster loaded monopole antenna over an infinite ground plane. A uniform plane wave incident on the antenna is received at the non-Foster loaded port (a square coaxial port), and the effective aperture area is calculated from the received voltage and the incident plane wave information.
 
-The simulation outputs time-domain data for post-processing, along with a binary geometry file. Because SPICE is used, some post-processed values need correcting: by default, the post processor performs its algebraic calculations using a constant 50 ohm impedance. This value is used for post-processing only — the correct port impedance is used in the simulation itself — but since the post processor has no way of knowing that value, the user must manually correct for the actual impedance.
+The simulation outputs time-domain data for post-processing, along with a binary geometry file. Because SPICE is used, some post-processed values need correcting: by default, the post processor performs its algebraic calculations using a constant 50 ohm impedance. This value is used for post-processing only — the correct port impedance is used in the simulation itself — but since the post processor has no way of directly knowing that value, the user must manually correct for the actual impedance in the `.csv` output files (there is a note within the header if 'renormalization' is possibly needed).
 
 This example uses a square coaxial-like port, but [`statics_solver/`](./statics_solver) also includes `coax_example.py`, which supports circular coaxial ports. The static solver can accommodate any port shape, but square and circular coax examples are provided since they're the most common.
+
+This example is primarily designed to demonstrate how to use SPICE, the infinite ground plane boundary condition, and gridded feeds.
 
 ## Workflow
 
@@ -22,18 +24,18 @@ This Python script calls `EM2Dsolver.py` to solve the statics problem. The resul
 ### 3. Run the object case — `master.py`
 Configures and runs the simulation.
 - Generates a text file of inputs, then executes the binary compiled in Step 1.
-- You must set the solver name in `master.py` (the multi-threaded CPU/OpenMP version is selected by default).
+- You must set the solver name in `master.py` (the multi-threaded CPU/OpenMP version is selected by default here).
 - When entering gridded feed information, manually enter the name of the binary created in Step 2.
 - Produces several output files used for post-processing and geometry viewing.
 
 ### 4. Post-process — `post_process.py`
 Uses the simulation outputs to generate the effective aperture area data as a `.csv` file.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
+- Because the load of interest in SPICE was set to 50 ohms, no corrections to the `.csv' file is needed.
+- Example: If the SPICE load had been set to 25 ohms, the aperture area produced by `post_processor.py` would need a factor of 2 correction.
 
-### 5. Correct the aperture area and plot (optional) via — `plot_up.py`
-Uses the `.csv` file generated in the post processing step and corrects using the actual load over which the voltage is measured.
 
-### 6. (Optional) View the geometry
+### 5. (Optional) View the geometry
 To visualize the simulation geometry:
 1. Run `fdtd_geometry_maker.py` to generate ParaView files.
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and don't open its contents individually.
@@ -48,4 +50,4 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | OpenMP (multi-threaded CPU) | ~2.1 minutes         |
 | Single-threaded (default)   | ~2.9 minutes         |
 
-> **Note:** SPICE accounts for most of the runtime in this particular example, due to a small SPICE time step, and it doesn't run natively on the GPU — which is why OpenMP outperforms OpenACC here. See the metal sphere monostatic scattering example for a case with more drastic runtime differences, where OpenACC dominates. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software.
+> **Note:** SPICE accounts for most of the runtime in this particular example, due to a (unecessarily) small SPICE time step, and it doesn't run natively on the GPU — which is why OpenMP outperforms OpenACC here. See the metal sphere monostatic scattering example for a case with more drastic runtime differences, where OpenACC dominates. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software.
