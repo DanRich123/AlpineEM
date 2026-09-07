@@ -5,4 +5,4 @@ These examples are chosen to validate the FDTD+SPICE solver and its features, an
 Current examples include:
 
 - The monostatic scattering of an incident plane wave off of a metal sphere
-- The aperture area and realized gain of a non-Foster loaded monopole-like antenna mounted over an infinite ground plane
+- The aperture area and realized gain of a receiving non-Foster loaded monopole-like antenna mounted over an infinite ground plane
