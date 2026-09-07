@@ -83,7 +83,7 @@ There are also two bash scripts for building ngspice, if the user has not alread
 5. If using gridded lumped ports, copy and run the [`statics_solver/`](./statics_solver) in the new folder first to generate the TEM-mode E/H field pattern.
 6. Run the solver via the Python execution script `master.py` that was copied from [`main_fdtd/`](./main_fdtd) (locally, or submit via [`slurm_scripts/`](./slurm_scripts) on a cluster).
 7. You may need to run a "clear" case depending on what you are simulating (e.g. a clear case is the identical simulation, typically with no geometry present).
-8. You may want to run a "metal" case depending on what you are simulating (e.g. metal plate in place of your geometry, typical for TRL calibration of unit cells with periodic boundary conditions).
+8. You may want to run a "metal" case depending on what you are simulating (e.g. a metal plate in place of your geometry is typical for TRL calibration of unit cells with periodic boundary conditions).
 9. Post-process results with the tools in [`utility_scripts/`](./utility_scripts), and view geometry in Paraview using the macro in [`paraview/`](./paraview).
 
 ## Additional information and known limitations
