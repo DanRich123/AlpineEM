@@ -193,6 +193,7 @@ Program fdtd
     character(3) :: char_spice_ports
 #endif
     integer :: num_spice_ports=0
+    integer :: additional_spice_ports=0
     real :: spice_time_reduction_factor
 
 
@@ -226,6 +227,7 @@ Program fdtd
     real, allocatable :: Cap(:)
     character(30), allocatable :: gridded_feed_names_spice(:)
     real, allocatable :: gridded_feed_all_spice(:,:,:,:)
+    character(len=15), allocatable :: names_of_additional_spice_ports(:)
 #endif
 
     !Field and auxillary arrays
@@ -1270,6 +1272,15 @@ Program fdtd
                 ports_spice(i,5,1)=1
             end if
         end do
+        if (num_spice_ports>0) then
+            read(1,*) additional_spice_ports
+            if (additional_spice_ports>0) then
+                allocate(names_of_additional_spice_ports(additional_spice_ports))
+            end if
+            do i=1, additional_spice_ports
+                read(1,*) names_of_additional_spice_ports(i)
+            end do
+        end if
 #endif
 
 #ifdef use_spice_version
@@ -3766,11 +3777,11 @@ Program fdtd
     !similar to above, we need to allocate regardless of use for acc passage.
 
     if (num_spice_ports>0) then
-        allocate(Spice_Current(num_spice_ports))
-        allocate(Spice_Voltage(num_spice_ports))
-        allocate(Spice_Voltage_out(num_spice_ports,time_steps))
-        allocate(Spice_Current_out(num_spice_ports,time_steps))
-        allocate(names(num_spice_ports))
+        allocate(Spice_Current(num_spice_ports+additional_spice_ports))
+        allocate(Spice_Voltage(num_spice_ports+additional_spice_ports))
+        allocate(Spice_Voltage_out(num_spice_ports+additional_spice_ports,time_steps))
+        allocate(Spice_Current_out(num_spice_ports+additional_spice_ports,time_steps))
+        allocate(names(num_spice_ports+additional_spice_ports))
         allocate(Cap(num_spice_ports))
     else
         allocate(Spice_Current(1))
@@ -3788,6 +3799,9 @@ Program fdtd
     Cap(:)=0.0
     do i=1, num_spice_ports
         names(i)%name = TRIM(names_of_spice_ports(i))
+    end do
+    do i=num_spice_ports+1, num_spice_ports+additional_spice_ports
+        names(i)%name = TRIM(names_of_additional_spice_ports(i-num_spice_ports))
     end do
 
     !now setup some items
@@ -5638,6 +5652,10 @@ Program fdtd
         !$omp single
         do i=1, num_spice_ports
             Spice_Voltage(i)=circuit%nodes%values(i)%voltage-ports_spice(i,4,1)
+            !write(*,*) Spice_Voltage(i)
+        end do
+        do i=num_spice_ports + 1, num_spice_ports + additional_spice_ports
+            Spice_Voltage(i)=circuit%nodes%values(i)%voltage
             !write(*,*) Spice_Voltage(i)
         end do
         !$omp end single
@@ -8188,7 +8206,7 @@ Program fdtd
         !Voltage outputs if any relevant
         !$acc parallel loop present(Spice_Voltage_out, Spice_Voltage)
         !$omp do schedule(static)
-        do i=1, num_spice_ports
+        do i=1, num_spice_ports + additional_spice_ports
             Spice_Voltage_out(i,counter)=Spice_Voltage(i)
         end do
         !$acc end parallel loop
@@ -8494,7 +8512,7 @@ Program fdtd
         write(10,*) "number of spice ports = ", 0
     #endif
     #ifdef use_spice_version
-        write(10,*) "number of spice ports = ", num_spice_ports
+        write(10,*) "number of spice ports = ", num_spice_ports + additional_spice_ports
     #endif
 
         write(10,*)  "simulation type" , pbc_x, pbc_y, pbc_z
@@ -8556,9 +8574,9 @@ Program fdtd
         end do
 
     #ifdef use_spice_version
-        do i=1, num_spice_ports
+        do i=1, num_spice_ports + additional_spice_ports
             write(10,*) "recieved voltage at spice port ", i, "w/ Z"
-            write(10,*) 50 !spice impedance set to 50, will need normaliziation in outputs later on
+            write(10,*) 1 !spice impedance set to 1, will need normaliziation in outputs later on
             do j=1, time_steps
                 write(10,*) Spice_Voltage_out(i,j)
             end do
@@ -8605,7 +8623,7 @@ Program fdtd
         write(10,*) "number of spice ports = ", 0
     #endif
     #ifdef use_spice_version
-        write(10,*) "number of spice ports = ", num_spice_ports/2
+        write(10,*) "number of spice ports = ", num_spice_ports/2 + additional_spice_ports/2
     #endif
 
         write(10,*)  "simulation type" , pbc_x, pbc_y, pbc_z, k_direction
@@ -8689,11 +8707,11 @@ Program fdtd
         end do
 
     #ifdef use_spice_version
-        do i=1, num_spice_ports/2
+        do i=1, num_spice_ports/2 + additional_spice_ports/2
             !1,2 real,imag currents for same fdtd E-port that was duplicated by the user on purpose
             !These are all real quantities here though but correspond to real and imaginary parts of the current and thus voltage actual
             write(10,*) "recieved voltage at spice port ", i, "w/ Z"
-            write(10,*) 50 !spice impedance set to 50, will need normaliziation in outputs later on
+            write(10,*) 1 !spice impedance set to 1, will need normaliziation in outputs later on
             do j=1, time_steps
                 write(10,*) Spice_Voltage_out(2*i-1,j), Spice_Voltage_out(2*i,j)
             end do
