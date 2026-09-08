@@ -20,8 +20,8 @@ Choose one of three build options depending on the resources available to you:
 This Python script calls `EM2Dsolver.py` to solve the statics problem. The resulting weights also apply to TEM modes when used appropriately.
 - Generates a binary file of E- and H-field weightings, which is read directly into and executed by the binary compiled in Step 1.
 - The user must set the permittivity and permeability of the 2D geometry to match the shape used in `master.py`.
-- For reference, the expected binary output `gridded_feed.bin` is included in this tutorial.
-- Additionally, the E and H field plots are included with voltage and Az (normal component):
+- For reference, the expected binary output named `gridded_feed.bin` is included in this tutorial.
+- Additionally, the E and H field plots are included with voltage and Az (normal component) as well:
 <p align="center">
   <img src="./electric fields.png" alt="Model E" width="49%" />
   <img src="./magnetic fields.png" alt="Model H" width="49%" />
@@ -39,9 +39,13 @@ Uses the simulation outputs to generate the effective aperture area data as a `.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
 - A normalization is needed to account for the correct impedance of each port location.
 
-### 5. (Optional) convert aperture area to realized gain and plot both — `plot.py`
+### 5. Convert aperture area to realized gain and plot both — `plot.py`
 Imports the `.csv` file for the aperture area, corrects the aperture area, and then plots both the aperture area and realized gain.
--Only the 50-ohm load SPICE port is of interest, so only its value is corrected in this script.
+-Only the 50-ohm load SPICE port is of interest, so only its value is corrected in the `plot.py` script.
+<p align="center">
+  <img src="./Realized gain comparison.png" alt="Model G" width="49%" />
+  <img src="./Aperture area comparison.png" alt="Model A" width="49%" />
+</p>
 
 ### 6. (Optional) View the geometry
 To visualize the simulation geometry:
