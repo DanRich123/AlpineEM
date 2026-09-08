@@ -47,6 +47,8 @@ To visualize the simulation geometry:
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and do not open its contents individually.
 3. For an easier setup, load the included macro, `fdtd_macro.py`, into ParaView (**Macros** tab) to automatically configure common viewing filters.
 
+![Model sphere](./sphere.png)
+
 ### 6. Validation
 
 The `PEC_sphere_monostatic_RCS_validation.py` file can be used to compare the FDTD result with the analytic result:
