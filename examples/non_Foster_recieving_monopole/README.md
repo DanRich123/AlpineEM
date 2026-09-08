@@ -42,6 +42,8 @@ Configures and runs the simulation.
 - When entering gridded feed information, manually enter the name of the binary created in Step 2.
 - Produces several output files used for post-processing and geometry viewing.
 
+  > **Note** Run for zero time steps if viewing the geometry (see step 6) is desired before running a full simulation.
+
 ### 4. Post-process — `post_process.py`
 Uses the simulation outputs to generate the effective aperture area data as a `.csv` file.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
