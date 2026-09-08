@@ -63,7 +63,9 @@ To visualize the simulation geometry:
 
 The Paraview rendered image along side a circuit schematic is shown below:
 
-![Model Accuracy](./geometry.png)
+<p align="center">
+  <img src="./geometry.png" alt="Model G" width="40%" />
+</p>
 
 ## Performance reference
 Approximate per-simulation runtimes measured on the author's hardware:
