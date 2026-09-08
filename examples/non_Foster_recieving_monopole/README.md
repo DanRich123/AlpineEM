@@ -16,6 +16,8 @@ Choose one of three build options depending on the resources available to you:
 - **Multi-threaded CPU** (OpenMP)
 - **GPU** (OpenACC)
 
+> **Note** SPICE must be installed. There are two example batch scripts included in this folder, `build_my_ngspice.sh` and `build_my_ngspice_acc.sh`, for installing and exporting paths for the different build options. They will likely need to be modified to include the user's specific information.
+
 ### 2. Run the static solver to produce the TEM E- and H-field weightings — `square_coax_example.py`
 This Python script calls `EM2Dsolver.py` to solve the statics problem. The resulting weights also apply to TEM modes when used appropriately.
 - Generates a binary file of E- and H-field weightings, which is read directly into and executed by the binary compiled in Step 1.
@@ -32,7 +34,7 @@ This Python script calls `EM2Dsolver.py` to solve the statics problem. The resul
 ### 3. Run the object case — `master.py`
 Configures and runs the simulation.
 - Generates a text file of inputs, then executes the binary compiled in Step 1.
-- You must set the solver name in `master.py` (the multi-threaded CPU/OpenMP version is selected by default here).
+- You must set the solver name in `master.py` (the single-threaded CPU version is selected by default here).
 - When entering gridded feed information, manually enter the name of the binary created in Step 2.
 - Produces several output files used for post-processing and geometry viewing.
 
