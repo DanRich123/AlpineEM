@@ -2,7 +2,7 @@
 
 This example uses AlpineEM to run FDTD simulations that calculate the effective aperture area of a non-Foster loaded monopole antenna over an infinite ground plane. A uniform plane wave incident on the antenna is received at the non-Foster loaded port (a square coaxial port), and the effective aperture area is calculated from the received voltage and the incident plane wave information.
 
-The simulation outputs time-domain data for post-processing, along with a binary geometry file. Because SPICE is used, some post-processed values need correcting: by default, the post processor performs its algebraic calculations using a constant 50 ohm impedance. This value is used for post-processing only — the correct port impedance is used in the simulation itself — but since the post processor has no way of directly knowing that value, the user must sometimes manually correct for the actual impedance in the `.csv` output files (there is a note within the header if 'renormalization' is possibly needed).
+The simulation outputs time-domain data for post-processing, along with a binary geometry file. Because SPICE is used, some post-processed values need correcting: by default, the post processor performs its algebraic calculations using a constant 50 ohm impedance. This value is used for post-processing only — the correct port impedance is used in the simulation itself — but since the post processor has no way of directly knowing that value, the user must sometimes manually correct for the actual impedance in the `.csv` output files (there is a note within the header if normalization is possibly needed).
 
 This example uses a square coaxial-like port, but [`statics_solver/`](./statics_solver) also includes `coax_example.py`, which supports circular coaxial ports. The static solver can accommodate any port shape, but square and circular coax examples are provided since they're the most common.
 
@@ -31,11 +31,13 @@ Configures and runs the simulation.
 ### 4. Post-process — `post_process.py`
 Uses the simulation outputs to generate the effective aperture area data as a `.csv` file.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
-- Because the load of interest in SPICE was set to 50 ohms, no corrections to the `.csv' file is needed.
-- Example: If the SPICE load had been set to 25 ohms, the aperture area produced by `post_processor.py` would need a factor of 2 correction.
+- Because the load of interest in SPICE was set to 50 ohms, no corrections to this port are needed.
+- If the user cares about the aperture area as seen from the FDTD port location, and not the 50-ohm load, this port does require a normalization.
+- Example: If the port had been set to 25 ohms, the aperture area produced by `post_processor.py` would need a factor of 2 correction.
 
 ### 5. (Optional) convert aperture area to realized gain and plot both — `plot.py`
 Imports the `.csv` file for the aperture area and plots both the aperture area and realized gain.
+- As mentioned above, only the 50-ohm load SPICE port is of interest and it does not require normalization.
 
 ### 6. (Optional) View the geometry
 To visualize the simulation geometry:
