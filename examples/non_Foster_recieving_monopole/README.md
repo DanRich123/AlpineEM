@@ -31,6 +31,8 @@ This Python script calls `EM2Dsolver.py` to solve the statics problem. The resul
   <img src="./magnetic fields.png" alt="Model H" width="49%" />
 </p>
 
+Anywhere the weightings are zero within the mask (outside the coaxial cable), the FDTD solver will ignore those cells as part of the port.
+
 > **Note** Z-direction is always normal in this statics solver. This mask can still be used, as is done in this case, when a different direction is actually normal in the FDTD solver. The FDTD solver accounts for this information correctly as long as the intended FDTD direction in `master.py` is selected.
 
 ### 3. Run the object case — `master.py`
