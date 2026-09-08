@@ -1,5 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import os
+
+# move to the current directory if not already there
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
 
 # load the non foster aperture area data
 data = np.loadtxt('Aperture_area.csv', delimiter=',', skiprows=1)
@@ -16,11 +21,12 @@ A_e_corrected_mag = data[3] - 10*np.log10(50)
 A_e_corrected_mag2 = data2[3] - 10*np.log10(50)
 
 plt.figure()
-plt.plot(data[0]*1000, A_e_corrected_mag, label = 'Aperture Area - NF Circuit w/ 50 ohm load')
+plt.plot(data[0]*1000, A_e_corrected_mag, label = 'Aperture Area - NF circuit w/ 50 ohm load')
 plt.plot(data2[0]*1000, A_e_corrected_mag2, label = 'Aperture Area - 50 ohm load only')
 plt.xlabel('Frequency (MHz)')
 plt.ylabel('Amplitude (dB)')
 plt.ylim(-90,-55)
+plt.legend()
 plt.grid()
 plt.title('Aperture Area Comparison')
 plt.savefig('Aperture area comparison')
@@ -31,11 +37,12 @@ G_r = A_e_corrected_mag + 10 * np.log10(4*np.pi/(lam**2))
 G_r2 = A_e_corrected_mag2 + 10 * np.log10(4*np.pi/(lam**2))
 
 plt.figure()
-plt.plot(data[0]*1000, G_r, label = 'Realized Gain - NF Circuit w/ 50 ohm load')
+plt.plot(data[0]*1000, G_r, label = 'Realized Gain - NF circuit w/ 50 ohm load')
 plt.plot(data2[0]*1000, G_r2, label = 'Realized Gain - 50 ohm load only')
 plt.xlabel('Frequency (MHz)')
 plt.ylabel('Amplitude (dB)')
 plt.ylim(-100,-35)
+plt.legend()
 plt.grid()
 plt.title('Realized Gain Comparison')
 plt.savefig('Realized gain comparison')
