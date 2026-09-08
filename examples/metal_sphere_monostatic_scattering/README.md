@@ -24,6 +24,8 @@ Configures and runs the simulation with the sphere present.
 - You must set the solver name in `master.py` (the GPU/OpenACC version is selected by default).
 - Produces several output files used for post-processing and geometry viewing.
 
+  > **Note** Run for zero time steps if viewing the geometry (see step 5) is desired before running a full simulation.
+
 ### 3. Run the clear case — `master_clear.py`
 
 Performs the same steps as `master.py`, but without the sphere present, to establish the reference (background) fields.
