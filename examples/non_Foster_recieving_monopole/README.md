@@ -34,8 +34,8 @@ Uses the simulation outputs to generate the effective aperture area data as a `.
 - Because the load of interest in SPICE was set to 50 ohms, no corrections to the `.csv' file is needed.
 - Example: If the SPICE load had been set to 25 ohms, the aperture area produced by `post_processor.py` would need a factor of 2 correction.
 
-### 5. (Optional) convert aperture area to realized gain — `convert.py`
-Imports the `.csv` file for the aperture area and plots the realized gain.
+### 5. (Optional) convert aperture area to realized gain and plot both — `plot.py`
+Imports the `.csv` file for the aperture area and plots both the aperture area and realized gain.
 
 ### 6. (Optional) View the geometry
 To visualize the simulation geometry:
