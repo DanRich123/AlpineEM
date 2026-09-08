@@ -48,7 +48,7 @@ To visualize the simulation geometry:
 3. For an easier setup, load the included macro, `fdtd_macro.py`, into ParaView (**Macros** tab) to automatically configure common viewing filters.
 
 <p align="center">
-  <img src="./sphere.png" alt="Model geom" width="20%" />
+  <img src="./sphere.png" alt="Model geom" width="50%" />
 </p>
 
 ### 6. Validation
