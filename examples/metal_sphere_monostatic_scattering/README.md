@@ -14,6 +14,8 @@ Choose one of three build options depending on the resources available to you:
 - **Multi-threaded CPU** (OpenMP)
 - **GPU** (OpenACC)
 
+There are batch scripts included for building all versions (`compile.sh`, `compile_mp.sh`, and `compile_acc.sh`).
+
 ### 2. Run the object case — `master.py`
 
 Configures and runs the simulation with the sphere present.
