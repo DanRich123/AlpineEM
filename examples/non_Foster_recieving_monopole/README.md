@@ -1,4 +1,4 @@
-# A Non-Foster Receiving Monopole Antenna (AlpineEM FDTD)
+# A Non-Foster Receiving Monopole Antenna (AlpineEM FDTD) In progress...
 
 This example uses AlpineEM to run FDTD simulations that calculate the effective aperture area of a non-Foster loaded monopole antenna over an infinite ground plane. A uniform plane wave incident on the antenna is received at the non-Foster loaded port (a square coaxial port), and the effective aperture area is calculated from the received voltage and the incident plane wave information.
 
