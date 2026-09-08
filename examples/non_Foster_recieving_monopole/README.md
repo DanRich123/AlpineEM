@@ -22,7 +22,7 @@ This Python script calls `EM2Dsolver.py` to solve the statics problem. The resul
 - The user must set the permittivity and permeability of the 2D geometry to match the shape used in `master.py`.
 - For reference, the expected binary output `gridded_feed.bin` is included in this tutorial.
 - Additionally, the E and H field plots are included:
-- ![Model E](./electric$fields.png) ![Model H](./magnetic$fields.png)
+- ![Model E](./electric%fields.png) ![Model H](./magnetic%fields.png)
 
 ### 3. Run the object case — `master.py`
 Configures and runs the simulation.
