@@ -61,6 +61,9 @@ To visualize the simulation geometry:
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and don't open its contents individually.
 3. For easier setup, load the included macro, `fdtd_macro.py`, into ParaView (**Macros** tab) to automatically configure common viewing filters.
 
+The Paraview rendered image along side a circuit schematic is shown below:
+
+
 ## Performance reference
 Approximate per-simulation runtimes measured on the author's hardware:
 
