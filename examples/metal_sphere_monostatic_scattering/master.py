@@ -287,6 +287,13 @@ f.write('0\n') #number of spice lumped ports connected to fdtd grid - 1 netlist 
 #f.write('out3\n') #name of the port to link to fdtd
 #f.write('I3\n') #name of the current source associated with the port linked to fdtd
 
+#if num spice ports > 0:
+#when done adding spice ports, add any additional spice 'ports' (nodes) from within spice that you want voltage for
+#the post processor counts these as additonal 'ports' but there is no direct connection to the fdtd grid 
+#kmax will need duplicates submitted together like submission above - they will be named different like above, but the same 'location' in the duplicate circuit
+#f.write('1\n')
+#f.write('v_load\n')
+
 f.close()
 
 #section to write the netlist from here with all PWL's input ready to go as dummy variables
@@ -351,34 +358,27 @@ f.close()
 #f.close()
 
 #normal example w/ gridded ports:
-#times=4000 #get from above
-#factor=1 #get from above
-#base_time_step=9.4365835E-13 #get from a clear case or similar
-#f=open('fdtd_netlist.cir','w')
-#f.write('*Fully Stabilized Ideal Non-Foster Co-Simulation Netlist\n\n')
-#f.write('.options method=gear reltol=1e-4 chgtol=1e-15\n\n')
-#f.write('I2 0 out2 PWL(0 0)\n\n')
-#f.write('C_interface out2 match_node 1pF\n\n')
-#f.write('R_lp match_node v_filter 1\n')
-#f.write('C_lp v_filter 0 1pF\n\n')
-#f.write('B_neg_cap 0 match_node I=-0.2p * ddt(v(v_filter))\n')
-#f.write('R_dc_anchor match_node 0 1meg\n\n')
-#f.write('R2 match_node 0 50\n\n')
+#f = open('fdtd_netlist.cir', 'w')
+#f.write('*Non-Foster Co-Simulation Netlist\n')
+#f.write('.options method=gear reltol=1e-3\n')
+#f.write('I2 0 out2 PWL(0 0)\n')
+#f.write('C_filter out2 filter 1nF\n')
+#f.write('C_neg filter v_load -1pF\n')
+#f.write('R_dc_anchor filter 0 1meg\n')
+#f.write('R_load v_load 0 50\n')
 #f.write('.tran 1E-13 {} UIC\n'.format(times * base_time_step / factor))
 #f.write('.end\n')
 #f.close()
-
-#kmax example for gridded ports:
-#times=4000 #get from above
-#factor=1 #get from above
-#base_time_step=9.4365835E-13 #get from a clear case or similar
-#f=open('fdtd_netlist.cir','w')
-#f.write('*Validation of coax operation with FDTD\n')
+#this is 50 ohms version for direct comparison
+#f = open('fdtd_netlist.cir', 'w')
+#f.write('*Baseline: 50 ohm load\n')
+#f.write('.options method=gear reltol=1e-3\n')
 #f.write('I2 0 out2 PWL(0 0)\n')
-#f.write('I3 0 out3 PWL(0 0)\n')
-#f.write('.tran 1E-13 {}\n'.format(times*base_time_step/factor))
-#f.write('R2 out2 0 36.68\n')
-#f.write('R3 out3 0 36.68\n')
+#f.write('C_filter out2 filter 1nF\n')
+#f.write('V_short v_load filter 0\n')
+#f.write('R_dc_anchor filter 0 1meg\n')
+#f.write('R_load v_load 0 50\n')
+#f.write('.tran 1E-13 {} UIC\n'.format(times * base_time_step / factor))
 #f.write('.end\n')
 #f.close()
 
@@ -401,6 +401,20 @@ f.close()
 #f.write('Rterm2 out2 0 50\n')
 #f.write('Rterm12 out12 0 50\n')
 #f.write('Rterm22 out22 0 50\n')
+#f.write('.end\n')
+#f.close()
+
+#kmax example for gridded ports:
+#times=4000 #get from above
+#factor=1 #get from above
+#base_time_step=9.4365835E-13 #get from a clear case or similar
+#f=open('fdtd_netlist.cir','w')
+#f.write('*Validation of coax operation with FDTD\n')
+#f.write('I2 0 out2 PWL(0 0)\n')
+#f.write('I3 0 out3 PWL(0 0)\n')
+#f.write('.tran 1E-13 {}\n'.format(times*base_time_step/factor))
+#f.write('R2 out2 0 36.68\n')
+#f.write('R3 out3 0 36.68\n')
 #f.write('.end\n')
 #f.close()
 
