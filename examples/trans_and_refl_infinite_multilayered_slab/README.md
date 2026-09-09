@@ -1,6 +1,6 @@
 # Transmission and Reflection Through a Multilayered Quasi-1D Infinite Slab of Dielectrics and Thin Sheets (AlpineEM FDTD)
 
-This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite multilayered slab of materials. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boudnary conditions. The multilayered stack up is as follows:
+This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite multilayered slab of materials. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boudnary conditions. The multilayered stack up is as follows (also see Paraview image below):
 
 - Layer 1: 50 ohms/sq thin sheet
 - Layer 2: 6mm of dielectric 2.1
