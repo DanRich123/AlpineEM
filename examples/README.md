@@ -6,4 +6,4 @@ Current examples include:
 
 - The monostatic scattering of an incident plane wave off of a metal sphere
 - The aperture area and realized gain of a receiving non-Foster loaded monopole-like antenna mounted over an infinite ground plane
-- Transmission and reflection through an infinite (periodic boundary conditions) multilayered slab made of dielectrics and thin sheets (in progress...)
+- Transmission and reflection through an infinite (periodic boundary conditions) multilayered slab made of dielectrics and thin sheets
