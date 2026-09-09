@@ -3,9 +3,9 @@
 This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite multilayered slab of materials. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boudnary conditions. The multilayered stack up is as follows (also see Paraview image below):
 
 - Layer 1: 50 ohms/sq thin sheet
-- Layer 2: 6mm of dielectric 2.1
+- Layer 2: 6 mm of an isotropic dielectric (relative epsilon = 2.1)
 - Layer 3: 25 ohms/sq thin sheet
-- Layer 4: 6mm of dielectric 3.5
+- Layer 4: 6 mm of an isotropic dielectric (relative epsilon = 3.5)
 
 It outputs time-domain data for post-processing, along with binary geometry files for the **object** (multilayer present), **clear** (multilayer absent), and **metal** (multilayer replaced with metal) cases.
 
