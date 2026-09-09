@@ -14,3 +14,4 @@ add a 2D Helmholtz solver for frequency dependent (dispersive or non-dispersive)
 modify gridded feeds so that they can handle dispersive field coefficients if desired
 Improve CPML and incident plane wave configurations for kmax (oblique angle PBCs)
 Improve the functionality of the python version (made for student education, not performance) of the solver and validated it.
+OpenACC (GPU) speed improvements for Drude (plasma) materials via reordering of memory array operations.
