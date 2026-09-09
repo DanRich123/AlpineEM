@@ -31,7 +31,7 @@ Configures and runs the simulation with the object present.
 - You must set the solver name in `master.py` (the single-threaded version is selected by default).
 - Produces several output files used for post-processing and geometry viewing.
 
-  > **Note** Run for zero time steps if viewing the geometry (see step 5) is desired before running a full simulation.
+  > **Note** Run for zero time steps if viewing the geometry (see step 6) is desired before running a full simulation.
 
 ### 3. Run the clear case — `master_clear.py`
 
