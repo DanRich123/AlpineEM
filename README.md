@@ -2,7 +2,7 @@
 
 **An FDTD–SPICE electromagnetic simulation suite**, coupling a full-wave 3D Finite-Difference Time-Domain (FDTD) solver with SPICE circuit co-simulation via ngspice. Built for a wide variety of electromagnetics problems.
 
-Developed by Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder and as an independent.
+Developed by Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder and as an independent for academic and workforce development purposes.
 
 > **Status:** Active development. APIs, file formats, and folder structure may still change — see [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the current roadmap.
 
