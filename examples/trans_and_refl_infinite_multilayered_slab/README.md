@@ -68,7 +68,7 @@ To visualize the simulation geometry:
 
 The `plot.py` file can be used to compare the FDTD result with the analytic result:
 
-![Model Accuracy](./Validation.png)
+![Model Accuracy](./Comparison_plot.png)
 
 ## Performance reference
 
