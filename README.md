@@ -74,7 +74,7 @@ The compilation process is generally straightforward since there are few depende
 
 There are also two bash scripts for building ngspice, if the user has not already done so.
 
-## Quick start
+## Quick start (also see examples folder)
 
 1. Create a new folder and choose a solver variant (standard vs. `kmax`, with or without SPICE) to compile using the appropriate script in [`compile_scripts/`](./compile_scripts).
 2. Copy any needed files for your selected variant from [`main_fdtd/`](./main_fdtd) to this new folder (e.g. `fdtd_solver.f90`, `circuit.F90`, etc.) and compile the solver.
