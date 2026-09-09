@@ -27,7 +27,7 @@ plt.grid()
 plt.legend()
 plt.xlabel('Frequency (GHz)')
 plt.ylabel('Amplitude (dB)')
-plt.title('S11 Comparisons')
+plt.title('S11 Comparison')
 
 # Right plot: S21 comparison
 plt.subplot(1, 2, 2)
@@ -39,7 +39,7 @@ plt.grid()
 plt.legend()
 plt.xlabel('Frequency (GHz)')
 plt.ylabel('Amplitude (dB)')
-plt.title('S21 Comparisons')
+plt.title('S21 Comparison')
 
 
 plt.tight_layout()
