@@ -41,7 +41,7 @@ Performs the same steps as `master.py`, but the object has been replaced with me
 
 - You must set the solver name in `master_metal.py` (the single-threaded version is selected by default).
 - Produces several output files used for post-processing and geometry viewing.
-- Note: set `use_metal=True` to `use_metal=True` within `post_processor.py` if the user wishes to bypass using the metal case.
+- Note: set `use_metal=True` to `use_metal=False` within `post_processor.py` if the user wishes to bypass using the metal case.
 - Using the metal case provides more accurate results, but it shift the phase center away from the wave port to the surface of the metal.
 
 ### 5. Post-process — `post_process.py`
