@@ -24,7 +24,7 @@ IGP_full_clear_filename='IGP_full_clear.dat' # full clear, no IGP even if presen
 padding=10
 # decide if metal should be used (only for unit cells, otherwise ignored) - effects phase centering - useful for measurement comparison and higher fidelity accuracy of amplitudes
 use_metal=False
-# IGP full clear needed for far field cal if IGP used (only for plane waves, otherwise ignored) - used for incident wave amplitude and phase centering for far fields
+# IGP full clear needed for far field scattering cal if IGP used (only for plane waves, otherwise ignored) - used for incident wave amplitude and phase centering for far field scattering
 use_IGP_full_clear=False
 # output file names - not all will ncessarily be used
 S_parameter_output_file_name='S_parameters.csv' # this is also used for aperture area when relevant
