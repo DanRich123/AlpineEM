@@ -87,6 +87,7 @@ Program fdtd
     integer :: clock_rate
     real :: step_vc_out !added for antenna source clear cases
     character(len=5) :: export_all_field_data
+    real :: sum_r, sum_t !used for refl,trans summations for reduction clause speed purposes
 
     !added for kmax
 #ifdef use_kmax_version
@@ -7006,56 +7007,104 @@ Program fdtd
         !don't need to cell center here - faster and equivalent
         !X normal unit cell
         if (pbc_y+pbc_z==2) then
-            !$acc parallel loop collapse(2) present(Ez, Ey, E_reflected, E_transmitted) &
-            !$acc reduction(+:E_reflected(counter), E_transmitted(counter))
+
+            !$omp single
+            !$acc serial
+            sum_r=0.0
+            sum_t=0.0
+            !$omp end single
+            !$acc end serial
+
+            !$acc parallel loop collapse(2) present(Ez, Ey) &
+            !$acc reduction(+:sum_r, sum_t)
             !$omp do collapse(2) schedule(static) &
-            !$omp reduction(+:E_reflected(counter), E_transmitted(counter))
+            !$omp reduction(+:sum_r, sum_t)
             do k = ff_zlow, ff_zhigh 
                 do j = ff_ylow, ff_yhigh
-                    E_reflected(counter) = E_reflected(counter) +  Ez(xlow,j,k)*sin(pol) - &
+                    sum_r = sum_r +  Ez(xlow,j,k)*sin(pol) - &
                     Ey(xlow,j,k)*cos(pol)*cos(phi)
-                    E_transmitted(counter) = E_transmitted(counter) + Ez(xhigh,j,k)*sin(pol) - &
+                    sum_t = sum_t + Ez(xhigh,j,k)*sin(pol) - &
                     Ey(xhigh,j,k)*cos(pol)*cos(phi)
                 end do
             end do
             !$acc end parallel loop
             !$omp end do
+
+            !$omp single
+            !$acc serial
+            E_reflected(counter) = E_reflected(counter) + sum_r
+            E_transmitted(counter) = E_transmitted(counter) + sum_t
+            !$omp end single
+            !$acc end serial
+
         end if
         !Y normal unit cell
         if (pbc_x+pbc_z==2) then
-            !$acc parallel loop collapse(2) present(Ez, Ex, E_reflected, E_transmitted) &
-            !$acc reduction(+:E_reflected(counter), E_transmitted(counter))
+
+            !$omp single
+            !$acc serial
+            sum_r=0.0
+            sum_t=0.0
+            !$omp end single
+            !$acc end serial
+
+            !$acc parallel loop collapse(2) present(Ez, Ex) &
+            !$acc reduction(+:sum_r, sum_t)
             !$omp do collapse(2) schedule(static) &
-            !$omp reduction(+:E_reflected(counter), E_transmitted(counter))
+            !$omp reduction(+:sum_r, sum_t)
             do k = ff_zlow, ff_zhigh
                 do i = ff_xlow, ff_xhigh
-                    E_reflected(counter) = E_reflected(counter) + Ez(i,ylow,k)*sin(pol) + &
+                    sum_r = sum_r + Ez(i,ylow,k)*sin(pol) + &
                     Ex(i,ylow,k)*cos(pol)*sin(phi)
-                    E_transmitted(counter) = E_transmitted(counter) + Ez(i,yhigh,k)*sin(pol) + &
+                    sum_t = sum_t + Ez(i,yhigh,k)*sin(pol) + &
                     Ex(i,yhigh,k)*cos(pol)*sin(phi)
                 end do
             end do
             !$acc end parallel loop
             !$omp end do
+
+            !$omp single
+            !$acc serial
+            E_reflected(counter) = E_reflected(counter) + sum_r
+            E_transmitted(counter) = E_transmitted(counter) + sum_t
+            !$omp end single
+            !$acc end serial
+
         end if
         !Z normal unit cell
         if (pbc_x+pbc_y==2) then
-            !$acc parallel loop collapse(2) present(Ey, Ex, E_reflected, E_transmitted) &
-            !$acc reduction(+:E_reflected(counter), E_transmitted(counter))
+
+            !$omp single
+            !$acc serial
+            sum_r=0.0
+            sum_t=0.0
+            !$omp end single
+            !$acc end serial
+
+            !$acc parallel loop collapse(2) present(Ey, Ex) &
+            !$acc reduction(+:sum_r, sum_t)
             !$omp do collapse(2) schedule(static) &
-            !$omp reduction(+:E_reflected(counter), E_transmitted(counter))
+            !$omp reduction(+:sum_r, sum_t)
             do j = ff_ylow, ff_yhigh
                 do i = ff_xlow, ff_xhigh
-                    E_reflected(counter) = E_reflected(counter) + &
+                    sum_r = sum_r + &
                     Ey(i,j,zlow)*(-1*cos(pol)*cos(phi)-sin(pol)*cos(theta)*sin(phi)) + &
                     Ex(i,j,zlow)*(cos(pol)*sin(phi)-sin(pol)*cos(theta)*cos(phi))
-                    E_transmitted(counter) = E_transmitted(counter) + &
+                    sum_t = sum_t + &
                     Ey(i,j,zhigh)*(-1*cos(pol)*cos(phi)-sin(pol)*cos(theta)*sin(phi)) + &
                     Ex(i,j,zhigh)*(cos(pol)*sin(phi)-sin(pol)*cos(theta)*cos(phi))
                 end do 
             end do
             !$acc end parallel loop
             !$omp end do
+
+            !$omp single
+            !$acc serial
+            E_reflected(counter) = E_reflected(counter) + sum_r
+            E_transmitted(counter) = E_transmitted(counter) + sum_t
+            !$omp end single
+            !$acc end serial
+
         end if
 #endif
 
