@@ -2,7 +2,7 @@ ITEMS TO INCORPORATE AT SOME POINT:
 Paraview and python viewer renderings of the wave port locations for unit cell designs
 option to output E,H fields at surfaces
 permeability beyond free space value for bulk materials
-make it possible to have a lumped ports at the first cube
+make it possible to have a lumped ports at the first cube (error gets thrownto warn the user if accidently selected now)
 add optional x,y,z sheets binary read-ins - like optional bulk material array
 add additional far field method - pick a frequency and produce all angles for that frequency.
 add more plasma terms to the multipole Drude model
