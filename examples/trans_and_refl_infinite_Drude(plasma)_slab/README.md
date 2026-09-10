@@ -84,6 +84,8 @@ The `plot.py` file can be used to compare the FDTD result with the analytic resu
 
 ![Model Accuracy](./Comparison_plot.png)
 
+In the 6-9 GHz region, there is slightly disagreement. This is a known and expected feature as the permittivity approaches and equals zero during this transition, making it hard for any solver to accurately resolve the physics.
+
 ## Performance reference
 
 Approximate per-simulation runtimes measured on the author's hardware:
