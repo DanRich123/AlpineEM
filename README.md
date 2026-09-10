@@ -92,7 +92,7 @@ There are also two bash scripts for building ngspice, if the user has not alread
 - **Thin-sheet filtering:** Vacuum sheets are intentionally skipped (used as the existence-filter mechanism); PEC sheets are approximated as high-conductivity with finite thickness rather than zero-impedance.
 - **Lumped port information:** Internal (non-SPICE) basic type ports intentionally omit the FDTD cell capacitance; SPICE-linked basic type ports include it. SPICE FDTD locations must use non-dispersive permittivity. Gridded lumped ports accept arbitrary geometry but require known non-dispersive E/H field coefficients — currently generated via the statics solver for TEM modes. Gridded ports do not require passing FDTD capacitance to SPICE.
 - **Adaptive far-field time-domain calculations** do not parallelize efficiently via OpenMP or OpenACC due to atomics; a fully parallel version would be RAM-intensive, though. A future release will include a broadband-angle-at-select-frequencies option; this is expected to parallelize well with no issues.
-- **Non-TEM mode generation** for lumped or wave ports requires a 2D Helmholtz-equation solver, which does not yet exist, along with modifications to the main code to support dispersive port behavior.
+- **Non-TEM mode generation** for lumped or wave ports (not free space) requires a 2D Helmholtz-equation solver, which does not yet exist, along with modifications to the main code to support dispersive port behavior.
 - **Non-LTI (narrow-band/CW) desirable source excitation** is not currently available but planned.
 - **Pure-Python trial version** is incomplete and not well tested — this is primarily for teaching purposes.
 
