@@ -18,7 +18,7 @@ $$
 
 This example outputs time-domain data for post-processing, along with binary geometry files for the **object** (material present), **clear** (material absent), and **metal** (material replaced with metal) cases.
 
-This example is designed to teach and validate the core mechanisms of the solver including normal incidence plane waves with periodic boundary conditions, the Drude (plasma) material model, and the three builder options (single-threaded CPU, multi-threaded CPU (OpenMP), and the GPU (OpenACC)).
+This example is designed to teach and validate the core mechanisms of the solver including normal incidence plane waves with periodic boundary conditions, the multi-pole Drude (plasma) material model, and the three builder options (single-threaded CPU, multi-threaded CPU (OpenMP), and the GPU (OpenACC)).
 
 ## Workflow
 
