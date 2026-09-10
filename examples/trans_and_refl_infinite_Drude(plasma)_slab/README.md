@@ -1,6 +1,6 @@
 # Transmission and Reflection Through a Quasi-1D Infinite Slab of a 3-Pole Drude (Plasma) Material (AlpineEM FDTD) (In progress...)
 
-This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite slab of a 3-Pole Drude (plasma) material. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boundary conditions. The slab of material is 50 mm thick (also see Paraview image below). The Drude model, as defined here and used in the solver is:
+This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite slab of a 3-pole Drude (plasma) material. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boundary conditions. The slab of material is 50 mm thick (also see Paraview image below). The Drude model supports up to 6 poles, but only 3 are utilized in this example. The 3-pole Drude model used in the example is:
 
 $$
 \varepsilon(\omega) = \varepsilon_\infty + \frac{i \sigma_0}{\omega \varepsilon_0} - \sum_{n=1}^{3} \frac{\omega_{p,n}^2}{\omega^2 + i \gamma_n \omega}
