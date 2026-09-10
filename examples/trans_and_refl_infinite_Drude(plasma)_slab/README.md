@@ -82,7 +82,10 @@ The Paraview rendered image is shown below:
 
 The `plot.py` file can be used to compare the FDTD result with the analytic result:
 
-![Model Accuracy](./Comparison_plot.png)
+<p align="center">
+  <img src="./Comparison_plot.png" alt="Model compare" width="50%" />
+</p>
+
 
 In the 6-9 GHz region, there is slightly disagreement. This is a known and expected feature as the permittivity approaches and equals zero during this transition, making it hard for any solver to accurately resolve the physics.
 
