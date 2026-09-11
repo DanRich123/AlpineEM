@@ -10,3 +10,4 @@ Current examples include:
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) single slab of a 3 pole Drude (plasma) material
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) multilayered slab made of dielectrics and thin sheets
 
+# More examples are forthcoming that show how to use all of the features.
