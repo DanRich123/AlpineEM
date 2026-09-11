@@ -157,12 +157,12 @@ f.write('block\n') #state if 'block' or 'sphere' or 'cylinder'
 f.write('6\n') #material identification number
 f.write('50,1,1\n') #where it starts, 1 is first location
 f.write('11,90,90\n') #cells long in x, y, z directions
-#do these lines for each cylinder
+#do these lines for each block
 f.write('block\n') #state if 'block' or 'sphere' or 'cylinder'
 f.write('5\n') #material identification number
 f.write('50,41,41\n') #where it starts, 1 is first location
 f.write('11,10,10\n') #cells long in x, y, z directions
-#do these lines for each cylinder
+#do these lines for each block
 f.write('block\n') #state if 'block' or 'sphere' or 'cylinder'
 f.write('6\n') #material identification number
 f.write('40,45,45\n') #where it starts, 1 is first location
