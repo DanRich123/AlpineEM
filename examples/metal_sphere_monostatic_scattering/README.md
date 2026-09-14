@@ -33,7 +33,7 @@ Performs the same steps as `master.py`, but without the sphere present, to estab
 - You must set the solver name in `master_clear.py` (the GPU/OpenACC version is selected by default).
 - Produces several output files used for post-processing and geometry viewing.
 
-### 4. Post-process — `post_process.py`
+### 4. Post-process — `post_processor.py`
 
 Combines the object and clear case outputs to generate RCS data as a `.csv` file.
 
