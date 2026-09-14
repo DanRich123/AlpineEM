@@ -49,7 +49,7 @@ Performs the same steps as `master.py`, but the object has been replaced with me
 - Note: set `use_metal=True` to `use_metal=False` within `post_processor.py` if the user wishes to bypass using the metal case.
 - Using the metal case provides more accurate results, but it shift the phase center away from the wave port to the surface of the metal.
 
-### 5. Post-process — `post_process.py`
+### 5. Post-process — `post_processor.py`
 
 Combines the object, clear, and metal case outputs to generate transmission and reflection data as a `.csv` file.
 
