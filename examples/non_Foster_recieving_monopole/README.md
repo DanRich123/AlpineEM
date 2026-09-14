@@ -44,7 +44,7 @@ Configures and runs the simulation.
 
   > **Note** Run for zero time steps if viewing the geometry (see step 6) is desired before running a full simulation.
 
-### 4. Post-process — `post_process.py`
+### 4. Post-process — `post_processor.py`
 Uses the simulation outputs to generate the effective aperture area data as a `.csv` file.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
 - A normalization is needed to account for the correct impedance of each port location.
