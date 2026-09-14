@@ -26,9 +26,9 @@ Configures and runs the simulation with the dipole present.
 
   > **Note** Run for zero time steps if viewing the geometry (see step 4) is desired before running a full simulation.
 
-### 3. Post-process — `post_process.py` and `plot.py`
+### 3. Post-process — `post_processor.py` and `plot.py`
 
-- `post_process.py` takes the object output to generate realized gain and S parameter data as a `.csv` file.
+- `post_processor.py` takes the object output to generate realized gain and S parameter data as a `.csv` file.
 - `plot.py` plots some of the `.csv` file data.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
 
