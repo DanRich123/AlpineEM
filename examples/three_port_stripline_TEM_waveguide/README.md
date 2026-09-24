@@ -55,7 +55,7 @@ The gridded feed file created in [`/examples/non-Foster_recieving_monopole`](../
 
 This creates a geometry binary that `master.py` reads in. Anything drawn in `master.py` after the import overwrites the corresponding regions of the imported geometry. For example, the coaxial feeds are drawn manually over the waveguide design.
 
-`make_optional_geom_bulk.py` imports a `.npy` file, which can be created with `build_waveguide.py`. That script was generated with AI assistance to approximate the waveguide design from [1].
+`make_optional_geom_bulk.py` imports a `.npy` file, which can be created with `build_waveguide.py`. That script was generated with AI assistance to approximate the waveguide design from [1] and is not considered a core utility script so it is only found in this folder.
 
 ### 4. Run the simulation — `master.py`
 
