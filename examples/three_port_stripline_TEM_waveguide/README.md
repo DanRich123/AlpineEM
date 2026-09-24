@@ -1,90 +1,115 @@
-# A Three Port Stripline-like TEM Waveguide (AlpineEM FDTD) (In progres...)
+# Three-Port Stripline-Like TEM Waveguide (AlpineEM FDTD)
 
-This example uses AlpineEM to run FDTD simulations that calculate the S-parameters of a 3-port stripline-like waveguide that is TEM below around 250 MHz or so. Each of the 3 ports is a square coaxial-like gridded port, matched to 50-ohms, though in one case there is a non-Foster circuit before the 50-ohm load of port 3. 
+> **Status:** In progress. Content and results may change.
 
-This example builds on a prior example given in `/examples/non-Foster_recieving_monopole` and utilizes the method developed at GTRI, published in [1], for determining the realized gain of an electrically small antenna using a transmission line measurement within a waveguide to compare the waveguide extracted realized gain with the free space (w/ infinite ground plane) determined realized gain.
+This example uses AlpineEM's FDTD solver to compute the S-parameters of a 3-port stripline-like waveguide that supports a TEM mode below roughly 250 MHz. Each port is a square, coaxial-like gridded port matched to 50 Ω. In one configuration, a non-Foster circuit sits between port 3 and its 50 Ω load.
 
-The simulation outputs time-domain data for post-processing, along with a binary geometry file. Because SPICE is used, some post-processed values need correcting: by default, the post processor performs its algebraic calculations using a constant 1 ohm impedance. This value is used for post-processing only — the correct port impedance is used in the simulation itself — but since the post processor has no way of directly knowing that value, the user must sometimes manually correct for the actual impedance in the `.csv` output files (there is a note within the header if normalization is needed).
+It builds on [`/examples/non-Foster_recieving_monopole`](../non-Foster_recieving_monopole) and applies the GTRI method from [1]: the realized gain of an electrically small antenna is extracted from a transmission-line measurement inside a waveguide, then compared with the realized gain from a free-space (infinite ground plane) simulation.
 
-This example uses two different square coaxial-like ports, but [`statics_solver/`](./statics_solver) also includes `coax_example.py`, which supports circular coaxial ports. The static solver can accommodate any port shape, but square and circular coax examples are provided since they're the most common.
+## What this example demonstrates
 
-This example is primarily designed to demonstrate how to use SPICE, gridded feeds, and extract S-parameters. Additionally, the self-consistency and accuracy between free space (w/ infinite ground plane) determined realized gain and transmission line waveguide produced realized gain emphasizes the accuracy of the solver given two very different simulations and processes to arrive at the same result. Note the final mismatch in data can very likely be attributed to cell size and resolution given the 0.5dB shift in free space (w/ infinite ground plane) model results with a 1/8 cell size reduction (1/2 size reduction in each direction).
+- Using SPICE circuit elements inside an FDTD simulation
+- Defining gridded (coaxial-like) feeds from a statics-solver mask
+- Extracting S-parameters from time-domain data
+- Cross-validating two very different approaches (waveguide extraction vs. free-space simulation) that should yield the same realized gain
+
+The two approaches agree closely. The remaining mismatch is most likely due to cell size: halving the cell edge length in each direction (1/8 the cell volume) shifts the free-space results by about 0.5 dB.
 
 ## Workflow
 
 ### 1. Compile the FDTD solver
-Choose one of three build options depending on the resources available to you:
-- **Single-threaded CPU**
-- **Multi-threaded CPU** (OpenMP)
-- **GPU** (OpenACC)
 
-There are batch scripts included for building all versions (`compile_spice.sh`, `compile_spice_mp.sh`, and `compile_spice_acc.sh`). **However, due to the size of the simulation, using resources other than a GPU (OpenACC) will results in several hours of computation time.**
+Choose one of three builds depending on your hardware:
 
-> **Note** SPICE must be installed. There are two example batch scripts included in this folder, `build_my_ngspice.sh` and `build_my_ngspice_acc.sh`, for installing and exporting paths for the different build options. They will likely need to be modified to include the user's specific information.
+| Build | Script |
+|---|---|
+| Single-threaded CPU | `compile_spice.sh` |
+| Multi-threaded CPU (OpenMP) | `compile_spice_mp.sh` |
+| GPU (OpenACC) | `compile_spice_acc.sh` |
 
-### 2. Run the static solver to produce the TEM E- and H-field weightings — `square_coax_example.py`
-This Python script calls `EM2Dsolver.py` to solve the statics problem. The resulting weights also apply to TEM modes when used appropriately.
-- Generates a binary file of E- and H-field weightings, which is read directly into and executed by the binary compiled in Step 1.
-- The user must set the permittivity and permeability of the 2D geometry to match the shape used in `master.py`.
-- For reference, the expected binary output named `gridded_feed_12.bin` is included in this tutorial.
-- Additionally, the E and H field plots are included with voltage and Az (normal component) as well:
+> **Note:** SPICE must be installed first. Use `build_my_ngspice.sh` or `build_my_ngspice_acc.sh` to install it and export the paths for your chosen build.
+
+> **Warning:** Because of the simulation size, anything other than the GPU (OpenACC) build takes several hours. See [Performance reference](#performance-reference).
+
+### 2. Run the static solver — `square_coax_example.py`
+
+This script calls `EM2Dsolver.py` to solve the 2D statics problem. The resulting weightings also apply to TEM modes when used appropriately.
+
+- It writes a binary file of E- and H-field weightings, which the solver from Step 1 reads directly.
+- Set the permittivity and permeability of the 2D geometry to match the shape used in `master.py`.
+- The expected output, `gridded_feed_12.bin`, is included for reference.
+- The E and H field plots below show voltage and A<sub>z</sub> (the normal component):
+
 <p align="center">
-  <img src="./electric fields_12.png" alt="Model E" width="49%" />
-  <img src="./magnetic fields_12.png" alt="Model H" width="49%" />
+  <img src="./electric%20fields_12.png" alt="Electric field and voltage plots for the square coaxial port" width="49%" />
+  <img src="./magnetic%20fields_12.png" alt="Magnetic field and Az plots for the square coaxial port" width="49%" />
 </p>
 
-Anywhere the weightings are zero within the mask (outside the coaxial cable), the FDTD solver will ignore those cells as part of the port.
+Wherever the weightings are zero within the mask (outside the coaxial cable), the FDTD solver ignores those cells as part of the port.
 
-**The gridded feed file created in `/examples/non-Foster_recieving_monopole` was also copied over and used here as well.**
+The gridded feed file created in [`/examples/non-Foster_recieving_monopole`](../non-Foster_recieving_monopole) is also copied here and used for the monopole port.
 
-> **Note** Z-direction is always normal in this statics solver. This mask can still be used, as is done in this case, when a different direction is actually normal in the FDTD solver. The FDTD solver accounts for this information correctly as long as the intended FDTD direction in `master.py` is selected.
+> **Note:** The statics solver always treats the z-direction as normal. The mask can still be used when a different direction is normal in the FDTD solver, as it is in this example. The FDTD solver handles this correctly as long as the intended direction is selected in `master.py`.
 
-### 3. Create the waveguide through the optional geometry method — `make_optional_geom_bulk.py`
-Creates a geometry binary file to be read in and used by the `master.py` script. Any geometry created in `master.py` after the import will overwrite relevant sections of the optional geometry immport. For example, the coaxial feeds will be manually drawn to overwrite portions of the waveguide design. `make_optional_geom_bulk.py` will import a `.npy` file that can be created using `build_waveguide.py` that was created by an AI for extracting the approximate waveguide design from [1].
+### 3. Build the waveguide geometry — `make_optional_geom_bulk.py`
 
-### 4. Run the object case — `master.py`
-Configures and runs the simulation.
-- Generates a text file of inputs, then executes the binary compiled in Step 1.
-- You must set the solver name in `master.py` (the GPU version using OpenACC is selected by default here for drastic speed improvements).
-- When entering gridded feed information, manually enter the name of the binary created in Step 2, along with the other binary created from `/examples/non-Foster_recieving_monopole`.
-- Produces several output files used for post-processing and geometry viewing.
+This creates a geometry binary that `master.py` reads in. Anything drawn in `master.py` after the import overwrites the corresponding regions of the imported geometry. For example, the coaxial feeds are drawn manually over the waveguide design.
 
-  > **Note** Run for zero time steps if viewing the geometry (see step 6) is desired before running a full simulation.
+`make_optional_geom_bulk.py` imports a `.npy` file, which can be created with `build_waveguide.py`. That script was generated with AI assistance to approximate the waveguide design from [1].
+
+### 4. Run the simulation — `master.py`
+
+This configures and runs the simulation.
+
+- It generates a text file of inputs, then executes the binary compiled in Step 1.
+- Set the solver name in `master.py`. The GPU (OpenACC) solver is selected by default because it is much faster.
+- When entering gridded feed information, provide the name of the binary from Step 2 and the binary copied from `/examples/non-Foster_recieving_monopole`.
+- Several output files are produced for post-processing and geometry viewing.
+
+> **Tip:** To inspect the geometry before committing to a full run, run for zero time steps and then follow [Step 7](#7-optional-view-the-geometry).
 
 ### 5. Post-process — `post_processor.py`
-Uses the simulation outputs to generate the S-parameter data as a `.csv` file.
-- Example Slurm batch scripts are included and can be adapted to your cluster environment.
-- A normalization is needed to account for the correct impedance of each port location.
 
-### 6. Convert aperture area to realized gain and plot both — `plot.py`
-Imports the `.csv` file for the S-parameters, correct them, determine the realized gain using [1], and then plot against data from `/examples/non-Foster_recieving_monopole` using the small cell size variant:
+This uses the simulation outputs to generate the S-parameter data as a `.csv` file. Example Slurm batch scripts are included and can be adapted to your cluster.
+
+> **Important — impedance normalization:** Because SPICE is used, the post-processor computes with a constant 1 Ω impedance. This is for post-processing only; the correct port impedance is used in the simulation itself. The post-processor has no way of knowing the actual value, so the `.csv` output may need to be corrected for the impedance at each port. A note in the `.csv` header says when normalization is required. The correction is applied in Step 6.
+
+### 6. Compute realized gain and plot — `plot.py`
+
+This script imports the S-parameter `.csv`, applies the impedance correction, converts aperture area to realized gain using the method in [1], and plots the result against the small-cell-size data from `/examples/non-Foster_recieving_monopole`:
 
 <p align="center">
-  <img src="./Realized gain.png" alt="Model G" width="50%" />
+  <img src="./Realized%20gain.png" alt="Realized gain: waveguide-extracted vs. free-space simulation" width="50%" />
 </p>
 
 ### 7. (Optional) View the geometry
-To visualize the simulation geometry:
-1. Run `fdtd_geometry_maker.py` to generate ParaView files.
-2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and don't open its contents individually.
-3. For easier setup, load the included macro, `fdtd_macro.py`, into ParaView (**Macros** tab) to automatically configure common viewing filters.
 
-The Paraview rendered image is:
+1. Run `fdtd_geometry_maker.py` to generate ParaView files.
+2. Open the resulting **single** ParaView file directly in ParaView. It references an accompanying folder of associated files, so leave that folder in place and do not open its contents individually.
+3. For easier setup, load the included macro `fdtd_macro.py` in ParaView (**Macros** tab) to configure common viewing filters automatically.
+
+The rendered geometry looks like this:
 
 <p align="center">
-  <img src="./geometry.jpg" alt="Model geom" width="80%" />
+  <img src="./geometry.jpg" alt="ParaView rendering of the waveguide geometry" width="80%" />
 </p>
 
 ## Performance reference
-Approximate per-simulation runtimes measured on the author's hardware:
 
-| Solver                     | Time per simulation |
-|-----------------------------|---------------------|
-| OpenACC (GPU)               | ~22 minutes         |
-| OpenMP (multi-threaded CPU) | ~3 hours         |
-| Single-threaded (default)   | ~4 hours       |
+Approximate per-simulation runtimes on the author's hardware:
 
-> **Note:** Due to the size and number of time steps, OpenACC was over 10x faster than the default version. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software.
+| Solver | Time per simulation |
+|---|---|
+| OpenACC (GPU) | ~22 minutes |
+| OpenMP (multi-threaded CPU) | ~3 hours |
+| Single-threaded (default) | ~4 hours |
+
+> **Note:** Because of the domain size and number of time steps, OpenACC was over 10× faster than the default build. Timings depend heavily on hardware, problem size, and system load. Treat them as a rough reference, not a benchmark against other software.
+
+## Other port shapes
+
+This example uses square coaxial-like ports. The [`statics_solver/`](./statics_solver) folder also includes `coax_example.py` for circular coaxial ports. The statics solver accepts any port shape, but square and circular coax are provided as the most common cases.
 
 ## References
-[1] D. Richardson, J. Dee, J. Yaeger, J. Marsh, R. S. Westafer, "A New Method for Determining Antenna Gain via Transmission Line Based Near Field Measurements in a Waveguide," PIER C, Vol. 155, 61-66, 2025.
+
+[1] D. Richardson, J. Dee, J. Yaeger, J. Marsh, R. S. Westafer, "A New Method for Determining Antenna Gain via Transmission Line Based Near Field Measurements in a Waveguide," *Progress In Electromagnetics Research C*, Vol. 155, 61-66, 2025.
