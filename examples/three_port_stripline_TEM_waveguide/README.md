@@ -12,7 +12,7 @@ It builds on [`/examples/non-Foster_recieving_monopole`](../non-Foster_recieving
 - Extracting S-parameters from time-domain data
 - Cross-validating two very different approaches (waveguide extraction vs. free-space simulation) that should yield the same realized gain
 
-The two approaches agree closely. The remaining mismatch is most likely due to cell size: halving the cell edge length in each direction (1/8 the cell volume) shifts the free-space results by about 0.5 dB.
+**The two approaches agree closely. The remaining mismatch is most likely due to cell size: halving the cell edge length in each direction (1/8 the cell volume) shifts the free-space results by about 0.5 dB.**
 
 ## Workflow
 
