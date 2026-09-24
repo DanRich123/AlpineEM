@@ -39,7 +39,10 @@ Anywhere the weightings are zero within the mask (outside the coaxial cable), th
 
 > **Note** Z-direction is always normal in this statics solver. This mask can still be used, as is done in this case, when a different direction is actually normal in the FDTD solver. The FDTD solver accounts for this information correctly as long as the intended FDTD direction in `master.py` is selected.
 
-### 3. Run the object case — `master.py`
+### 3. Create the waveguide through the optional geometry method — `make_optional_geom_bulk.py`
+Creates a geometry binary file to be read in and used by the `master.py` script. Any geometry created in `master.py` after the import will overwrite relevant sections of the optional geometry immport. For example, the coaxial feeds will be manually drawn to overwrite portions of the waveguide design. `make_optional_geom_bulk.py` will import a `.npy` file that can be created using `build_waveguide.py` that was created by an AI for extracting the approximate waveguide design from [1].
+
+### 4. Run the object case — `master.py`
 Configures and runs the simulation.
 - Generates a text file of inputs, then executes the binary compiled in Step 1.
 - You must set the solver name in `master.py` (the GPU version using OpenACC is selected by default here for drastic speed improvements).
@@ -48,19 +51,19 @@ Configures and runs the simulation.
 
   > **Note** Run for zero time steps if viewing the geometry (see step 6) is desired before running a full simulation.
 
-### 4. Post-process — `post_processor.py`
+### 5. Post-process — `post_processor.py`
 Uses the simulation outputs to generate the S-parameter data as a `.csv` file.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
 - A normalization is needed to account for the correct impedance of each port location.
 
-### 5. Convert aperture area to realized gain and plot both — `plot.py`
+### 6. Convert aperture area to realized gain and plot both — `plot.py`
 Imports the `.csv` file for the S-parameters, correct them, determine the realized gain using [1], and then plot against data from `/examples/non-Foster_recieving_monopole` using the small cell size variant:
 
 <p align="center">
   <img src="./Realized gain.png" alt="Model G" width="50%" />
 </p>
 
-### 6. (Optional) View the geometry
+### 7. (Optional) View the geometry
 To visualize the simulation geometry:
 1. Run `fdtd_geometry_maker.py` to generate ParaView files.
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and don't open its contents individually.
@@ -81,4 +84,7 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | OpenMP (multi-threaded CPU) | --         |
 | Single-threaded (default)   | --       |
 
-> **Note:** Due to the size and number of time steps, OpenACC was over 15x faster than the default version. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software. 
+> **Note:** Due to the size and number of time steps, OpenACC was over 15x faster than the default version. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software.
+
+## References
+[1] Richardson et al....
