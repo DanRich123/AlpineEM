@@ -81,4 +81,4 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | OpenMP (multi-threaded CPU) | --         |
 | Single-threaded (default)   | --       |
 
-> **Note:** These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software. Due to the size and number of time steps, OpenACC is over 10x faster than the default version.
+> **Note:** Due to the size and number of time steps, OpenACC was over 15x faster than the default version. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software. 
