@@ -9,3 +9,9 @@ Current examples include:
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps)
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) single slab of a 3 pole Drude (plasma) material
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) multilayered slab made of dielectrics and thin sheets
+  
+Forthcoming examples include:
+- The monostatic scattering of an incident plane wave off of a metal half sphere over an infinite ground plane
+- A complicated unit cell design
+- A fields creation and viewer demonstration
+- A kmax example for oblique angle incidence with periodic boundary conditions
