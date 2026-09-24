@@ -82,7 +82,7 @@ Approximate per-simulation runtimes measured on the author's hardware:
 |-----------------------------|---------------------|
 | OpenACC (GPU)               | ~22 minutes         |
 | OpenMP (multi-threaded CPU) | ~3 hours         |
-| Single-threaded (default)   | ~6 hours       |
+| Single-threaded (default)   | ~4 hours       |
 
 > **Note:** Due to the size and number of time steps, OpenACC was over 10x faster than the default version. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software.
 
