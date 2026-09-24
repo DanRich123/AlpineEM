@@ -9,7 +9,7 @@ import shutil
 #inputs file name for read-in
 inputs_filename = 'inputs.txt'
 #output directory name for VTR files
-output_dir = "unit cell design"
+output_dir = "waveguide"
 #main VTM output file name
 filename = 'main geometry' # main VTM file
 #label if using spice or kmax versions
