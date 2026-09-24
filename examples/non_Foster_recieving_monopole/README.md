@@ -51,7 +51,7 @@ Uses the simulation outputs to generate the effective aperture area data as a `.
 
 ### 5. Convert aperture area to realized gain and plot both — `plot.py`
 Imports the `.csv` file for the aperture area, corrects the aperture area, and then plots both the aperture area and realized gain.
-- Only the 50-ohm load SPICE port is of interest, so only its value is corrected in the `plot.py` script. A separate simulation was performed (not saved here) that was rescaled to have 1/8 of the original cell size is also shown for the 50-ohm case. This shows how simulation fidelity can influence the results.
+- Only the 50-ohm load SPICE port is of interest, so only its value is corrected in the `plot.py` script. A separate simulation was performed (not saved here) and rescaled to have 1/8 of the original cell size. The results are also shown below for the 50-ohm case. This shows how simulation fidelity can influence the results.
 <p align="center">
   <img src="./Realized gain comparison.png" alt="Model G" width="49%" />
   <img src="./Aperture area comparison.png" alt="Model A" width="49%" />
