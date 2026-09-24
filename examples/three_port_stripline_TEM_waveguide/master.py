@@ -452,6 +452,7 @@ f.write('.tran 8E-13 {} UIC\n'.format(times * base_time_step / factor))
 f.write('.end\n')
 f.close()
 """
+
 #kmax example w/ basic ports
 #times=4000 #get from above
 #factor=1 #get from above
