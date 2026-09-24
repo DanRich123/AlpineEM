@@ -94,6 +94,8 @@ The rendered geometry looks like this:
   <img src="./geometry.jpg" alt="ParaView rendering of the waveguide geometry" width="80%" />
 </p>
 
+> **Note:** If the main output file is too large and/or the macro causes issues (long rendering time or too much RAM), the user can go into the folder that accompanies the main Paraview file and load individual portions and/or filter without using the macro.
+
 ## Performance reference
 
 Approximate per-simulation runtimes on the author's hardware:
