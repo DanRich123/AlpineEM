@@ -29,8 +29,8 @@ This Python script calls `EM2Dsolver.py` to solve the statics problem. The resul
 - For reference, the expected binary output named `gridded_feed_12.bin` is included in this tutorial.
 - Additionally, the E and H field plots are included with voltage and Az (normal component) as well:
 <p align="center">
-  <img src="./electric fields.png" alt="Model E" width="49%" />
-  <img src="./magnetic fields.png" alt="Model H" width="49%" />
+  <img src="./electric fields_12.png" alt="Model E" width="49%" />
+  <img src="./magnetic fields_12.png" alt="Model H" width="49%" />
 </p>
 
 Anywhere the weightings are zero within the mask (outside the coaxial cable), the FDTD solver will ignore those cells as part of the port.
