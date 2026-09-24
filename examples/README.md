@@ -5,7 +5,7 @@ These examples are chosen to validate the FDTD+SPICE solver and its features, an
 Current examples include:
 
 - The monostatic scattering of an incident plane wave off of a metal sphere
-- The aperture area and realized gain of a receiving non-Foster loaded monopole-like antenna mounted over an infinite ground plane
+- The aperture area and realized gain of a receiving non-Foster loaded monopole-like antenna (gridded feed/port type) mounted over an infinite ground plane
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps)
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) single slab of a 3 pole Drude (plasma) material
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) multilayered slab made of dielectrics and thin sheets
