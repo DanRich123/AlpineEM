@@ -81,10 +81,10 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | Solver                     | Time per simulation |
 |-----------------------------|---------------------|
 | OpenACC (GPU)               | ~22 minutes         |
-| OpenMP (multi-threaded CPU) | --         |
+| OpenMP (multi-threaded CPU) | ~3 hours         |
 | Single-threaded (default)   | --       |
 
-> **Note:** Due to the size and number of time steps, OpenACC was over 15x faster than the default version. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software.
+> **Note:** Due to the size and number of time steps, OpenACC was over 10x faster than the default version. These timings depend heavily on hardware, problem size, and system load — use them only as a rough point of reference, not a direct benchmark against other software.
 
 ## References
 [1] D. Richardson, J. Dee, J. Yaeger, J. Marsh, R. S. Westafer, "A New Method for Determining Antenna Gain via Transmission Line Based Near Field Measurements in a Waveguide," PIER C, Vol. 155, 61-66, 2025.
