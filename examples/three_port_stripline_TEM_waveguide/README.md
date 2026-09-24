@@ -1,7 +1,5 @@
 # Three-Port Stripline-Like TEM Waveguide (AlpineEM FDTD)
 
-> **Status:** In progress. Content and results may change.
-
 This example uses AlpineEM's FDTD solver to compute the S-parameters of a 3-port stripline-like waveguide that supports a TEM mode below roughly 250 MHz. Each port is a square, coaxial-like gridded port matched to 50 Ω. In one configuration, a non-Foster circuit sits between port 3 and its 50 Ω load.
 
 It builds on [`/examples/non-Foster_recieving_monopole`](../non-Foster_recieving_monopole) and applies the GTRI method from [1]: the realized gain of an electrically small antenna is extracted from a transmission-line measurement inside a waveguide, then compared with the realized gain from a free-space (infinite ground plane) simulation.
