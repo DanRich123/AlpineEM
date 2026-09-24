@@ -54,11 +54,10 @@ Uses the simulation outputs to generate the S-parameter data as a `.csv` file.
 - A normalization is needed to account for the correct impedance of each port location.
 
 ### 5. Convert aperture area to realized gain and plot both — `plot.py`
-Imports the `.csv` file for the S-parameters, correct them, determine the aperture area and realized gain using [1], and then plot these to compare against data from `/examples/non-Foster_recieving_monopole`.
+Imports the `.csv` file for the S-parameters, correct them, determine the realized gain using [1], and then plot against data from `/examples/non-Foster_recieving_monopole` using the small cell size variant:
 
 <p align="center">
-  <img src="./Realized gain comparison.png" alt="Model G" width="49%" />
-  <img src="./Aperture area comparison.png" alt="Model A" width="49%" />
+  <img src="./Realized gain.png" alt="Model G" width="50%" />
 </p>
 
 ### 6. (Optional) View the geometry
@@ -67,7 +66,7 @@ To visualize the simulation geometry:
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and don't open its contents individually.
 3. For easier setup, load the included macro, `fdtd_macro.py`, into ParaView (**Macros** tab) to automatically configure common viewing filters.
 
-The Paraview rendered image along side a circuit schematic is shown below w/ the results from above for convenience:
+The Paraview rendered image is:
 
 <p align="center">
   <img src="./geometry.jpg" alt="Model geom" width="80%" />
