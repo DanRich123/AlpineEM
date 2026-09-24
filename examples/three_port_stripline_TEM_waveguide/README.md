@@ -7,6 +7,7 @@ It builds on [`/examples/non-Foster_recieving_monopole`](../non-Foster_recieving
 ## What this example demonstrates
 
 - Using SPICE circuit elements inside an FDTD simulation
+- Using the optional geometry feature
 - Defining gridded (coaxial-like) feeds from a statics-solver mask
 - Extracting S-parameters from time-domain data
 - Cross-validating two very different approaches (waveguide extraction vs. free-space simulation) that should yield the same realized gain
