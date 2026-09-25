@@ -19,3 +19,4 @@ Forthcoming examples include:
 - An Archimedean spiral antenna design
 - A dielectric conformal averaging (permttivity averaging) design
 - A SPICE sourced dipole antenna
+- Optimization examples
