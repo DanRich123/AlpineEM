@@ -18,3 +18,4 @@ Forthcoming examples include:
 - A kmax example for oblique angle incidence with periodic boundary conditions
 - An Archimedean spiral antenna design
 - A dielectric conformal averaging (permttivity averaging) design
+- A SPICE sourced dipole antenna
