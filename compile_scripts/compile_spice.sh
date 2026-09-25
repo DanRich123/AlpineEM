@@ -14,7 +14,7 @@ export PATH=$INSTALL_DIR/ngspice-sf-mirror-ngspice-44.2/local/bin:$PATH
 export LD_LIBRARY_PATH=$INSTALL_DIR/ngspice-sf-mirror-ngspice-44.2/local/lib:$LD_LIBRARY_PATH
 
 # Now compile my own code - move to the correct folder manually before doing so
-icc -I${INSTALL_DIR}/ngspice-sf-mirror-ngspice-44.2/src/include/ngspice -c ngspice_interfaces.c
+icx -I${INSTALL_DIR}/ngspice-sf-mirror-ngspice-44.2/src/include/ngspice -c ngspice_interfaces.c
 ifx -c ngspice_interface.F90
 ifx -c circuit.F90
 ifx ${OPT_FLAGS} -c fdtd_solver.f90
