@@ -16,3 +16,5 @@ Forthcoming examples include:
 - A complicated unit cell design
 - A fields creation and viewer demonstration
 - A kmax example for oblique angle incidence with periodic boundary conditions
+- An Archimedean spiral antenna design
+- A dielectric conformal averaging (permttivity averaging) design
