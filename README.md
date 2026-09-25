@@ -57,7 +57,7 @@ The FDTD core is built in four flavors, combined from two axes:
 - [ngspice](https://ngspice.sourceforge.io/) (only required for SPICE-coupled builds)
 - C compiler (only required for SPICE-coupled builds, e.g. `icx/icc`, `gcc`, `nvc`)
 - Python 3 (recommended) for the execution wrapper script and post-processing utilities
-- [Paraview](https://www.paraview.org/) (optional, for geometry visualization)
+- [Paraview](https://www.paraview.org/), along with the python `pyevtk.hl` import (optional, for geometry visualization)
 - Slurm (optional, only needed for cluster job submission)
 
 ## Building
