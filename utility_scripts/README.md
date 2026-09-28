@@ -13,6 +13,7 @@ This folder contains key pre- and post-processing scripts for the main FDTD solv
 | `conformal_builder.py` | Class based script required by the above `make_optional_geom_and_conform_bulk.py` | N/A |
 | xx|xx | xx|
 | `plot_kmax_f_vs_angle.py`|xx | xx|
+| `plot_kmax_angle_vs_angle.py`|xx | xx|
 | xx|xx | xx|
 | xx|xx | xx|
 | xx|xx | xx|
