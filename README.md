@@ -15,7 +15,7 @@ Developed by Daniel Richardson at the Center for National Security Initiatives (
 - **Boundary conditions** — convolutional PML (ADE formulation); standard periodic boundaries, with a dedicated `kmax` solver variant for oblique-incidence plane waves (constant k-vector method); and an infinite ground plane option
 - **Two excitation types** — Gaussian and normalized differentiated Gaussian, usable as lumped-port or TF/SF plane-wave sources
 - **Far-field and S-parameter extraction** — adaptive, on-the-fly time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
-- **Sub-cell thin-sheet modeling** — Smith–Mahoney method, including zero-impedance approximations for PEC sheets
+- **Sub-cell thin-sheet modeling** — Smith–Maloney method, including zero-impedance approximations for PEC sheets
 - **Anisotropic, non-magnetic media** — diagonal (anisotropic) permittivity and electrical conductivity; permeability is currently fixed at the vacuum value (isotropic only)
 - **Dispersive, non-magnetic media support** — auxiliary differential equation (ADE) approach; currently only an up to 6 pole Drude (plasma) media
 - **Statics solver** — generates non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
