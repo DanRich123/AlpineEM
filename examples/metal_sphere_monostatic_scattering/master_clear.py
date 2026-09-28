@@ -310,6 +310,22 @@ f.close()
 #f.write('.end\n')
 #f.close()
 
+#normal example w/ basic ports, source from SPICE:
+#times=15000 #get from above
+#factor=1 #get from above
+#base_time_step=1.8873167E-12 #get from a clear case or similar
+#f=open('fdtd_netlist.cir','w')
+#f.write('*Validation of one 50 ohm ports with FDTD and a SPICE source\n')
+#f.write('I 0 out PWL(0 0)\n')
+#f.write('.tran 8E-13 {}\n'.format(times * base_time_step / factor))
+#base on circuit, incident will be 1/2 this value
+#Note: range of output data from post processor is still determined by freq parameter and pulse type number above.
+#f.write('B1 src_in 0 V = 0.001 * sin(2*pi*10G*time) * exp(-log(2) * ((time - 150p)/50p)^2)\n')
+#f.write('R_source src_in out 50\n')
+#f.write('Cp out 0 1\n')
+#f.write('.end\n')
+#f.close()
+
 #normal example w/ basic ports:
 #times=4000 #get from above
 #factor=1 #get from above
