@@ -1,4 +1,4 @@
-# Utility Scripts Folder (In Progress...)
+# Utility Scripts Folder
 
 This folder contains the key pre- and post-processing scripts for the main FDTD solver. Below is a list of the scripts with a brief description of what each one does. See the [`examples/`](../examples) folder for examples of how some of the primary scripts are used.
 
@@ -13,6 +13,7 @@ This folder contains the key pre- and post-processing scripts for the main FDTD 
 | `make_optional_geom_bulk.py` | Creates an optional geometry `.bin` file. Drawing objects (blocks, cylinders, spheres) conventionally in `master.py` can be tedious; this script makes it easier to build a geometry as a NumPy array and save it to the binary format required by the solver. The entire FDTD grid must be accounted for in the binary — any object drawn in `master.py` will overwrite sections of it. | A `.bin` file used by `master.py` for geometries that are otherwise hard to draw |
 | `make_optional_geom_and_conform_bulk.py` | Same as above, with the added ability to draw more detailed geometries (finer than the FDTD grid itself) and map them to the grid using conformal averaging with anisotropic materials. Useful for dielectrics and lossy materials, including Drude materials. Requires `conformal_builder.py`. | A `.bin` file for hard-to-draw geometries, plus a NumPy array of conformally-averaged materials data for use in `master.py` |
 | `conformal_builder.py` | Class-based script required by `make_optional_geom_and_conform_bulk.py`. | N/A |
+
 
 ## Other Utility Scripts
 
