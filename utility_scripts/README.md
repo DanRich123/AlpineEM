@@ -15,6 +15,6 @@ This folder contains key pre- and post-processing scripts for the main FDTD solv
 | `plot_kmax_f_vs_angle.py`| A highly customizable script for plotting frequency vs angle results produced by using `kmax` | picture files|
 | `plot_kmax_angle_vs_angle.py`| A highly customizable script for plotting angle 1 vs angle 2 results produced by using `kmax` | picture files|
 | `parallel_kmax.py` | A highly customizable script for setting up and running many `kmax` simulations in parallel | many results folders and files|
-|`import_tecplot_and_interpolate.py`|||
-|`import_plasma_properties.py`|||
-|`convert_to_touchstone.py`|||
+|`import_tecplot_and_interpolate.py`| A highly customizable script for importing, interpolating, and preparing FDTD geometries from custom CFD simulations in structured grids | FDTD ready optional geometry files w/ appropriate grid sizes printed out and a materials info in a NumPy array|
+|`import_plasma_properties.py`| A highly customizable script showing how to use the materials results produced by using the above `import_tecplot_and_interpolate.py` script in `master.py`||
+|`convert_to_touchstone.py`| A highly customiable script used to create touchstone files and renormalized results produced using `kmax`| touchstone files.|
