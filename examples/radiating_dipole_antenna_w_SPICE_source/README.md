@@ -62,4 +62,4 @@ Approximate per-simulation runtimes measured on the author's hardware:
 | OpenMP (multi-threaded CPU)   | ~5 minutes            |
 | Single-threaded (default)     | ~9.5 minutes          |
 
-> **Note:** These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software.
+> **Note:** These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software. SPICE sources are intrinsically slower than the built-in FDTD sources but allow for much more flexibility.
