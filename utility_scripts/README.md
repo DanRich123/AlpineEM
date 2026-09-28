@@ -1,4 +1,4 @@
-# Utility Scripts Folder
+# Utility Scripts Folder (In progress..)
 
 This folder contains key pre- and post-processing scripts for the main FDTD solver. Below is the list of the scripts with a brief description of what each one is intended to do. Also see the examples folder [`examples/`](../examples) for examples where some of them are used.
 
