@@ -1,20 +1,27 @@
-# Utility Scripts Folder (In progress..)
+# Utility Scripts Folder (In Progress...)
 
-This folder contains key pre- and post-processing scripts for the main FDTD solver. Below is the list of the scripts with a brief description of what each one is intended to do. Also see the examples folder [`examples/`](../examples) for examples where some of the primary scripts are used.
+This folder contains the key pre- and post-processing scripts for the main FDTD solver. Below is a list of the scripts with a brief description of what each one does. See the [`examples/`](../examples) folder for examples of how some of the primary scripts are used.
 
-| Script                      | Description |  Output  |
-|-------------------------------|---------------------|----------------------|
-| `post_processor.py`                | This script takes a few inputs from the user (top of file only) and reads in `.dat` files produced from `master.py`        | S-parameters, realized gain, etc. as `.csv` files |
-| `post_processor_kmax.py`                | This script takes a few inputs from the user (top of file only) and reads in `.dat` files produced from `master.py`  for the `kmax` variant      | S-parameters, realized gain, etc. as `.csv` files |
-| `python_fields_viewer.py` | This script takes a few inputs from the user (top of file only) and reads 2-D slices of binary (`.bin`) field data produced by `master.py` if that option was chosen by the user | 2-D time or frequency domain videos of the simulation |
-| `paraview_fields_viewer.py` | This script takes a few inputs from the user (SETUP section) and reads 3-D slices of binary (`.bin`) field data produced by `master.py` if that option was chosen by the user | 3-D time or frequency domain Paraview files of the simulation - can view still frames and videos using Paraview software |
-| `make_optional_geom_bulk.py` | This script takes inputs from the user to create an optional geometry `.bin` file, if desired. The conventional drawing of objects (blocks, cylinders, spheres) in `master.py` can be tedious and sometimes it is easier to create a geometry in a Numpy array, then save it to the binary file format required by the main FDTD solver. This script aids in doing this. The entire FDTD grid must be accounted for in the binary, and any object drawn in `master.py` will overwrite sections of this optional geometry. | A binary (`.bin`) file used by `master.py` to create a harder to draw geometry in the main FDTD solver |
-| `make_optional_geom_and_conform_bulk.py` | Identical to the above script with the added benefit of drawing very detailed geometries (more refined than the FDTD grid itself) and using conformal averaging techniques to map it to the actual FDTD grid using anisotropic materials. Requires `conformal_builder.py`. This technique is useful for dielectrics and lossy materials, including Drude materials. | A binary (`.bin`) file used by `master.py` to create a harder to draw geometry in the main FDTD solver, along with a Numpy array of materials information created under conformal averaging for using in `master.py` |
-| `conformal_builder.py` | Class based script required by the above `make_optional_geom_and_conform_bulk.py` | N/A |
-| `spiral.py`    | A highly customizable script designed to create a 2-D Archimedean spiral-like pattern         | Numpy arrays that can be directly imported to `master.py` for creating spiral antenna patterns, or similar, from thin sheets |
-| `plot_kmax_f_vs_angle.py`| A highly customizable script for plotting frequency vs angle results produced by using `kmax` | picture files|
-| `plot_kmax_angle_vs_angle.py`| A highly customizable script for plotting angle 1 vs angle 2 results produced by using `kmax` | picture files|
-| `parallel_kmax.py` | A highly customizable script for setting up and running many `kmax` simulations in parallel | many results folders and files|
-|`import_tecplot_and_interpolate.py`| A highly customizable script for importing, interpolating, and preparing FDTD geometries from custom CFD simulations in structured grids | FDTD ready optional geometry files w/ appropriate grid sizes printed out and a materials info in a NumPy array|
-|`import_plasma_properties.py`| A highly customizable script showing how to use the materials results produced by using the above `import_tecplot_and_interpolate.py` script in `master.py`||
-|`convert_to_touchstone.py`| A highly customiable script used to create touchstone files and renormalized results produced using `kmax`| touchstone files.|
+## Main Utility Scripts
+
+| Script | Description | Output |
+|---|---|---|
+| `post_processor.py` | Takes a few user inputs (top of file only) and reads `.dat` files produced by `master.py`. | S-parameters, realized gain, etc. as `.csv` files |
+| `post_processor_kmax.py` | Same as above, for the `kmax` variant. | S-parameters, realized gain, etc. as `.csv` files |
+| `python_fields_viewer.py` | Takes a few user inputs (top of file only) and reads 2-D slices of binary (`.bin`) field data produced by `master.py` (if that option was selected). | 2-D time- or frequency-domain videos of the simulation |
+| `paraview_fields_viewer.py` | Takes a few user inputs (SETUP section) and reads 3-D slices of binary (`.bin`) field data produced by `master.py` (if that option was selected). | 3-D time- or frequency-domain ParaView files — view still frames or videos in ParaView |
+| `make_optional_geom_bulk.py` | Creates an optional geometry `.bin` file. Drawing objects (blocks, cylinders, spheres) conventionally in `master.py` can be tedious; this script makes it easier to build a geometry as a NumPy array and save it to the binary format required by the solver. The entire FDTD grid must be accounted for in the binary — any object drawn in `master.py` will overwrite sections of it. | A `.bin` file used by `master.py` for geometries that are otherwise hard to draw |
+| `make_optional_geom_and_conform_bulk.py` | Same as above, with the added ability to draw more detailed geometries (finer than the FDTD grid itself) and map them to the grid using conformal averaging with anisotropic materials. Useful for dielectrics and lossy materials, including Drude materials. Requires `conformal_builder.py`. | A `.bin` file for hard-to-draw geometries, plus a NumPy array of conformally-averaged materials data for use in `master.py` |
+| `conformal_builder.py` | Class-based script required by `make_optional_geom_and_conform_bulk.py`. | N/A |
+
+## Other Utility Scripts
+
+| Script | Description | Output |
+|---|---|---|
+| `spiral.py` | Highly customizable script for creating a 2-D Archimedean-spiral-like pattern. | NumPy arrays that can be imported directly into `master.py` to create spiral antennas (or similar) from thin sheets |
+| `plot_kmax_f_vs_angle.py` | Highly customizable script for plotting frequency vs. angle results from `kmax`. | Image files |
+| `plot_kmax_angle_vs_angle.py` | Highly customizable script for plotting angle-1 vs. angle-2 results from `kmax`. | Image files |
+| `parallel_kmax.py` | Highly customizable script for setting up and running many `kmax` simulations in parallel. | Multiple results folders and files |
+| `import_tecplot_and_interpolate.py` | Highly customizable script for importing, interpolating, and preparing FDTD geometries from custom CFD simulations on structured grids. | FDTD-ready optional geometry files (with appropriate grid sizes printed out) and a materials-info NumPy array |
+| `import_plasma_properties.py` | Highly customizable script showing how to use the materials results from `import_tecplot_and_interpolate.py` in `master.py`. | — |
+| `convert_to_touchstone.py` | Highly customizable script for creating Touchstone files and renormalized results from `kmax`. | Touchstone files |
