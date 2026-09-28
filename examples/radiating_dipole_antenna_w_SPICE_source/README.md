@@ -7,14 +7,14 @@ This example is designed to teach the core mechanisms of the solver including ba
 ## Workflow
 
 ### 1. Compile the FDTD solver
-
 Choose one of three build options depending on the resources available to you:
-
 - **Single-threaded CPU**
 - **Multi-threaded CPU** (OpenMP)
 - **GPU** (OpenACC)
 
-There are batch scripts included for building all versions (`compile.sh`, `compile_mp.sh`, and `compile_acc.sh`).
+There are batch scripts included for building all versions (`compile_spice.sh`, `compile_spice_mp.sh`, and `compile_spice_acc.sh`).
+
+> **Note** SPICE must be installed. There are two example batch scripts included in this folder, `build_my_ngspice.sh` and `build_my_ngspice_acc.sh`, for installing and exporting paths for the different build options. They will likely need to be modified to include the user's specific information.
 
 ### 2. Run the object case — `master.py`
 
