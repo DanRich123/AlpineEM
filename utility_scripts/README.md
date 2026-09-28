@@ -1,28 +1,32 @@
-# Utility Scripts Folder
+# Utility Scripts
 
-This folder contains the key pre- and post-processing scripts for the main FDTD solver. Below is a list of the scripts with a brief description of what each one does. See the [`examples/`](../examples) folder for examples of how some of the primary scripts are used.
+Pre- and post-processing tools for the main FDTD solver. See [`examples/`](../examples) for demonstration workflows.
 
-## Main Utility Scripts
+## Standard Workflow Scripts
 
-| Script | Description | Output |
-|---|---|---|
-| `post_processor.py` | Takes a few user inputs (top of file only) and reads `.dat` files produced by `master.py`. | S-parameters, realized gain, etc. as `.csv` files |
-| `post_processor_kmax.py` | Same as above, for the `kmax` variant. | S-parameters, realized gain, etc. as `.csv` files |
-| `python_fields_viewer.py` | Takes a few user inputs (top of file only) and reads 2-D slices of binary (`.bin`) field data produced by `master.py` (if that option was selected). | 2-D time- or frequency-domain videos of the simulation |
-| `paraview_fields_viewer.py` | Takes a few user inputs (SETUP section) and reads 3-D slices of binary (`.bin`) field data produced by `master.py` (if that option was selected). | 3-D time- or frequency-domain ParaView files — view still frames or videos in ParaView |
-| `make_optional_geom_bulk.py` | Creates an optional geometry `.bin` file. Drawing objects (blocks, cylinders, spheres) conventionally in `master.py` can be tedious; this script makes it easier to build a geometry as a NumPy array and save it to the binary format required by the solver. The entire FDTD grid must be accounted for in the binary — any object drawn in `master.py` will overwrite sections of it. | A `.bin` file used by `master.py` for geometries that are otherwise hard to draw |
-| `make_optional_geom_and_conform_bulk.py` | Same as above, with the added ability to draw more detailed geometries (finer than the FDTD grid itself) and map them to the grid using conformal averaging with anisotropic materials. Useful for dielectrics and lossy materials, including Drude materials. Requires `conformal_builder.py`. | A `.bin` file for hard-to-draw geometries, plus a NumPy array of conformally-averaged materials data for use in `master.py` |
-| `conformal_builder.py` | Class-based script required by `make_optional_geom_and_conform_bulk.py`. | N/A |
+Core utility scripts for everyday simulation setup, execution, and field analysis.
+
+| Script | Description | Input / Dependencies | Output |
+|---|---|---|---|
+| `post_processor.py` | Extracts S-parameters, realized gain, and far-field radiation patterns from solver runs. | `.dat` simulation files | `.csv` performance metrics |
+| `post_processor_kmax.py` | Post-processing variant customized for `kmax` simulation sweeps. | `.dat` files from `kmax` | `.csv` sweep data |
+| `python_fields_viewer.py` | Generates 2-D field distribution plots and video animations. | 2-D field files (`.bin`) | Videos and plot images |
+| `paraview_fields_viewer.py` | Exports 3-D volumetric field slices and timeframes for 3-D rendering. | 3-D field files (`.bin`) | ParaView VTK files |
+| `make_optional_geom_bulk.py` | Constructs custom 3-D grid geometries in NumPy when native drawing is tedious. | NumPy | `optional_geom_bulk.bin` |
+| `make_optional_geom_and_conform_bulk.py` | Generates fine-resolution sub-pixel conformal geometries ($\epsilon$, $\sigma$). | `conformal_builder.py` | `optional_geom_bulk.bin`, `materials_id_opfile.npy` |
+| `conformal_builder.py` | Engine class (`ConformalGeometry`) for sub-cell material averaging and slice plotting. | `numpy`, `matplotlib` | Object class dependency (no Drude of permeability support yet) |
 
 
-## Other Utility Scripts
+## Specialized & Non-Routine Scripts
 
-| Script | Description | Output |
-|---|---|---|
-| `spiral.py` | Highly customizable script for creating a 2-D Archimedean-spiral-like pattern. | NumPy arrays that can be imported directly into `master.py` to create spiral antennas (or similar) from thin sheets |
-| `plot_kmax_f_vs_angle.py` | Highly customizable script for plotting frequency vs. angle results from `kmax`. | Image files |
-| `plot_kmax_angle_vs_angle.py` | Highly customizable script for plotting angle-1 vs. angle-2 results from `kmax`. | Image files |
-| `parallel_kmax.py` | Highly customizable script for setting up and running many `kmax` simulations in parallel. | Multiple results folders and files |
-| `import_tecplot_and_interpolate.py` | Highly customizable script for importing, interpolating, and preparing FDTD geometries from custom CFD simulations on structured grids. | FDTD-ready optional geometry files (with appropriate grid sizes printed out) and a materials-info NumPy array |
-| `import_plasma_properties.py` | Highly customizable script showing how to use the materials results from `import_tecplot_and_interpolate.py` in `master.py`. | N/A |
-| `convert_to_touchstone.py` | Highly customizable script for creating Touchstone files and renormalized results from `kmax`. | Touchstone files |
+Advanced scripts designed for specialized workflows (CFD-plasma coupling, parallel parameter sweeps, Touchstone conversions, and complex patterns).
+
+| Script | Description | Input / Dependencies | Output |
+|---|---|---|---|
+| `import_tecplot_and_interpolate.py` | Interpolates 2-D CFD Tecplot flowfields into 3-D grids and computes plasma ($\omega_p, \gamma$) values. | Tecplot `.plt`, `scipy`, `pandas` | `optional_geom_bulk.bin`, `material_properties.npy`, diagnostic plots |
+| `import_plasma_properties.py` | Formats `material_properties.npy` data into multi-pole plasma definitions for the solver. | `material_properties.npy` | Solver plasma input streams |
+| `convert_to_touchstone.py` | Converts S-parameter CSVs into `.sNp` files with angle-dependent $Z_0$ normalization to $50\,\Omega$. | S-parameter `.csv`, `data.dat`, `skrf` | `.sNp` Touchstone files |
+| `parallel_kmax.py` | Manages parallel execution of multiple `kmax` solver runs across compute threads. | `master.py`, binaries | Subdirectories with sweep runs |
+| `spiral.py` | Generates 2-D Archimedean spiral coordinates for planar antenna creation. | NumPy | Coordinate arrays |
+| `plot_kmax_f_vs_angle.py` | Plots frequency vs. incident/observation angles for `kmax` datasets. | `kmax` sweep datasets | Plot files (`.png`, `.pdf`) |
+| `plot_kmax_angle_vs_angle.py` | Plots angle-1 vs. angle-2 variation mappings for `kmax` datasets. | `kmax` sweep datasets | Plot files (`.png`, `.pdf`) |
