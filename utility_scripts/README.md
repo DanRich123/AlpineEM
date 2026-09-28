@@ -15,3 +15,6 @@ This folder contains key pre- and post-processing scripts for the main FDTD solv
 | `plot_kmax_f_vs_angle.py`|xx | xx|
 | `plot_kmax_angle_vs_angle.py`|xx | xx|
 | `parallel_kmax.py` |xx | xx|
+|`import_tecplot_and_interpolate.py`|||
+|`import_plasma_properties.py`|||
+|`convert_to_touchstone.py`|||
