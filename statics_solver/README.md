@@ -2,7 +2,7 @@
 
 2-D finite-difference electrostatic and magnetostatic Poisson solver designed to compute static field profiles for initializing wave sources in the main FDTD solver. Currently, this workflow supports **TEM modes only**.
 
-The solver extracts $E$-field and $H$-field weightings directly mapped to Yee-cell grids, exports binary feed distribution files (`gridded_feed.bin`), and generates visualization field plots.
+The solver extracts $E$-field and $H$-field weightings directly mapped to Yee-cell grids, exports binary feed distribution files (`gridded_feed.bin`), and generates visualization field plots. See [`examples/`](../examples) for demonstration workflows.
 
 ---
 
