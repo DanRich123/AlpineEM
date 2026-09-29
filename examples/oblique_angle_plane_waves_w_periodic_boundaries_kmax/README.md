@@ -78,14 +78,14 @@ The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with t
   <img src="./ex1.png" alt="ex1" width="100%" />
 </p>
 
+If you want to go to higher angles for the same frequency you need to lower the pulse parameter frequency and then go to higher k values or move beyond the 20 dB rule in the post processor. Moving beyond the 20 dB rule means data produced and saved beyond that limit is more qualitative and less trustworthy. However, you can get more data this way and it's sometime not that bad of a result.
+
 ### 7b. Validation - example 2
 
 The `plot_kmax_angle_vs_angle.py` file can be used to plot the results.
 
 <p align="center">
-  <img src="./ex2.png" alt="ex2" width="50%" />
+  <img src="./ex2.png" alt="ex2" width="100%" />
 </p>
 
-### Notes
-- If you want to go to higher angles for same frequency, you need to lower the pulse parameter frequency and then go to higher k values or move beyond the 20 dB rule in the post processor. Moving beyond the 20 dB rule means data produced and saved beyond those limit is more qualitative and less trustworthy. However, you can get more data this way.
-- In example 2, though the defintion defined angles for ky,kz outside the data shown, the frequency parameter doesn't allow for those angle data to be trusted so it is not saved in the csv file. Similar to above, it that info is desired, use higher than 20 dB rule or lower freq parameter and then use higher k values.
+Though the definition defined angles for ky,kz outside the data shown, the frequency parameter using the 20dB rule doesn't allow for those angle data to be trusted so it is not saved in the csv file. As discussed above in 7a., it that information is desired, use higher than the 20 dB rule or lower the frequency parameter and then use higher k values.
