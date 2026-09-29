@@ -89,4 +89,4 @@ The `plot_kmax_angle_vs_angle.py` file can be used to plot the results.
   <img src="./ex2.png" alt="ex2" width="100%" />
 </p>
 
-Though the definition defined angles for ky,kz outside the data shown, the frequency parameter using the 20dB rule doesn't allow for those angle data to be trusted so it is not saved in the csv file. As discussed above in 7a., it that information is desired, use higher than the 20 dB rule or lower the frequency parameter and then use higher k values.
+Though the definition defined angles for ky,kz outside the data shown, the frequency parameter using the 20dB rule doesn't allow for those angle data to be trusted so it is not saved in the csv file - hence the white space in the plots. As discussed above in 7a., it that information is desired, use beyond than the 20 dB rule in the post processor or lower the frequency parameter with higher k values.
