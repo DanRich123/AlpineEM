@@ -6,7 +6,7 @@ Current examples include:
 
 - The monostatic scattering of an incident plane wave off of a metal sphere
 - The aperture area and realized gain of a receiving non-Foster loaded monopole-like antenna (gridded feed/port type) mounted over an infinite ground plane
-- Oblique angle plane wave incidence with periodic boundary conditions - `kmax` variant required example 
+- Oblique angle plane wave incidence with periodic boundary conditions - a `kmax` variant required example 
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps) 
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps) that uses a SPICE source instead of a local FDTD generated source
 - A 3-port stripline wave guide design that operates in a quasi-TEM mode below around 250 MHz that builds on the non-Foster antenna example
