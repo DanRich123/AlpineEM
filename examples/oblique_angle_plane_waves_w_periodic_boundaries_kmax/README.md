@@ -75,7 +75,7 @@ The Paraview rendered image is shown below:
 The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with the analytic result.
 
 <p align="center">
-  <img src="./ex1.png" alt="ex1" width="50%" />
+  <img src="./ex1.png" alt="ex1" width="100%" />
 </p>
 
 ### 7b. Validation - example 2
