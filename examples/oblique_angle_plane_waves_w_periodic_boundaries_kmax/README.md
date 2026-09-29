@@ -18,7 +18,7 @@ Choose one of three build options depending on the resources available to you:
 - **Multi-threaded CPU** (OpenMP)
 - **GPU** (OpenACC)
 
-There are batch scripts included for building all versions (`compile.sh`, `compile_mp.sh`, and `compile_acc.sh`).
+There are batch scripts included for building all versions (`compile_kmax.sh`, `compile_kmax_mp.sh`, and `compile_kmax_acc.sh`).
 
 The example batch script (`run_parallel.sh`) included here was designed for running many simulations in parallel on an HPC system. Due to HPC resource availability, only the single-threaded option is demonstrated - each simulation is small, and 1 core is sufficient for each. The other versions can be utilized here, if resources allow.
 
