@@ -15,8 +15,8 @@ Current examples include:
   
 Forthcoming examples include:
 - The monostatic scattering of an incident plane wave off of a metal half sphere over an infinite ground plane
-- A complicated unit cell design
 - A fields creation and viewer demonstration
 - An Archimedean spiral antenna design
 - A dielectric conformal averaging (permttivity averaging) design
 - Optimization examples
+- Canonical FSS Bandpass unit cell design
