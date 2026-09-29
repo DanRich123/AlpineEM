@@ -4,7 +4,7 @@ This example uses AlpineEM to perform FDTD simulations that calculate the obliqu
 
 It outputs time-domain data for post-processing, along with binary geometry files for the **object** (material present), **clear** (material absent), and **metal** (material replaced with metal) cases.
 
-This example is designed to teach and validate the core mechanisms of the solver including oblique incidence plane waves with periodic boundary conditions, dielectric materials, and the utility scripts associated with processing `kmax` data. It is highly suggested the reader starts with the other examples first, as the `kmax` variant can be nuanced and particularly challenging.
+This example is designed to teach and validate the core mechanisms of the solver including oblique incidence plane waves with periodic boundary conditions, dielectric materials, and the utility scripts associated with processing `kmax` data. It is highly recommended that the reader starts with the other examples first, as the `kmax` variant can be nuanced and particularly challenging.
 
 This FDTD variant utilizes what is commonly referred to as the constant k vector method. Each frequency component of the transmission and reflection extracted from the time domain simulations corresponds to a different angle of incidence, requiring additional steps after post processing to understand and visualize the data. Similarly, other S-parameter and far field quantities (even w/ Bloch phase removed) can be hard to meaningfully interpret so great care must be taken when using the `kmax` variant.
 
