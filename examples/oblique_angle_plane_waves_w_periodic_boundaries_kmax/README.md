@@ -79,7 +79,7 @@ The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with t
   <img src="./ex1.png" alt="ex1" width="100%" />
 </p>
 
-If you want to go to higher angles for the same frequency you need to lower the pulse parameter frequency and then go to higher k values or move beyond the 20 dB rule in the post processor. Moving beyond the 20 dB rule means data produced and saved beyond that limit is more qualitative and less trustworthy. However, you can get more data this way and it's sometime not that bad of a result.
+If you want to go to higher angles for the same frequency you need to lower the pulse parameter frequency and then go to higher k values, or move beyond the 20 dB rule in the post processor. Moving beyond the 20 dB rule means data produced and saved beyond that limit is more qualitative and less trustworthy. However, you can get more data this way and it's sometime not that bad of a result.
 
 ### 7b. Validation - example 2
 
