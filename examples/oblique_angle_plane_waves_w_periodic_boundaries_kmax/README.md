@@ -80,7 +80,7 @@ The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with t
 
 ### 7b. Validation - example 2
 
-The `plot_kmax_angle_vs_angle.py` file can be used to plot the results. Analytic result comparison is forthcoming but also shows good agreement. 
+The `plot_kmax_angle_vs_angle.py` file can be used to plot the results.
 
 <p align="center">
   <img src="./ex2.png" alt="ex2" width="50%" />
