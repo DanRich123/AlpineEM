@@ -5,6 +5,7 @@ These examples are chosen to validate the FDTD+SPICE solver and its features, an
 Current examples include:
 
 - The monostatic scattering of an incident plane wave off of a metal sphere
+- Oblique angle plane wave incidence with periodic boundary conditions - `kmax` example usage
 - The aperture area and realized gain of a receiving non-Foster loaded monopole-like antenna (gridded feed/port type) mounted over an infinite ground plane
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps)
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps) that uses a SPICE source instead of a local FDTD generated source
@@ -16,7 +17,6 @@ Forthcoming examples include:
 - The monostatic scattering of an incident plane wave off of a metal half sphere over an infinite ground plane
 - A complicated unit cell design
 - A fields creation and viewer demonstration
-- A kmax example for oblique angle incidence with periodic boundary conditions
 - An Archimedean spiral antenna design
 - A dielectric conformal averaging (permttivity averaging) design
 - Optimization examples
