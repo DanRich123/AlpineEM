@@ -72,7 +72,7 @@ The Paraview rendered image is shown below:
 
 ### 7a. Validation - example 1
 
-The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with the analytic result. See 1. for ensuring the right settings for exmaple 1 were selected in `run_parallel.sh`.
+The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with the analytic result. See 1. for ensuring the right settings for example 1 were selected in `run_parallel.sh`.
 
 <p align="center">
   <img src="./ex1.png" alt="ex1" width="100%" />
@@ -82,7 +82,7 @@ If you want to go to higher angles for the same frequency you need to lower the 
 
 ### 7b. Validation - example 2
 
-The `plot_kmax_angle_vs_angle.py` file can be used to plot the results. See 1. for ensuring the right settings for exmaple 2 were selected in `run_parallel.sh`.
+The `plot_kmax_angle_vs_angle.py` file can be used to plot the results. See 1. for ensuring the right settings for example 2 were selected in `run_parallel.sh`.
 
 <p align="center">
   <img src="./ex2.png" alt="ex2" width="100%" />
