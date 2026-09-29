@@ -6,7 +6,7 @@ It outputs time-domain data for post-processing, along with binary geometry file
 
 This example is designed to teach and validate the core mechanisms of the solver including oblique incidence plane waves with periodic boundary conditions, dielectric materials, and the utiltity scripts associated with processing `kmax` data.
 
-This FDTD variant utilizes what is commonly referred to as the constant k vector method. Each frequency component of the transmission and reflection extracted from the time domain simulations corresponds to a different angle of incidence, requiring additional steps after post processing to understand and visualize the data. Similarly other S-parameter and far field quantities (even w/ Bloch phase removed) can be hard to meaningfully interpret so great care must be taken when using the `kmax` variant.
+This FDTD variant utilizes what is commonly referred to as the constant k vector method. Each frequency component of the transmission and reflection extracted from the time domain simulations corresponds to a different angle of incidence, requiring additional steps after post processing to understand and visualize the data. Similarly, other S-parameter and far field quantities (even w/ Bloch phase removed) can be hard to meaningfully interpret so great care must be taken when using the `kmax` variant.
 
 ## Workflow
 
@@ -72,7 +72,7 @@ The Paraview rendered image is shown below:
 
 ### 7a. Validation - example 1
 
-The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with the analytic result.
+The `plot_kmax_f_vs_angle.py` file can be used to compare the FDTD result with the analytic result. See 1. for ensuring the right settings for exmaple 1 were selected in `run_parallel.sh`.
 
 <p align="center">
   <img src="./ex1.png" alt="ex1" width="100%" />
@@ -82,7 +82,7 @@ If you want to go to higher angles for the same frequency you need to lower the 
 
 ### 7b. Validation - example 2
 
-The `plot_kmax_angle_vs_angle.py` file can be used to plot the results.
+The `plot_kmax_angle_vs_angle.py` file can be used to plot the results. See 1. for ensuring the right settings for exmaple 2 were selected in `run_parallel.sh`.
 
 <p align="center">
   <img src="./ex2.png" alt="ex2" width="100%" />
