@@ -20,7 +20,7 @@ clear_filename='clear-k.dat'
 metal_filename='metal-k.dat'
 # padding factor (integer) for increasing output # of points - time domain interpolation via padding at the end of the time sequence
 # it can cause ripples in output data if padding>0 and it's EM fields are not converged in the time domain
-padding=0
+padding=10
 # decide if metal should be used - effects phase centering - useful for measurement comparison
 use_metal=False
 # output file names - not all will ncessarily be used
@@ -366,9 +366,10 @@ if simulation_type=='plane wave':
                 coeff_ex=k3*k1/(k*k12)
                 coeff_ey=k3*k2/(k*k12)
                 coeff_ez=k12/k*(2*k_direction-1)*-1.0
-
-    inc_ff_pc_time = Ex*coeff_ex+Ey*coeff_ey+Ez*coeff_ez
-    inc_ff_pc_freq = np.fft.fft(inc_ff_pc_time)
+                
+    if (num_angles>0):
+        inc_ff_pc_time = Ex*coeff_ex+Ey*coeff_ey+Ez*coeff_ez
+        inc_ff_pc_freq = np.fft.fft(inc_ff_pc_time)
 
     timeplace=0
     for i in range(int(2*num_angles)):
