@@ -1,4 +1,5 @@
-# Oblique Angle TM Transmission and Reflection Through a Quasi-1D Infinite Slab of Dielectric Material (AlpineEM FDTD) In progress...
+# In progress...
+# Oblique Angle TM Transmission and Reflection Through a Quasi-1D Infinite Slab of Dielectric Material (AlpineEM FDTD)
 
 This example uses AlpineEM to perform FDTD simulations that calculate the oblique angle transmission and reflection through a quasi-1D infinite slab of material. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boundary conditions. Because the angles are oblique with respect to the periodic boundaries, the `kmax` variant is required.
 
