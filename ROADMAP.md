@@ -5,7 +5,7 @@ Planned fixes and features for [AlpineEM](./README.md). Items are grouped by are
 ## Solver core and materials
  
 - [ ] Permeability beyond the free-space value for bulk materials
-- [ ] More plasma terms in the multipole Drude model (currently up to 6 poles)
+- [ ] More plasma terms (thermal pressure, cyclotron motion, etc.) in the multipole Drude model (currently up to 6 poles)
 - [ ] Optional double-precision arithmetic in Fortran
 - [ ] Thin wires as a modeling option
 - [ ] Optional x, y, z sheet binary read-ins, similar to the optional bulk material array
