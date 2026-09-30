@@ -27,7 +27,9 @@ Two examples are demonstrated here. They differ only in the number of cases, the
 - **Example 2:** 225 cases. Set the number of simulations to 225, uncomment the line for `parallel_kmax_angle_vs_angle.py`, and comment out the line for `parallel_kmax_f_vs_angle.py`.
 The batch script runs all simulations.
 
-As in the other examples, the individual steps are described below.
+`parallel_kmax_angle_vs_angle.py` and `parallel_kmax_f_vs_angle.py` were slightly modified from the default utility script labeled `parallel_kmax.py` in the utilities folder. 
+
+As in the other example folders, the individual steps are described below.
  
 ### 2. Run the object case — `master.py`
  
