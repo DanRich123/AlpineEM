@@ -37,7 +37,7 @@ Developed by Dr. Daniel Richardson at the Center for National Security Initiativ
 | [`paraview/`](./paraview) | Geometry-viewing macro for Paraview |
 | [`fdtd_python_trial_versions/`](./fdtd_python_trial_versions) | Incomplete, lightly-tested pure-Python (PyTorch/TensorFlow) version of the solver for educational purposes |
 | [`examples/`](./examples) | Example simulation files, updated periodically (may occasionally lag behind the current version) |
-| [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) | Planned fixes and features |
+| [`ITEMS TO ADD.md`](./ITEMS%20TO%20ADD.md) | Planned fixes and features |
 | [`LICENSE.txt`](./LICENSE.txt) | License and third-party acknowledgments |
 
 ## Solver variants
