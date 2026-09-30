@@ -68,7 +68,7 @@ Combines the object, clear, and metal case outputs to generate transmission and 
 
 To visualize the simulation geometry:
 
-1. Run `fdtd_geometry_maker.py` to generate ParaView files.
+1. Run `fdtd_geometry_maker.py` to generate ParaView files. It will read the FDTD inputs file and the corresponding geometry binary to create the ParaView files.
 2. Open the resulting **single** ParaView file directly in ParaView — it references an accompanying folder of associated files, so leave that folder in place and do not open its contents individually.
 3. For an easier setup, load the included macro, `fdtd_macro.py`, into ParaView (**Macros** tab) to automatically configure common viewing filters.
 
