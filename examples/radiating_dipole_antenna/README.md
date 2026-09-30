@@ -49,7 +49,7 @@ To visualize the simulation geometry:
   <img src="./geometry.png" alt="Model geom" width="50%" />
 </p>
 
-> **Note** This example utilizes a basic port type with a size that is 1x1x1 (1 full cell). The user can select sheets, blocks, or lines for the port shape and size.
+> **Note** This example utilizes a basic port type with a size that is 1x1x1 (1 full cell). The user can select sheets, blocks, or lines (0x0x1) for the port shape and size.
 
 ## Performance reference
 
