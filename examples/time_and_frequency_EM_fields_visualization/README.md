@@ -58,7 +58,7 @@ To visualize the simulation geometry:
 The top of the script has many options available to the user. Both time and frequency domain (still frame and phasor) are available, with and wihtout the geometry display at the 2D yee cell slice. There are additional settings for viewing the incident or scattered fields only if the clear case was also run. Similarly, there are many options for changing colors and scaling. An example of one of the time domain `.gif` files is shown below.
 
 <p align="center">
-  <img src="./Ex.gif" alt="time-python" width="100%" />
+  <video src="https://raw.githubusercontent.com/DanRich123/AlpineEM/main/examples/time_and_frequency_EM_fields_visualization/Ex.mp4" width="100%" controls></video>
 </p>
 
 ### 6. Create 3D field files using the ParaView viewer option — `paraview_fields_viewer.py`
