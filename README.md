@@ -4,7 +4,7 @@
 
 Developed by Dr. Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder and as an independent researcher. It is intended for academic and workforce development purposes.
 
-> **Status:** Active development. APIs, file formats, and folder structure may still change — see [`ITEMS TO ADD.md`](./ITEMS%20TO%20ADD.md) for the current roadmap.
+> **Status:** Active development. APIs, file formats, and folder structure may still change — see [`ROADMAP.md`](./ROADMAP.md) for the current roadmap.
 
 ---
 
@@ -37,7 +37,7 @@ Developed by Dr. Daniel Richardson at the Center for National Security Initiativ
 | [`paraview/`](./paraview) | Geometry-viewing macro for Paraview |
 | [`fdtd_python_trial_versions/`](./fdtd_python_trial_versions) | Incomplete, lightly-tested pure-Python (PyTorch/TensorFlow) version of the solver for educational purposes |
 | [`examples/`](./examples) | Example simulation files, updated periodically (may occasionally lag behind the current version) |
-| [`ITEMS TO ADD.md`](./ITEMS%20TO%20ADD.md) | Planned fixes and features |
+| [`ROADMAP.md`](./ROADMAP.md) | Planned fixes and features |
 | [`LICENSE.txt`](./LICENSE.txt) | License and third-party acknowledgments |
 
 ## Solver variants
@@ -96,7 +96,7 @@ There are also two bash scripts for building ngspice, if the user has not alread
 - **Non-LTI (narrow-band/CW) desirable source excitation** is not currently available but planned.
 - **Pure-Python trial version** is incomplete and not well tested — this is primarily for teaching purposes.
 
-See [`ITEMS TO ADD.md`](./ITEMS%20TO%20ADD.md) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
+See [`ROADMAP.md`](./ROADMAP.md) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
 
 ## Citing this work
 
