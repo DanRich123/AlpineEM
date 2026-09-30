@@ -1,6 +1,6 @@
 # Examples
 
-These examples are chosen to validate the FDTD+SPICE solver and its features, and/or demonstrate how to model various scenarios of interest. Each folder within the examples folder is considered self-contained.
+These examples are chosen to validate the FDTD+SPICE solver and its features, and/or demonstrate how to model various scenarios of interest. Each folder within the examples folder is largely considered self-contained but might occasionally reference other example folders.
 
 Current examples include:
 
@@ -14,7 +14,7 @@ Current examples include:
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) single slab of a 3 pole Drude (plasma) material
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) multilayered slab made of dielectrics and thin sheets
   
-Forthcoming examples include:
+Forthcoming planned examples include:
 - The monostatic scattering of an incident plane wave off of a metal half sphere over an infinite ground plane - validation of an infinite ground plane usage (incident and NFFF)
 - A dielectric conformal averaging (permittivity averaging) design - shows how to use the conformal averaging utility script and validates the approach
 - An Archimedean spiral antenna design - shows how to use the spiral antenna mask utility script
