@@ -1,6 +1,6 @@
 # AlpineEM Roadmap
  
-Planned fixes and features for [AlpineEM](./README.md). Items are grouped by area and are not listed in priority order. This is a working list, so plans may change. Suggestions and contributions are welcome via [GitHub Issues](https://github.com/DanRich123/AlpineEM/issues).
+Planned fixes and features for [AlpineEM](./README.md). Items are grouped by area and are not listed in priority order. This is a working list, so plans may change.
  
 ## Solver core and materials
  
