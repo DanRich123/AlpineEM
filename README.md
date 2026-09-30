@@ -18,11 +18,11 @@ Developed by Dr. Daniel Richardson at the Center for National Security Initiativ
 - **Sub-cell thin-sheet modeling** — Smith–Maloney method, including zero-impedance approximations for PEC sheets
 - **Anisotropic, non-magnetic media** — diagonal (anisotropic) permittivity and electrical conductivity; permeability is currently fixed at the vacuum value (isotropic only)
 - **Dispersive, non-magnetic media support** — auxiliary differential equation (ADE) approach; currently only an up to 6 pole Drude (plasma) media
-- **Statics solver** — generates non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused)
-- **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows
+- **Statics solver** — generates non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused) 
+- **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows (scripts available w/ specific examples forthecoming)
 - **Paraview integration** — geometry visualization, including a ready-to-import macro
 - **Slurm submission scripts** — for HPC/cluster runs, especially useful for OpenMP/OpenACC builds
-- **Pure-Python trial version** — experimental, incomplete PyTorch/TensorFlow implementation of the solver, for educational purposes
+- **Pure-Python trial version** — experimental, incomplete PyTorch/TensorFlow implementation of the solver, for educational purposes only
 
 ## Repository structure
 
