@@ -4,7 +4,7 @@
 
 Developed by Dr. Daniel Richardson at the Center for National Security Initiatives (NSI), University of Colorado Boulder and as an independent researcher. It is intended for academic and workforce development purposes.
 
-> **Status:** Active development. APIs, file formats, and folder structure may still change — see [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the current roadmap.
+> **Status:** Active development. APIs, file formats, and folder structure may still change — see [`ITEMS TO ADD.md`](./ITEMS%20TO%20ADD.md) for the current roadmap.
 
 ---
 
@@ -17,9 +17,9 @@ Developed by Dr. Daniel Richardson at the Center for National Security Initiativ
 - **Far-field and S-parameter extraction** — adaptive, on-the-fly time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
 - **Sub-cell thin-sheet modeling** — Smith–Maloney method, including zero-impedance approximations for PEC sheets
 - **Anisotropic, non-magnetic media** — diagonal (anisotropic) permittivity and electrical conductivity; permeability is currently fixed at the vacuum value (isotropic only)
-- **Dispersive, non-magnetic media support** — auxiliary differential equation (ADE) approach; currently only an up to 6 pole Drude (plasma) media
+- **Dispersive, non-magnetic media support** — auxiliary differential equation (ADE) approach; currently only an up to 6-pole Drude (plasma) media
 - **Statics solver** — generates non-dispersive E/H field patterns used in gridded lumped ports (TEM-mode focused) 
-- **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows (scripts available w/ specific examples forthecoming)
+- **Optimization examples** — adjoint (gradient-based) and genetic-algorithm workflows (scripts available w/ specific examples forthcoming)
 - **Paraview integration** — geometry visualization, including a ready-to-import macro
 - **Slurm submission scripts** — for HPC/cluster runs, especially useful for OpenMP/OpenACC builds
 - **Pure-Python trial version** — experimental, incomplete PyTorch/TensorFlow implementation of the solver, for educational purposes only
@@ -96,7 +96,7 @@ There are also two bash scripts for building ngspice, if the user has not alread
 - **Non-LTI (narrow-band/CW) desirable source excitation** is not currently available but planned.
 - **Pure-Python trial version** is incomplete and not well tested — this is primarily for teaching purposes.
 
-See [`ITEMS TO ADD.txt`](./ITEMS%20TO%20ADD.txt) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
+See [`ITEMS TO ADD.md`](./ITEMS%20TO%20ADD.md) for the full list of planned additions, including further source types, a Helmholtz solver, and dispersive lumped-port coefficients.
 
 ## Citing this work
 
