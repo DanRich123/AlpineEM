@@ -39,7 +39,7 @@ Performs the same steps as `master.py`, but without the cube present, to establi
 - You must set the solver name in `master_clear.py` (the default version is selected).
 - Produces several output files used for fields and geometry viewing.
 
-- Example Slurm batch scripts are included and can be adapted to your cluster environment.
+  Example Slurm batch scripts are included and can be adapted to your cluster environment.
 
 ### 4. (Optional) View the geometry
 
