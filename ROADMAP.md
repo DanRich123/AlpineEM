@@ -7,13 +7,14 @@ Planned fixes and features for [AlpineEM](./README.md). Items are grouped by are
 - [ ] Permeability beyond the free-space value for bulk materials
 - [ ] More plasma terms (thermal pressure, cyclotron motion, etc.) in the multipole Drude model (currently up to 6 poles)
 - [ ] Optional double-precision arithmetic in Fortran
-- [ ] Thin wires as a modeling option
+- [ ] Thin sub-cell wires
+- [ ] Additional dispersive and dissipative materials (Debye, Lorentz, etc.)
 - [ ] Optional x, y, z sheet binary read-ins, similar to the optional bulk material array
 - [ ] Output of E and H fields at cell surfaces, not just at cell centers
 ## Sources and far-field
  
 - [ ] Additional source types (e.g., CW, raised-cosine envelope)
-- [ ] Additional far-field method: choose a frequency and compute all angles at that frequency
+- [ ] Additional far-field method: choose a frequency and compute all angles at that frequency - better for many angles and parallelization in general for openMP and openACC
 ## Ports and feeds
  
 - [ ] 2D Helmholtz solver for frequency-dependent (dispersive or non-dispersive) mode generation for gridded feeds
