@@ -17,9 +17,9 @@ os.chdir(script_dir)
 #SETUP
 #################################################################################
 # Simulation parameters - input your simulation parameters, will error out if the sizes are wrong.
-Nx = 65
-Ny = 30
-Nz = 30
+Nx = 70
+Ny = 70
+Nz = 70
 del_t = 9.4365835E-13
 time_steps = 500
 # Use H fields, and if so, what filenames
@@ -34,10 +34,10 @@ Ey_field_name = "data_full_Ey.bin"
 Ez_field_name = "data_full_Ez.bin"
 # Output file info
 output_folder = "./Output"
-# not setup yet but kmax or not kmax for data types that come in and what we do with them
+# decide if kmax was used - not then time domain is complex
 kmax=False
 # Select info on still frame, freq, time, etc.
-time_or_freq="freq" #'time' or 'freq'
+time_or_freq="time" #'time' or 'freq'
 # Select time or freq frame, [start,stop] frames, both won't be used (only time or freq used, not both)
 time_frame=[0,99] # Ex. if you wanted the first 100 frames you would use [0,99]
 freq_frame=[0,19] # At end of program is will print what these frequencies are in GHz for reference

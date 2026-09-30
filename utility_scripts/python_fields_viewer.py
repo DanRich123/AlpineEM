@@ -27,15 +27,15 @@ min_vals = [-1, -1, -1, -1/377, -1/377, -1/377]
 
 color_mapping = 'nipy_spectral' # color mapping for the fields
 Type_fields = 'total'           # 'total', 'incident', 'scattered'
-clear_filename = 'clear.dat'    # clear geometry file name to pule info from
+clear_filename = 'clear.dat'    # clear geometry file name to pull info from if using 'scatterd' or 'incident' options
 
-use_geometry = True    # show geometry of cross section or not
-opacity = 0.4           # opacity for the combination: 0.0 shows no EM fields, 1.0 shows no geometry
-geom_colors = "Pastel1" # color mapping for the geometry
-#colors = ["gray", "black"]
-#geom_colors = LinearSegmentedColormap.from_list("custom_div", colors)
+use_geometry = True      # show geometry of cross section or not
+opacity = 0.6            # opacity for the combination: 0.0 shows no EM fields, 1.0 shows no geometry
+#geom_colors = "Pastel1" # color mapping for the geometry
+colors = ["gray", "black"]
+geom_colors = LinearSegmentedColormap.from_list("custom_div", colors)
 
-KMAX = True
+KMAX = False
 ###############################################################################
 ###############################################################################
 
