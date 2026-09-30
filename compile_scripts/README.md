@@ -1,6 +1,6 @@
 # FDTD Solver Build & Compilation Scripts
 
-Build utilities and Bash compilation scripts for compiling the FDTD solver across various hardware target architectures (CPU OpenMP, NVIDIA GPU OpenACC) and solver variants (Standard, KMAX periodicity, NGSPICE circuit co-simulation).
+Build utilities and Bash compilation scripts for compiling the FDTD solver across various hardware target architectures (CPU OpenMP, NVIDIA GPU OpenACC) and solver variants (Standard, KMAX periodicity, NGSPICE circuit co-simulation). The specifics might vary for a given user. Example: Loading Autotools was required on CU's Alpine HPC system user nodes, but was not required on my personal Linux machine.
 
 ---
 
