@@ -55,10 +55,10 @@ To visualize the simulation geometry:
 
 ### 5. Create 2D field slices using the python viewer option — `python_fields_viewer.py`
 
-The top of the script has many options available to the user. Both time and frequency domain (still frame and phasor) are available, with and wihtout the geometry display at the 2D yee cell slice. There are additional settings for viewing the incident or scattered fields only if the clear case was also run. Similarly, there are many options for changing colors and scaling. An example image of one of the time domain `Ex.mp4` file is shown below.
+The top of the script has many options available to the user. Both time and frequency domain (still frame and phasor) are available, with and wihtout the geometry display at the 2D yee cell slice. There are additional settings for viewing the incident or scattered fields only if the clear case was also run. Similarly, there are many options for changing colors and scaling. An example image of the `Ex.mp4` time domain file is shown below.
 
 <p align="center">
-  <img src="./example.png" alt="time-python" width="100%" />
+  <img src="./Ex.jpg" alt="time-python" width="50%" />
 </p>
 
 ### 6. Create 3D field files using the ParaView viewer option — `paraview_fields_viewer.py`
