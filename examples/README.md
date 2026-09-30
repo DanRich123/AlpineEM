@@ -16,7 +16,6 @@ Current examples include:
   
 Forthcoming examples include:
 - The monostatic scattering of an incident plane wave off of a metal half sphere over an infinite ground plane - validation of an infinite ground plane usage (incident and NFFF)
-- A dielectric conformal averaging (permttivity averaging) design
-- An Archimedean spiral antenna design
-- Simple bandstop FSS design
-- Optimization examples (adjoint-based gradient descent, genetic algorithm w/ and w/out and HPC system, and Bayesian statistical optimization)
+- A dielectric conformal averaging (permittivity averaging) design - shows how to use the conformal averaging utility script and validates the approach
+- An Archimedean spiral antenna design - shows how to use the spiral antenna mask utility script
+- Optimization examples (adjoint-based gradient descent, genetic algorithm w/ and w/out and HPC system, and Bayesian statistical optimization) - modern EM problems require extensive topology optimization and/or circuit element optimization so simple examples will be demonstrated
