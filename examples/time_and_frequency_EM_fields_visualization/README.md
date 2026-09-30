@@ -66,7 +66,8 @@ The top of the script has many options available to the user. Both time and freq
 The top of the script has many options available to the user. Both time and frequency domain are available. There are few settings here as ParaView options are very extensive for modifying what information is viewed and how. It is most convenient to open either a new ParaView instance or go through the geometry file if it is open and viewable, and then to load all time or frequency domain files as one grouped file (this is the default option). From there, it is easy to select slices, volume, ect. or change the colors and scales, or examine magnitude vs component, etc. The possibles are quite large. See ParaView documentation for best practices. An exmample is shown below.
 
 <p align="center">
-  <img src="./example2.png" alt="time-paraview" width="100%" />
+  <img src="./example2.png" alt="time-paraview" width="49%" />
+  <img src="./example2-2.png" alt="time-paraview" width="49%" />
 </p>
 
 It is important to note that ParaView often does somewhat odd interpolation schemes or creates seemly uniform but actually nonuniform grids. For example, symmetric fields can easily appear asymmetric if the user is not careful. ParaView is a powerful tool, but does a lot of things under the hood.
