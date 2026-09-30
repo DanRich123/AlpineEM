@@ -75,7 +75,7 @@ The most convenient workflow is to open either a new ParaView instance or the ge
   <img src="./example2-2.png" alt="Time-domain 3D fields in ParaView (view 2)" width="49%" />
 </p>
 
-> **Caution:** ParaView often applies unexpected interpolation schemes or creates grids that look uniform but are actually nonuniform. For example, symmetric fields can appear asymmetric if you are not careful. ParaView is a powerful tool, but it does a lot under the hood.
+> **Caution:** ParaView often applies unexpected interpolation schemes or creates grids that look uniform but are actually nonuniform. For example, symmetric fields can appear asymmetric if you are not careful. ParaView is a very powerful tool, but it does a lot under the hood without explicitly stating what it is doing.
 
 ## Performance reference
 
