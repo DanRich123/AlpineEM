@@ -55,10 +55,10 @@ To visualize the simulation geometry:
 
 ### 5. Create 2D field slices using the python viewer option — `python_fields_viewer.py`
 
-The top of the script has many options available to the user. Both time and frequency domain (still frame and phasor) are available, with and wihtout the geometry display at the 2D yee cell slice. There are additional settings for viewing the incident or scattered fields only if the clear case was also run. Similarly, there are many options for changing colors and scaling. An example of one of the time domain `.gif` files is shown below.
+The top of the script has many options available to the user. Both time and frequency domain (still frame and phasor) are available, with and wihtout the geometry display at the 2D yee cell slice. There are additional settings for viewing the incident or scattered fields only if the clear case was also run. Similarly, there are many options for changing colors and scaling. An example image of one of the time domain `Ex.mp4` file is shown below.
 
 <p align="center">
-  <video src="https://raw.githubusercontent.com/DanRich123/AlpineEM/main/examples/time_and_frequency_EM_fields_visualization/Ex.mp4" width="100%" controls></video>
+  <img src="./example.png" alt="time-python" width="100%" />
 </p>
 
 ### 6. Create 3D field files using the ParaView viewer option — `paraview_fields_viewer.py`
@@ -66,7 +66,7 @@ The top of the script has many options available to the user. Both time and freq
 The top of the script has many options available to the user. Both time and frequency domain are available. There are few settings here as ParaView options are very extensive for modifying what information is viewed and how. It is most convenient to open either a new ParaView instance or go through the geometry file if it is open and viewable, and then to load all time or frequency domain files as one grouped file (this is the default option). From there, it is easy to select slices, volume, ect. or change the colors and scales, or examine magnitude vs component, etc. The possibles are quite large. See ParaView documentation for best practices. An exmample is shown below.
 
 <p align="center">
-  <img src="./example.png" alt="time-paraview" width="100%" />
+  <img src="./example2.png" alt="time-paraview" width="100%" />
 </p>
 
 It is important to note that ParaView often does somewhat odd interpolation schemes or creates seemly uniform but actually nonuniform grids. For example, symmetric fields can easily appear asymmetric if the user is not careful. ParaView is a powerful tool, but does a lot of things under the hood.
