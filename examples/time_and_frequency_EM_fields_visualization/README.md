@@ -7,7 +7,7 @@ The sole purpose of this example is to demonstrate the capabilities of the EM fi
 There are two options for viewing fields:
 
 - **Python viewer**: creates videos or still frames of 2D (cell-centered) slices.
-- **ParaView viewer**: creates videos or still frames of the full 3D fields. This option still uses Python to create the ParaView files, similar to the geometry viewer. It is the most general option, and 2D slices can also be created in ParaView, but the memory required is much larger.
+- **ParaView viewer**: creates videos or still frames of the full 3D (cell-centered) fields. This option still uses Python to create the ParaView files, similar to the geometry viewer. It is the most general option, and 2D slices can also be created in ParaView, but the memory required is much larger. Note that for time and memory reasons the H field components are 1/2-time step ahead of the E fields in the 3D field output files.
 
 ## Workflow
 
