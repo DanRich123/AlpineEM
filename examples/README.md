@@ -19,3 +19,4 @@ Forthcoming planned examples include:
 - A dielectric conformal averaging (permittivity averaging) design - shows how to use the conformal averaging utility script and validates the approach
 - An Archimedean spiral antenna design - shows how to use the spiral antenna mask utility script
 - Optimization examples (adjoint-based gradient descent, genetic algorithm w/ and w/out and HPC system, and Bayesian statistical optimization) - modern EM problems require extensive topology optimization and/or circuit element optimization so simple examples will be demonstrated
+- Example of using kmax and SPICE together - oddities surrounding complex data types can make this non-intuitive. 
