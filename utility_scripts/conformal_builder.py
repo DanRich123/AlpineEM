@@ -250,15 +250,22 @@ class ConformalGeometry:
     def plot_slice(self, slice_type , loc):
         """Quick visualization of coarse_grid[:, :, :] (requires matplotlib) at specific location."""
         from matplotlib import pyplot as plt
-        X = np.linspace(1, self.coarse_y, self.coarse_y)
-        Y = np.linspace(1, self.coarse_z, self.coarse_z)
-        X, Y = np.meshgrid(X, Y)
         if slice_type=='x':
+            X = np.linspace(1, self.coarse_z, self.coarse_z)
+            Y = np.linspace(1, self.coarse_y, self.coarse_y)
+            X, Y = np.meshgrid(X, Y)
             mesh = plt.pcolormesh(X, Y, self.course_grid[loc, :, :])
         if slice_type=='y':
+            X = np.linspace(1, self.coarse_z, self.coarse_z)
+            Y = np.linspace(1, self.coarse_x, self.coarse_x)
+            X, Y = np.meshgrid(X, Y)
             mesh = plt.pcolormesh(X, Y, self.course_grid[:, loc, :])
         if slice_type=='z':
+            X = np.linspace(1, self.coarse_y, self.coarse_y)
+            Y = np.linspace(1, self.coarse_x, self.coarse_x)
+            X, Y = np.meshgrid(X, Y)
             mesh = plt.pcolormesh(X, Y, self.course_grid[:, :, loc])
         plt.colorbar(mesh)
         plt.show()
+        plt.savefig('2D-slice')
         return mesh
