@@ -31,7 +31,7 @@ This custom script uses the class found in `conformal_builder.py`. It performs h
 
 It outputs two files, `materials_id_opfile.npy` and `optional_geom_bulk.bin`. `materials_id_opfile.npy` is a NumPy array of material property information that can be loaded and used in `master.py`. `optional_geom_bulk.bin` is a geometry binary that `master.py` reads in. Anything drawn in `master.py` after the import overwrites the corresponding regions of the imported geometry.
 
-There is an option within `make_optional_geom_and_conform_bulk.py` to save a 2D slice of the conformed Yee grid. An example is saved here: `2D-slice.png`.
+There is an option within `make_optional_geom_and_conform_bulk.py` to save a 2D slice of the conformed Yee grid.
 
 ### 3. Run the object case — `master.py` or `master_perfect_alignment.py`
 
