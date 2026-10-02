@@ -10,13 +10,13 @@ Current examples include:
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps) 
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps) that uses a SPICE source instead of a local FDTD generated source
 - A 3-port stripline wave guide design that operates in a quasi-TEM mode below around 250 MHz that builds on the non-Foster antenna example
+- Sub-pixel averaging to conform media: transmission and reflection of a quasi-1D infinite (periodic boundary conditions) dielectric slab of material
 - Time and frequency domain electromagnetic field visualization using 2D cell centered field slices (Python) or full 3D cell centered fields (ParaView)
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) single slab of a 3 pole Drude (plasma) material
 - Transmission and reflection through a quasi-1D infinite (periodic boundary conditions) multilayered slab made of dielectrics and thin sheets
   
 Forthcoming planned examples include:
 - The monostatic scattering of an incident plane wave off of a metal half sphere over an infinite ground plane - validation of an infinite ground plane usage (incident and NFFF)
-- A dielectric conformal averaging (permittivity averaging) design - shows how to use the conformal averaging utility script and validates the approach
 - An Archimedean spiral antenna design - shows how to use the spiral antenna mask utility script
 - Optimization examples (adjoint-based gradient descent, genetic algorithm w/ and w/out and HPC system, and Bayesian statistical optimization) - modern EM problems require extensive topology optimization and/or circuit element optimization so simple examples will be demonstrated
 - Example of using kmax and SPICE together - oddities surrounding complex data types can make this non-intuitive. 
