@@ -1,5 +1,3 @@
-# In progress...
-
 # Sub-pixel Averaging and Conforming Media: Transmission and Reflection Through a Quasi-1D Infinite Slab of Dielectric Material (AlpineEM FDTD)
 
 This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite slab of dielectric material. The slab is infinite in the y and z directions and finite in the x direction. The infinite condition is created using periodic boundary conditions.
@@ -85,7 +83,7 @@ Because the conformally averaged case is shifted 1/2 cell relative to the perfec
 
 At high frequencies there is a growing error, most notable in the transmission plot. This is expected: sub-pixel averaging is not perfect, and failures to conform show up first at the higher frequencies.
 
-![Model Accuracy](./Comparison_plot.png)
+![Model Accuracy](./Combined_S_Parameters_Plot.png)
 
 ## Performance reference
 
