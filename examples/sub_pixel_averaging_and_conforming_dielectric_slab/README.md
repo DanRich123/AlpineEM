@@ -82,8 +82,8 @@ Approximate per-simulation runtimes measured on the author's hardware:
 
 | Solver                       | Time per simulation |
 |-------------------------------|---------------------|
-| OpenACC (GPU)                 | ~3 seconds         |
-| OpenMP (multi-threaded CPU)   | ~0.8 seconds          |
+| OpenACC (GPU)                 | ~3.8 seconds         |
+| OpenMP (multi-threaded CPU)   | ~0.9 seconds          |
 | Single-threaded (default)     | ~1.8 seconds          |
 
 > **Note:** OpenACC (GPU) performed worse due to the size and scaling of the problem. Unless the simulation is large enough, the overhead required for GPU calculations will dominate. Thus, because this problem utilized a severely non-cubic grid (75x30x30) and was not large in size (total cells and time steps), the GPU case did not dominate. See the monostatic scattering of a sphere example where the GPU handedly dominates the simulation time. These timings depend heavily on hardware, problem size, and system load. Use them only as a rough point of reference, not a direct benchmark against other software.
