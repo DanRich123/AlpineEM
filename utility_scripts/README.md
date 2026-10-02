@@ -54,7 +54,7 @@ Conventions shared by most scripts:
 ### Notes on the specialized scripts
 
 - The two `plot_kmax_*` scripts must be edited so their ky/kz arrays match the ones in `parallel_kmax.py`, since they locate results by folder name. The plotted CSV columns (TM reflection and transmission) and the angle formula are hard-coded; adjust them for your geometry and port ordering.
-- `convert_to_touchstone.py` and the Tecplot scripts were written for specific projects. They are included as working references for similar tasks.
+- `convert_to_touchstone.py`, the Tecplot scripts, and the others were written for specific projects. They are included as working references for similar tasks.
 
 ## Dependencies
 
