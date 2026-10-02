@@ -31,6 +31,8 @@ This custom script uses the class found in `conformal_builder.py`. It performs h
 
 It outputs two files, `materials_id_opfile.npy` and `optional_geom_bulk.bin`. `materials_id_opfile.npy` is a NumPy array of material property information that can be loaded and used in `master.py`. `optional_geom_bulk.bin` is a geometry binary that `master.py` reads in. Anything drawn in `master.py` after the import overwrites the corresponding regions of the imported geometry.
 
+There is an option within `make_optional_geom_and_conform_bulk.py` to save a 2D slice of the conformed Yee grid. An example is saved here: `2D-slice.png`.
+
 ### 3. Run the object case — `master.py` or `master_perfect_alignment.py`
 
 Configures and runs the simulation with the object present.
@@ -69,7 +71,7 @@ To visualize the simulation geometry:
 2. Open the resulting **single** ParaView file directly in ParaView. It references an accompanying folder of associated files, so leave that folder in place and do not open its contents individually.
 3. For an easier setup, load the included macro, `fdtd_macro.py`, into ParaView (**Macros** tab) to automatically configure common viewing filters.
 
-The ParaView-rendered image is shown below:
+The ParaView-rendered image of the conformed media is shown below:
 
 <p align="center">
   <img src="./geometry.png" alt="Model geom" width="50%" />
