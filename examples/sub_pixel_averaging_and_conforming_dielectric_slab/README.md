@@ -1,6 +1,6 @@
 # In progress...
 
-# Transmission and Reflection Through a Multilayered Quasi-1D Infinite Slab of Dielectrics and Thin Sheets (AlpineEM FDTD)
+# Sub-pixel Averaging and Conforming Media: Transmission and Reflection Through a Quasi-1D Infinite Slab of Dielectric Material (AlpineEM FDTD)
 
 This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite slab of dielectric material. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boundary conditions. By using the `conformal_builder.py` and `make_optional_geom_and_conform_bulk.py` script, objects can be drawn into much larger (more cells) and more refined (smaller cells) Yee cells grids. Through anisotropic harmonic and arithmetic sub-pixel averaging schemes, the materials can be conformed to fit the actual Yee cell grid of the intended simulation.
 
