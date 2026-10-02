@@ -29,7 +29,7 @@ Batch scripts are included for building each version (`compile.sh`, `compile_mp.
 
 This custom script uses the class found in `conformal_builder.py`. It performs harmonic and arithmetic averaging of the dielectric properties, as discussed above.
 
-It outputs two files, `materials_id_opfile.npy` and `optional_geom_bulk.bin`. `materials_id_opfile.npy` is a NumPy array of material property information that can be loaded and used in `master.py`. `optional_geom_bulk.bin` is a geometry binary that `master.py` reads in. Anything drawn in `master.py` after the import overwrites the corresponding regions of the imported geometry.
+It outputs two files, `materials_id_opfile.npy` and `optional_geom_bulk.bin`. `materials_id_opfile.npy` is a NumPy array of material property information that can be loaded and used in `master.py`. `optional_geom_bulk.bin` is a geometry binary that `master.py` reads in. Both expected files are included here for reference. Anything drawn in `master.py` after the import overwrites the corresponding regions of the imported geometry.
 
 There is an option within `make_optional_geom_and_conform_bulk.py` to save a 2D slice of the conformed Yee grid.
 
