@@ -74,7 +74,7 @@ The Paraview rendered image is shown below:
 
 ### 8. Validation
 
-The `plot.py` file can be used to compare the two different FDTD results. It can be seen there is excellent agreement between the amplitude and phase of both transmission and reflection. It is important to note that because the conformally averaged case was 1/2 cell different from the other perfectly aligned case, it required a 1 cell phase correction manually to the reflection phase to comapre apples to applees. The tranmission phase is however unaffected by this placement shift, as expected.
+The `plot.py` file can be used to compare the two different FDTD results. It can be seen there is excellent agreement between the amplitude and phase of both transmission and reflection. It is important to note that because the conformally averaged case was 1/2 cell different from the other perfectly aligned case, it required a 1 cell phase correction manually to the reflection phase to comapre apples to applees. The tranmission phase is however unaffected by this placement shift, as expected. At the high frequencies, there is a growing error, most notable in the tranmission plot. This is expected as the sub-pixel averaging is not perfect and the failure to conform will show up first at the higher freuqencies.
 
 ![Model Accuracy](./Comparison_plot.png)
 
