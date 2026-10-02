@@ -29,7 +29,7 @@ Conventions shared by most scripts:
 | `paraview_fields_viewer.py` | Converts the **full-volume** field export to VTK image files, in time or frequency (magnitude) | `<name>_full_*.bin` | `Output/E_Field_###.vti`, `Output/H_Field_###.vti` |
 | `make_optional_geom_bulk.py` | Minimal example of drawing a bulk material array directly in NumPy | none | `optional_geom_bulk.bin` |
 | `make_optional_geom_and_conform_bulk.py` | Draws geometry on a fine grid and conformally averages it down to the FDTD grid | `conformal_builder.py` | `optional_geom_bulk.bin`, `materials_id_opfile.npy` |
-| `conformal_builder.py` | The `ConformalGeometry` class used above: harmonic/arithmetic averaging of ε and σ, with new blended materials created as needed. No Drude or permeability support yet | NumPy (Matplotlib for `plot_slice`) | Imported, not run directly |
+| `conformal_builder.py` | The `ConformalGeometry` class used above: harmonic/arithmetic averaging of ε and σ, with new blended materials created as needed to conform and/or sub-pixel average. No Drude or permeability support yet | NumPy (Matplotlib for `plot_slice`) | Imported, not run directly |
 
 ### Notes on the workflow scripts
 
