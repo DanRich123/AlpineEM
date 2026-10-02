@@ -2,7 +2,7 @@
 
 # Sub-pixel Averaging and Conforming Media: Transmission and Reflection Through a Quasi-1D Infinite Slab of Dielectric Material (AlpineEM FDTD)
 
-This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite slab of dielectric material. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boundary conditions. By using the `conformal_builder.py` and `make_optional_geom_and_conform_bulk.py` script, objects can be drawn into much larger (more cells) and more refined (smaller cells) Yee cells grids. Through anisotropic harmonic and arithmetic sub-pixel averaging schemes, the materials can be conformed to fit the actual Yee cell grid of the intended simulation.
+This example uses AlpineEM to perform FDTD simulations that calculate the transmission and reflection through a quasi-1D infinite slab of dielectric material. The slab of material is infinite in the y and z directions, and finite in the x direction. The infinite condition is created using periodic boundary conditions. By using the `conformal_builder.py` and `make_optional_geom_and_conform_bulk.py` script, objects can be drawn into much larger (more cells) and more refined (smaller cells) Yee cells grids. Through anisotropic harmonic and arithmetic sub-pixel averaging schemes, the materials can be conformed to fit the actual Yee cell grid of the intended simulation. It does not directly support dispersive media properties yet.
 
 This example considers and compares two cases: 1) The dielectric slab fits nicely within the Yee cell grid and 2) The dielectric slab is shifted up 1/2 cell distance in space; therefore, it does not fit nicely within the Yee cell grid and needs to be conformed through sub-pixel averaged.
 
@@ -20,11 +20,15 @@ Choose one of three build options depending on the resources available to you:
 - **Multi-threaded CPU** (OpenMP)
 - **GPU** (OpenACC)
 
-There are batch scripts included for building all versions (`compile.sh`, `compile_mp.sh`, and `compile_acc.sh`).
+There are batch scripts included for building all versions (`compile.sh`, `compile_mp.sh`, and `compile_acc.sh`). Example Slurm batch scripts are included for running steps 3-6 as well and can be adapted to your cluster environment.
 
-### 2.
+### 2. Perform sub-pixel averaging and conform the media — `make_optional_geom_and_conform_bulk.py`
 
-### 3. Run the object case — `master.py`
+This is a custom script that uses the class found within `conformal_builder.py`. It performs harmonic and arithmetic averaging of the dielectric properties, as discussed above.
+
+It will output two files, `materials_id_opfile.npy` and `optional_geom_bulk.bin`. `materials_id_opfile.npy` is a NumPy array with material property information that can be uploaded and used in `master.py`. `optional_geom_bulk.bin` is a geometry binary that `master.py` reads in. Anything drawn in `master.py` after the import overwrites the corresponding regions of the imported geometry
+
+### 3. Run the object case — `master.py` or `master_perfect_alignment.py`
 
 Configures and runs the simulation with the object present.
 
@@ -54,8 +58,6 @@ Performs the same steps as `master.py`, but the object has been replaced with me
 
 Combines the object, clear, and metal case outputs to generate transmission and reflection data as a `.csv` file.
 
-- Example Slurm batch scripts are included and can be adapted to your cluster environment.
-
 ### 7. (Optional) View the geometry
 
 To visualize the simulation geometry:
@@ -72,7 +74,7 @@ The Paraview rendered image is shown below:
 
 ### 8. Validation
 
-The `plot.py` file can be used to compare the two different FDTD results...
+The `plot.py` file can be used to compare the two different FDTD results. It can be seen there is excellent agreement between the amplitude and phase of both transmission and reflection. It is important to note that because the conformally averaged case was 1/2 cell different from the other perfectly aligned case, it required a 1 cell phase correction manually to the reflection phase to comapre apples to applees. The tranmission phase is however unaffected by this placement shift, as expected.
 
 ![Model Accuracy](./Comparison_plot.png)
 
