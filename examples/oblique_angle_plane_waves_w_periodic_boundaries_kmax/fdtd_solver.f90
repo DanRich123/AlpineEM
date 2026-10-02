@@ -7009,11 +7009,9 @@ Program fdtd
         if (pbc_y+pbc_z==2) then
 
             !$omp single
-            !$acc serial
             sum_r=0.0
             sum_t=0.0
             !$omp end single
-            !$acc end serial
 
             !$acc parallel loop collapse(2) present(Ez, Ey) &
             !$acc reduction(+:sum_r, sum_t)
@@ -7042,11 +7040,9 @@ Program fdtd
         if (pbc_x+pbc_z==2) then
 
             !$omp single
-            !$acc serial
             sum_r=0.0
             sum_t=0.0
             !$omp end single
-            !$acc end serial
 
             !$acc parallel loop collapse(2) present(Ez, Ex) &
             !$acc reduction(+:sum_r, sum_t)
@@ -7075,11 +7071,9 @@ Program fdtd
         if (pbc_x+pbc_y==2) then
 
             !$omp single
-            !$acc serial
             sum_r=0.0
             sum_t=0.0
             !$omp end single
-            !$acc end serial
 
             !$acc parallel loop collapse(2) present(Ey, Ex) &
             !$acc reduction(+:sum_r, sum_t)
