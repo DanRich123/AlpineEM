@@ -13,7 +13,7 @@ Developed by Dr. Daniel Richardson at the Center for National Security Initiativ
 - **3D FDTD solver** — full-wave solver on a standard cubic Yee grid, written in Fortran (`.f90`), with OpenMP / OpenACC build variants for multithreaded CPU or GPU execution
 - **SPICE co-simulation** — couples FDTD lumped ports directly to an ngspice circuit netlist
 - **Boundary conditions** — convolutional PML (ADE formulation); standard periodic boundaries, with a dedicated `kmax` solver variant for oblique-incidence plane waves (constant k-vector method); and an infinite ground plane option
-- **Two excitation types** — Gaussian and normalized differentiated Gaussian, usable as lumped-port or TF/SF plane-wave sources
+- **Two excitation types** — Gaussian and normalized differentiated Gaussian, usable as lumped-port or TF/SF plane-wave sources (though almost any source type can be used when generated in SPICE directly)
 - **Far-field and S-parameter extraction** — adaptive, on-the-fly time-domain far-field (at select angles) and S-parameter extraction, both producing broadband information
 - **Sub-cell thin-sheet modeling** — Smith–Maloney method, including zero-impedance approximations for PEC sheets
 - **Anisotropic, non-magnetic media** — diagonal (anisotropic) permittivity and electrical conductivity; permeability is currently fixed at the vacuum value (isotropic only)
