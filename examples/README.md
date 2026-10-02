@@ -17,5 +17,4 @@ Current examples include:
   
 Forthcoming planned examples include:
 - The monostatic scattering of an incident plane wave off of a metal half sphere over an infinite ground plane - validation of an infinite ground plane usage (incident and NFFF)
-- An Archimedean spiral antenna design - shows how to use the spiral antenna mask utility script
 - Example of using kmax and SPICE together - oddities surrounding complex data types can make this non-intuitive. 
