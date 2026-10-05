@@ -30,7 +30,7 @@ Configures and runs the simulation with the dipole present.
 
 - `source.py` takes the funciton submitted by the user to SPICE and some FDTD info to produce the incident wave as a numpy array. This is needed by `post_processor.py`. This is a custom script and only included in this example folder.
 - `post_processor.py` takes the object output to generate realized gain and S parameter data as a `.csv` file.
-- `plot.py` plots some of the `.csv` file data. As with the other SPICE examples (discussed in detail in [`non_Foster_recieving_monopole/`](../non_Foster_recieving_monopole) and noted in the `.csv` files) some of the parameters need a (purely) mathematical correction to the parameters of interest since the post processor didn't know the impedance of the SPICE circuit nodes.
+- `plot.py` plots some of the `.csv` file data. As with the other SPICE examples, some of the parameters need a (purely) mathematical correction to the parameters of interest since the post processor didn't know the impedance of the SPICE circuit nodes. This is discussed in detail in [`non_Foster_recieving_monopole/`](../non_Foster_recieving_monopole) and noted here within the `.csv` output files here.
 - Example Slurm batch scripts are included and can be adapted to your cluster environment.
 
  <p align="center">
