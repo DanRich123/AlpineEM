@@ -8,7 +8,7 @@ import os
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
-# setup analytic calcultions
+# setup analytic calculations
 radius=12.5E-3 #meters
 freq=np.linspace(0.7E9,50E9,1000)
 c=299792458
