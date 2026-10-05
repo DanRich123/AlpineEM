@@ -26,7 +26,7 @@ Configures and runs the simulation with the dipole present.
 
   > **Note** Run for zero time steps if viewing the geometry (see step 4) is desired before running a full simulation.
 
-### 3. Post-process — `source.py, `post_processor.py`, and `plot.py`
+### 3. Post-process — `source.py`, `post_processor.py`, and `plot.py`
 
 - `source.py` takes the funciton submitted by the user to SPICE and some FDTD info to produce the incident wave as a numpy array. This is needed by `post_processor.py`. This is a custom script and only included in this example folder.
 - `post_processor.py` takes the object output to generate realized gain and S parameter data as a `.csv` file.
