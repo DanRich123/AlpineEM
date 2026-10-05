@@ -13,7 +13,7 @@ Planned fixes and features for [AlpineEM](./README.md). Items are grouped by are
 - [ ] Output of E and H fields at cell surfaces, not just at cell centers
 ## Sources and far-field
  
-- [ ] Additional source types (e.g., CW, raised-cosine envelope)
+- [ ] Additional internal (non-SPICE generated) source types (e.g., CW, raised-cosine envelope)
 - [ ] Additional far-field method: choose a frequency and compute all angles at that frequency - better for many angles and parallelization in general for openMP and openACC
 ## Ports and feeds
  
