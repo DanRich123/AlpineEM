@@ -1402,11 +1402,11 @@ Program fdtd
     if (is_mirror==1) then
         select case(mirror_type)
         case(1)
-            xlow=mirror_height
+            xlow=mirror_height + 1 !use submits for cube, I have to manually place it at the right surface
             xlow_wall=0
             x_mirror_offset = 2.0 * (xlow)
             !ic=xlow
-            nxPML_1=0
+            nxPML_1=1 !used to be zero but causes instability
             use_x_mirror=1.0
         case(2)
             xhigh=mirror_height
@@ -1416,11 +1416,11 @@ Program fdtd
             nxPML_2=0
             use_x_mirror=1.0
         case(3)
-            ylow=mirror_height
+            ylow=mirror_height + 1 !use submits for cube, I have to manually place it at the right surface
             ylow_wall=0
             y_mirror_offset = 2.0 * (ylow)
             !jc=ylow
-            nyPML_1=0
+            nyPML_1=1 !used to be zero but causes instability
             use_y_mirror=1.0
         case(4)
             yhigh=mirror_height
@@ -1430,11 +1430,11 @@ Program fdtd
             nyPML_2=0
             use_y_mirror=1.0
         case(5)
-            zlow=mirror_height
+            zlow=mirror_height + 1 !use submits for cube, I have to manually place it at the right surface
             zlow_wall=0
             z_mirror_offset = 2.0 * (zlow)
             !kc=zlow
-            nzPML_1=0
+            nzPML_1=1 !used to be zero but causes instability
             use_z_mirror=1.0
         case(6)
             zhigh=mirror_height
