@@ -439,17 +439,29 @@ gridToVTK(os.path.join(output_dir, "sheets_z"), xc, yc, zc, cellData={"MaterialI
 if igp_on=='IGP':
     igp_grid=np.zeros((nx,ny,nz))
     igp_grid[:,:,:]=base_number
-    if igp_value=='+x' or igp_value=='-x':
+    if igp_value=='+x':
         igp_grid[igp_location-1,:,:]=igp_val
         xc, yc, zc, data_x = create_thin_grid(nx, ny, nz, igp_grid, axis='x')
         gridToVTK(os.path.join(output_dir, "IGP"), xc, yc, zc, cellData={"MaterialID": data_x})
-    if igp_value=='+y' or igp_value=='-y':
+    if igp_value=='-x':
+        igp_grid[igp_location,:,:]=igp_val
+        xc, yc, zc, data_x = create_thin_grid(nx, ny, nz, igp_grid, axis='x')
+        gridToVTK(os.path.join(output_dir, "IGP"), xc, yc, zc, cellData={"MaterialID": data_x})
+    if igp_value=='+y':
         igp_grid[:,igp_location-1,:]=igp_val
         xc, yc, zc, data_y = create_thin_grid(nx, ny, nz, igp_grid, axis='y')
         gridToVTK(os.path.join(output_dir, "IGP"), xc, yc, zc, cellData={"MaterialID": data_y})
-    if igp_value=='+z' or igp_value=='-z':
+    if igp_value=='-y':
+        igp_grid[:,igp_location,:]=igp_val
+        xc, yc, zc, data_y = create_thin_grid(nx, ny, nz, igp_grid, axis='y')
+        gridToVTK(os.path.join(output_dir, "IGP"), xc, yc, zc, cellData={"MaterialID": data_y})
+    if igp_value=='+z':
         igp_grid[:,:,igp_location-1]=igp_val
-        xc, yc, zc, data_z = create_thin_grid(nx, ny, nz, igp_grid, axis='x')
+        xc, yc, zc, data_z = create_thin_grid(nx, ny, nz, igp_grid, axis='z')
+        gridToVTK(os.path.join(output_dir, "IGP"), xc, yc, zc, cellData={"MaterialID": data_z})
+    if igp_value=='-z':
+        igp_grid[:,:,igp_location]=igp_val
+        xc, yc, zc, data_z = create_thin_grid(nx, ny, nz, igp_grid, axis='z')
         gridToVTK(os.path.join(output_dir, "IGP"), xc, yc, zc, cellData={"MaterialID": data_z})
 
 def create_port_grid(port_data, start_idx, nx_p, ny_p, nz_p, thickness=0.01):
