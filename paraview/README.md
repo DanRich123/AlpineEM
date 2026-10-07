@@ -16,8 +16,8 @@ Pre-processing visualization tools for generating, inspecting, and styling 3-D F
 ## Technical Notes
 
 * **VTK Grid Mapping:** `fdtd_geometry_maker.py` places thin 2-D sheets ($x, y, z$ directions) and lumped port direction indicators directly on Yee-cell faces using custom sub-cell coordinate arrays (`create_thin_grid()`) to prevent alignment overlaps with volume elements.
-* **Material ID Scheme:** Discrete integer ranges map specific simulation domains:
-  * `-5`: Internal Ground Plane (IGP)
+* **Material ID Scheme:** Discrete integer ranges map specific simulation domains if relevant:
+  * `-5`: Infinite Ground Plane (IGP)
   * `-4`: Domain Bounding Box
   * `-3`: Perfectly Matched Layers (PML)
   * `-2`: Lumped Port Direction Indicators
