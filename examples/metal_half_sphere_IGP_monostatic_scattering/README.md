@@ -1,1 +1,3 @@
 # In Progress...
+
+The monostatic scattering of an incident plane wave off of a metal half-sphere mounted over an infinite ground plane.
