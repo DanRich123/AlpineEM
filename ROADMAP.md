@@ -20,9 +20,6 @@ Planned fixes and features for [AlpineEM](./README.md). Items are grouped by are
 - [ ] 2D Helmholtz solver for frequency-dependent (dispersive or non-dispersive) mode generation for gridded feeds
 - [ ] Support for dispersive field coefficients in gridded feeds
 - [ ] Allow lumped ports at the first cube (currently an error is thrown to warn the user if this is selected accidentally)
-## Oblique incidence (`kmax`)
- 
-- [ ] Improve CPML and incident plane-wave configurations for `kmax` (oblique-angle periodic boundary conditions)
 ## Performance and scaling
  
 - [ ] MPI support to spread memory across multiple nodes (multiple computers)
