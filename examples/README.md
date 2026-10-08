@@ -2,7 +2,7 @@
 
 These examples are chosen to validate the FDTD+SPICE solver and its features, and/or demonstrate how to model various scenarios of interest. Each folder within the examples folder is largely considered self-contained but might occasionally reference other example folders.
 
-Current examples include:
+Current examples (in folder order) include:
 
 - The monostatic scattering of an incident plane wave off of a metal half-sphere mounted over an infinite ground plane
 - The monostatic scattering of an incident plane wave off of a metal sphere
