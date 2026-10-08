@@ -4,8 +4,8 @@ These examples are chosen to validate the FDTD+SPICE solver and its features, an
 
 Current examples include:
 
-- The monostatic scattering of an incident plane wave off of a metal sphere
 - The monostatic scattering of an incident plane wave off of a metal half-sphere mounted over an infinite ground plane
+- The monostatic scattering of an incident plane wave off of a metal sphere
 - The aperture area and realized gain of a receiving non-Foster loaded monopole-like antenna (gridded feed/port type) mounted over an infinite ground plane
 - Oblique angle plane wave incidence with periodic boundary conditions - a `kmax` variant required example 
 - A radiating dipole antenna with the basic port type (parallel plate-like gaps) 
