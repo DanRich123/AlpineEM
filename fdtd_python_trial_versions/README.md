@@ -1,4 +1,4 @@
-# GPU Diagnostics and FDTD Electromagnetic Simulator
+# TRIAL: GPU Diagnostics and FDTD Electromagnetic Simulator
 
 This repository contains Python scripts for validating GPU hardware acceleration (via PyTorch and TensorFlow) and performing 3D Finite-Difference Time-Domain (FDTD) electromagnetic field simulations.
 
