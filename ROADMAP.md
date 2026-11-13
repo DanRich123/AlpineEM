@@ -26,6 +26,4 @@ Planned fixes and features for [AlpineEM](./README.md). Items are grouped by are
 ## Visualization
  
 - [ ] ParaView and Python viewer renderings of wave-port locations for unit-cell designs
-## Education
- 
-- [ ] Improve and validate the pure-Python version of the solver (intended for student education, not performance)
+
