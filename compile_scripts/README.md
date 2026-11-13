@@ -38,3 +38,4 @@ Build utilities and Bash compilation scripts for compiling the FDTD solver acros
   * **Intel Workloads:** Uses `ifx` (Fortran compiler) and `icx` (C compiler for NGSPICE wrapper interface).
   * **NVIDIA GPU Workloads:** Uses `nvfortran` and `nvc` from the NVIDIA HPC SDK (`nvhpc_sdk`) alongside CUDA modules.
 * **SPICE Pre-compilation Dependency:** Any `*_spice*.sh` build requires building the `ngspice` shared library target first using either `build_my_ngspice.sh` (for CPU/MP execution) or `build_my_ngspice_acc.sh` (for GPU ACC execution).
+* **GFortran:** If using GFortran to compile, `-ffree-line-length-none` and `-cpp` are likely needed as flags for compilation. `-cpp` replaces Intel's `-fpp`, while `-ffree-line-length-none` is required for overflow lines by GFortran.
