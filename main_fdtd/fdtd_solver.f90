@@ -1285,11 +1285,11 @@ Program fdtd
 #endif
 
 #ifdef use_spice_version
-    #ifdef use_kmax_version
+#ifdef use_kmax_version
         if ((mod(num_spice_ports, 2) /= 0)) then
             STOP "ERROR: USER IS MISSING ONE OR MORE SPICE PORTS - THERE SHOULD BE AN EVEN NUMBER"
         end if
-    #endif
+#endif
 #endif
 
         if (allocated(tmp_real)) deallocate(tmp_real)
@@ -6302,7 +6302,7 @@ Program fdtd
                     do ii=p_loc(1),p_loc_d(1)
                         do jj=p_loc(2),p_loc_d(2)
                             do kk=p_loc(3),p_loc_d(3)
-    #ifdef use_kmax_version
+#ifdef use_kmax_version
                                 if (mod(i, 2) == 0) then
                                     !i is even so imaginary to match current section
                                     !i is even comes after odd so must be added to current value
@@ -6312,10 +6312,10 @@ Program fdtd
                                     !is is odd will go first so it's a reset of equals
                                     Ex(ii,jj,kk)=1.0*((Spice_Voltage(i)))/((ports_spice(i,3,1))*(del_x))
                                 end if
-    #endif
-    #ifndef use_kmax_version
+#endif
+#ifndef use_kmax_version
                                 Ex(ii,jj,kk)=1.0*((Spice_Voltage(i)))/((ports_spice(i,3,1))*(del_x))
-    #endif
+#endif
                             end do
                         end do
                     end do
@@ -6324,7 +6324,7 @@ Program fdtd
                     do ii=p_loc(1),p_loc_d(1)
                         do jj=p_loc(2),p_loc_d(2)
                             do kk=p_loc(3),p_loc_d(3)
-    #ifdef use_kmax_version
+#ifdef use_kmax_version
                                 if (mod(i, 2) == 0) then
                                     !i is even so imaginary to match current section
                                     !i is even comes after odd so must be added to current value
@@ -6334,10 +6334,10 @@ Program fdtd
                                     !is is odd will go first so it's a reset of equals
                                     Ey(ii,jj,kk)=1.0*((Spice_Voltage(i)))/((ports_spice(i,3,2))*(del_y))
                                 end if
-    #endif
-    #ifndef use_kmax_version
+#endif
+#ifndef use_kmax_version
                                 Ey(ii,jj,kk)=1.0*((Spice_Voltage(i)))/((ports_spice(i,3,2))*(del_y))
-    #endif
+#endif
                             end do
                         end do
                     end do
@@ -6346,7 +6346,7 @@ Program fdtd
                     do ii=p_loc(1),p_loc_d(1)
                         do jj=p_loc(2),p_loc_d(2)
                             do kk=p_loc(3),p_loc_d(3)
-    #ifdef use_kmax_version
+#ifdef use_kmax_version
                                 if (mod(i, 2) == 0) then
                                     !i is even so imaginary to match current section
                                     !i is even comes after odd so must be added to current value
@@ -6356,10 +6356,10 @@ Program fdtd
                                     !is is odd will go first so it's a reset of equals
                                     Ez(ii,jj,kk)=1.0*(Spice_Voltage(i))/((ports_spice(i,3,3))*(del_z))
                                 end if
-    #endif
-    #ifndef use_kmax_version
+#endif
+#ifndef use_kmax_version
                                 Ez(ii,jj,kk)=1.0*(Spice_Voltage(i))/((ports_spice(i,3,3))*(del_z))
-    #endif
+#endif
                             end do
                         end do
                     end do
@@ -6381,7 +6381,7 @@ Program fdtd
                 select case (int(ports_spice(i,1,2)))
 
                 case(0,1)
-    #ifdef use_kmax_version
+#ifdef use_kmax_version
                     if (mod(i, 2) == 0) then
                     !i is even so imaginary to match current section
                     !i is even comes after odd so must be added to current value
@@ -6411,8 +6411,8 @@ Program fdtd
                             end do
                         end do
                     end if
-    #endif
-    #ifndef use_kmax_version
+#endif
+#ifndef use_kmax_version
                     do jj=1, p_loc_d(1)+1
                         do kk=1, p_loc_d(2)+1
                             if (gridded_feed_all_spice(i,1,jj,kk)/=0) then
@@ -6423,9 +6423,9 @@ Program fdtd
                             end if
                         end do
                     end do
-    #endif
+#endif
                 case(2,3)
-    #ifdef use_kmax_version
+#ifdef use_kmax_version
                     if (mod(i, 2) == 0) then
                     !i is even so imaginary to match current section
                     !i is even comes after odd so must be added to current value
@@ -6455,8 +6455,8 @@ Program fdtd
                             end do
                         end do
                     end if
-    #endif
-    #ifndef use_kmax_version
+#endif
+#ifndef use_kmax_version
                     do jj=1, p_loc_d(1)+1
                         do kk=1, p_loc_d(2)+1
                             if (gridded_feed_all_spice(i,1,jj,kk)/=0) then
@@ -6467,9 +6467,9 @@ Program fdtd
                             end if
                         end do
                     end do
-    #endif
+#endif
                 case(4,5)
-    #ifdef use_kmax_version
+#ifdef use_kmax_version
                     if (mod(i, 2) == 0) then
                     !i is even so imaginary to match current section
                     !i is even comes after odd so must be added to current value
@@ -6499,8 +6499,8 @@ Program fdtd
                             end do
                         end do
                     end if
-    #endif
-    #ifndef use_kmax_version
+#endif
+#ifndef use_kmax_version
                     do jj=1, p_loc_d(1)+1
                         do kk=1, p_loc_d(2)+1
                             if (gridded_feed_all_spice(i,1,jj,kk)/=0) then
@@ -6511,7 +6511,7 @@ Program fdtd
                             end if
                         end do
                     end do
-    #endif
+#endif
                 end select
             end if
         end do
@@ -8551,12 +8551,12 @@ Program fdtd
         write(10,*)  "video size_b = " , vid_size2
         write(10,*)  "number of far field angles = ", num_far_field_angles
         write(10,*) "number of internal ports = ", num_ports
-    #ifndef use_spice_version
+#ifndef use_spice_version
         write(10,*) "number of spice ports = ", 0
-    #endif
-    #ifdef use_spice_version
+#endif
+#ifdef use_spice_version
         write(10,*) "number of spice ports = ", num_spice_ports + additional_spice_ports
-    #endif
+#endif
 
         write(10,*)  "simulation type" , pbc_x, pbc_y, pbc_z
 
@@ -8616,7 +8616,7 @@ Program fdtd
             end do
         end do
 
-    #ifdef use_spice_version
+#ifdef use_spice_version
         do i=1, num_spice_ports + additional_spice_ports
             write(10,*) "recieved voltage at spice port ", i, "w/ Z"
             write(10,*) 1 !spice impedance set to 1, will need normaliziation in outputs later on
@@ -8624,7 +8624,7 @@ Program fdtd
                 write(10,*) Spice_Voltage_out(i,j)
             end do
         end do
-    #endif
+#endif
 
         if (num_far_field_angles>0) then
             write(10,*) "far field phase correction time information:"
@@ -8662,12 +8662,12 @@ Program fdtd
         write(10,*)  "video size_b = " , vid_size2
         write(10,*)  "number of far field angles = ", num_far_field_angles
         write(10,*) "number of internal ports = ", num_ports
-    #ifndef use_spice_version
+#ifndef use_spice_version
         write(10,*) "number of spice ports = ", 0
-    #endif
-    #ifdef use_spice_version
+#endif
+#ifdef use_spice_version
         write(10,*) "number of spice ports = ", num_spice_ports/2 + additional_spice_ports/2
-    #endif
+#endif
 
         write(10,*)  "simulation type" , pbc_x, pbc_y, pbc_z, k_direction
 
@@ -8749,7 +8749,7 @@ Program fdtd
             end do
         end do
 
-    #ifdef use_spice_version
+#ifdef use_spice_version
         do i=1, num_spice_ports/2 + additional_spice_ports/2
             !1,2 real,imag currents for same fdtd E-port that was duplicated by the user on purpose
             !These are all real quantities here though but correspond to real and imaginary parts of the current and thus voltage actual
@@ -8759,7 +8759,7 @@ Program fdtd
                 write(10,*) Spice_Voltage_out(2*i-1,j), Spice_Voltage_out(2*i,j)
             end do
         end do
-    #endif
+#endif
 
         if (num_far_field_angles>0) then
             write(10,*) "far field phase correction time information:"
